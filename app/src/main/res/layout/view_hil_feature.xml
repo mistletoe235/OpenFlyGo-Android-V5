@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#081018"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <FrameLayout
+        android:id="@+id/hil_preview_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.55"
+        android:background="@drawable/cockpit_panel"
+        android:padding="6dp">
+
+        <ImageView
+            android:id="@+id/hil_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#020508"
+            android:contentDescription="@string/ue_camera_preview_description"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="8dp"
+            android:background="@drawable/cockpit_panel"
+            android:gravity="center"
+            android:paddingHorizontal="9dp"
+            android:text="@string/ue_camera_badge"
+            android:textColor="#A6BED3"
+            android:textSize="9sp" />
+    </FrameLayout>
+
+    <ScrollView
+        android:id="@+id/hil_settings_scroll"
+        android:layout_width="330dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/cockpit_panel"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+        <TextView android:layout_width="match_parent" android:layout_height="18dp" android:text="@string/connection_mode" android:textColor="#8FA9C1" android:textSize="9sp" />
+        <Spinner android:id="@+id/hil_mode" android:layout_width="match_parent" android:layout_height="30dp" android:background="@drawable/cockpit_field" />
+
+        <TextView
+            android:id="@+id/hil_network_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/hil_hotspot_help"
+            android:textColor="#9AA9B8"
+            android:textSize="8sp" />
+
+        <Button
+            android:id="@+id/hil_open_hotspot_settings"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/cockpit_button"
+            android:minHeight="0dp"
+            android:text="@string/hil_open_hotspot_settings"
+            android:textColor="#FFFFFF"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/hil_host_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView android:layout_width="match_parent" android:layout_height="16dp" android:text="@string/ue_host" android:textColor="#8FA9C1" android:textSize="9sp" />
+            <EditText
+                android:id="@+id/hil_host"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/cockpit_field"
+                android:gravity="center_vertical"
+                android:hint="192.168.1.20"
+                android:inputType="textUri"
+                android:paddingHorizontal="9dp"
+                android:text="192.168.1.20"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#778392"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="18dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="@string/status_udp" android:textColor="#8FA9C1" android:textSize="10sp" />
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="6dp" android:text="@string/image_tcp" android:textColor="#8FA9C1" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="32dp" android:orientation="horizontal">
+            <EditText android:id="@+id/hil_udp_port" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/cockpit_field" android:gravity="center_vertical" android:inputType="number" android:paddingHorizontal="9dp" android:text="30020" android:textColor="#FFFFFF" android:textSize="11sp" />
+            <EditText android:id="@+id/hil_frame_port" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="6dp" android:background="@drawable/cockpit_field" android:gravity="center_vertical" android:inputType="number" android:paddingHorizontal="9dp" android:text="30022" android:textColor="#FFFFFF" android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/frequency_settings"
+            android:textColor="#DCE8F2"
+            android:textSize="10sp" />
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:text="@string/dji_raw_source_request" android:textColor="#8FA9C1" android:textSize="9sp" />
+            <TextView
+                android:id="@+id/hil_native_frequency"
+                android:layout_width="120dp"
+                android:layout_height="28dp"
+                android:background="@drawable/cockpit_field"
+                android:gravity="center"
+                android:text="20 Hz"
+                android:textColor="#A6BED3"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="34dp" android:layout_marginTop="2dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:text="@string/android_to_ue_pose" android:textColor="#8FA9C1" android:textSize="9sp" />
+            <Spinner android:id="@+id/hil_frequency" android:layout_width="120dp" android:layout_height="32dp" android:background="@drawable/cockpit_field" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/hil_frequency_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/hil_independent_rates"
+            android:textColor="#8496A7"
+            android:textSize="8sp" />
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="34dp" android:layout_marginTop="4dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:text="@string/hil_camera_source" android:textColor="#8FA9C1" android:textSize="9sp" />
+            <Spinner android:id="@+id/hil_camera_source" android:layout_width="160dp" android:layout_height="32dp" android:background="@drawable/cockpit_field" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="34dp" android:layout_marginTop="6dp" android:orientation="horizontal">
+            <Button android:id="@+id/hil_start" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="@string/start_hil" android:textColor="#FFFFFF" android:textSize="9sp" />
+            <Button android:id="@+id/hil_stop" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:layout_marginStart="5dp" android:background="@drawable/cockpit_button_danger" android:minHeight="0dp" android:text="@string/action_stop" android:textColor="#FFAAA0" android:textSize="9sp" />
+            <Button android:id="@+id/hil_preview_once" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:layout_marginStart="5dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/preview_one_frame" android:textColor="#FFFFFF" android:textSize="9sp" />
+        </LinearLayout>
+
+        <TextView android:layout_width="match_parent" android:layout_height="18dp" android:layout_marginTop="4dp" android:text="@string/runtime_status" android:textColor="#8FA9C1" android:textSize="9sp" />
+        <TextView
+            android:id="@+id/hil_status"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="#AA050B11"
+            android:fontFamily="monospace"
+            android:padding="9dp"
+            android:text="@string/hil_not_started"
+            android:textColor="#DCE4EF"
+            android:textSize="10sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "source": "testdata/active-recapture/two-buildings/source-route.json",
+  "source_sha256": "8967a25d8f1cf87a5133d5af1efc5fe8d5d56e1a1e1500f2def7ed285f070f3e",
+  "wgs84_fit": "handoff/active_recapture/two_buildings/wgs84_fit_report.json",
+  "speed_mps": 2.8,
+  "max_sortie_distance_m": null,
+  "max_sortie_photos": null,
+  "validation": {
+    "sortie_count": 1,
+    "photo_count": 636,
+    "capture_waypoint_count": 205,
+    "altitude_photo_counts": {
+      "50.0": 372,
+      "52.0": 4,
+      "70.0": 260
+    },
+    "high_rise_views": [
+      "BACKWARD_OBLIQUE",
+      "FORWARD_OBLIQUE",
+      "LEFT_OBLIQUE",
+      "NADIR",
+      "RIGHT_OBLIQUE"
+    ],
+    "maximum_adjacent_distance_m": 24.799638525759008,
+    "maximum_yaw_step_deg": 45.0,
+    "maximum_gimbal_pitch_step_deg": 14.37405899998091
+  },
+  "sorties": [
+    {
+      "sortie": 1,
+      "file": "openfly-active-recapture-two-buildings-v30.json",
+      "photos": 636,
+      "waypoints": 1022,
+      "path_m": 15299.326,
+      "flight_s": 5531.708,
+      "altitude_min_m": 50.0,
+      "altitude_max_m": 70.0
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+ext {
+    deps = [:]
+
+    deps.aircraft = 'com.dji:dji-sdk-v5-aircraft:5.18.0'
+    deps.aircraftProvided = 'com.dji:dji-sdk-v5-aircraft-provided:5.18.0'
+    deps.networkImp = 'com.dji:dji-sdk-v5-networkImp:5.18.0'
+
+    deps.gson = 'com.google.code.gson:gson:2.9.1'
+    deps.okio = 'com.squareup.okio:okio:1.17.2'
+    deps.rx3Android = 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    deps.rx3Kt = 'io.reactivex.rxjava3:rxkotlin:3.0.0'
+    deps.wire = 'com.squareup.wire:wire-runtime:2.2.0'
+    deps.maplibreTurf = 'org.maplibre.gl:android-sdk-turf:5.9.1'
+    deps.maplibreSdk = 'org.maplibre.gl:android-sdk:10.3.5'
+    deps.lottie = 'com.airbnb.android:lottie:3.3.1'
+    deps.cardview = 'androidx.cardview:cardview:1.0.0'
+    deps.material = 'com.google.android.material:material:1.0.0'
+    deps.mikepenzCommunityMaterial = 'com.mikepenz:community-material-typeface:3.5.95.1-kotlin@aar'
+    deps.mikepenzGoogleMaterial = 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
+    deps.mikepenzIconicsViews = 'com.mikepenz:iconics-views:4.0.2@aar'
+    deps.mikepenzIconicsCore = 'com.mikepenz:iconics-core:4.0.2@aar'
+    deps.mikepenzIonicons = 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
+    deps.playservicesplaces = 'com.google.android.gms:play-services-places:16.0.0'
+    deps.playservicesmaps = 'com.google.android.gms:play-services-maps:16.0.0'
+    deps.playserviceslocation = 'com.google.android.gms:play-services-location:16.0.0'
+    deps.playservicesbase = 'com.google.android.gms:play-services-base:16.0.0'
+    deps.annotation = 'androidx.annotation:annotation:1.1.0'
+    deps.appcompat = 'androidx.appcompat:appcompat:1.7.0'
+    deps.constraintLayout = 'androidx.constraintlayout:constraintlayout:2.1.4'
+    deps.multidex = 'androidx.multidex:multidex:2.0.1'
+    deps.recyclerview = 'androidx.recyclerview:recyclerview:1.1.0'
+    deps.lifecycleJava8 = 'androidx.lifecycle:lifecycle-common-java8:2.3.1'
+    deps.lifecycleRuntime = 'androidx.lifecycle:lifecycle-runtime:2.3.1'
+    deps.lifecycleProcess = 'androidx.lifecycle:lifecycle-process:2.3.1'
+    deps.legacySupport = 'androidx.legacy:legacy-support-v4:1.0.0'
+    deps.media = 'androidx.media:media:1.0.0'
+    deps.ktxCore = 'androidx.core:core-ktx:1.3.2'
+    deps.kotlinLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
+    deps.wpmzSdk = 'com.dji:wpmzsdk:1.0.5.1'
+
+    deps.androidxCore = 'androidx.core:core:1.13.1'
+}

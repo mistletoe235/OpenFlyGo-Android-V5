@@ -1,0 +1,11 @@
+## Copy this file to local.properties and edit the values for this machine.
+## Android Studio also manages sdk.dir automatically.
+
+sdk.dir=/path/to/Android/sdk
+OPENFLY_APPLICATION_ID_V5=com.example.openflygo.v5
+AIRCRAFT_API_KEY_V5=your_dji_msdk_v5_key_for_the_application_id
+MAPLIBRE_TOKEN=optional_maplibre_token_for_uxsdk_map_widget
+BAIDU_MAP_AK_V5=your_baidu_android_ak_for_the_application_id_and_signing_certificate
+V86_DEFAULT_ENDPOINT=http://127.0.0.1:55000
+# Optional only when the standard NDK 29 path is unavailable.
+# OPENFLY_SHARED_CPP_RUNTIME=/absolute/path/to/arm64-v8a/libc++_shared.so

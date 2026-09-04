@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@android:color/transparent" android:orientation="horizontal">
+
+    <FrameLayout android:id="@+id/survey_map_host" android:layout_width="0dp"
+        android:layout_height="match_parent" android:layout_weight="1">
+        <edu.playground.djivln.survey.TerrainPreviewView android:id="@+id/survey_preview"
+            android:layout_width="match_parent" android:layout_height="match_parent" />
+        <LinearLayout android:id="@+id/survey_map_summary" android:layout_width="268dp"
+            android:layout_height="wrap_content" android:layout_gravity="top|start"
+            android:layout_marginStart="10dp" android:layout_marginTop="42dp"
+            android:background="@drawable/bg_survey_info" android:clickable="true"
+            android:elevation="8dp" android:importantForAccessibility="no"
+            android:orientation="vertical" android:padding="10dp">
+            <TextView android:id="@+id/survey_status" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:maxLines="2"
+                android:text="@string/survey_add_boundary_hint"
+                android:textColor="#FF20374A" android:textSize="10sp" android:textStyle="bold" />
+            <TextView android:id="@+id/survey_live_telemetry" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="3dp" android:maxLines="1"
+                android:text="@string/survey_live_telemetry_unavailable"
+                android:textColor="#FF596673" android:textSize="9sp" android:textStyle="bold" />
+            <TextView android:id="@+id/survey_statistics" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="4dp" android:maxLines="4"
+                android:text="@string/survey_summary_placeholder"
+                android:textColor="#FF66717D" android:textSize="9sp" />
+            <TextView android:id="@+id/survey_execution_status" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="4dp" android:maxLines="2"
+                android:text="@string/survey_preflight_pending" android:textColor="#FF8A5A20"
+                android:textSize="9sp" android:textStyle="bold" />
+            <LinearLayout android:id="@+id/survey_eta_overlay" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="6dp"
+                android:orientation="vertical" android:visibility="gone">
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginBottom="5dp" android:background="#FFD9E1E8" />
+                <TextView android:id="@+id/survey_eta_title" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:maxLines="1"
+                    android:text="@string/survey_execution_phase_placeholder" android:textColor="#FF20374A"
+                    android:textSize="10sp" android:textStyle="bold" />
+                <TextView android:id="@+id/survey_eta_time" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                    android:text="@string/survey_eta_placeholder" android:textColor="#FF0B6E4F"
+                    android:textSize="12sp" android:textStyle="bold" />
+                <TextView android:id="@+id/survey_eta_detail" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="1dp" android:maxLines="2"
+                    android:text="@string/survey_speed_placeholder"
+                    android:textColor="#FF66717D" android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <Button
+            android:id="@+id/set_simulator_origin_on_map"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="42dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_survey_info"
+            android:elevation="9dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="12dp"
+            android:text="@string/set_simulator_start"
+            android:textColor="#FF1F6FB2"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+        <LinearLayout android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone">
+            <Button android:id="@+id/import_mission" android:layout_width="1dp" android:layout_height="1dp" />
+            <Button android:id="@+id/export_survey_artifacts" android:layout_width="1dp" android:layout_height="1dp" />
+            <Button android:id="@+id/import_checkpoint" android:layout_width="1dp" android:layout_height="1dp" />
+        </LinearLayout>
+        <edu.playground.djivln.survey.TerrainAltitudeLegendView android:id="@+id/terrain_altitude_legend"
+            android:layout_width="72dp" android:layout_height="190dp" android:layout_gravity="top|end"
+            android:layout_marginTop="70dp" android:layout_marginEnd="10dp"
+            android:background="#B8000000" android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout android:id="@+id/survey_planner_panel" android:layout_width="304dp"
+        android:layout_height="match_parent" android:background="#FFF7F8FA" android:clickable="true"
+        android:importantForAccessibility="no" android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="52dp"
+            android:background="#FFFFFFFF" android:gravity="center_vertical" android:orientation="horizontal"
+            android:paddingStart="16dp" android:paddingEnd="10dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/survey_area_route" android:textColor="#FF20242A" android:textSize="16sp" android:textStyle="bold" />
+                <EditText android:id="@+id/survey_name" android:layout_width="match_parent" android:layout_height="22dp"
+                    android:background="@android:color/transparent" android:hint="@string/survey_mission_name_hint"
+                    android:inputType="textCapSentences" android:maxLines="1" android:padding="0dp"
+                    android:singleLine="true" android:text="@string/survey_default_mission_name" android:textColor="#FF5A626D"
+                    android:textColorHint="#FF9AA1AA" android:textSize="9sp" />
+            </LinearLayout>
+            <Button android:id="@+id/survey_header_pause" android:layout_width="64dp" android:layout_height="36dp"
+                android:layout_marginEnd="6dp" android:text="@string/survey_pause" android:textSize="11sp" android:visibility="gone" />
+            <Button android:id="@+id/survey_header_abort" android:layout_width="52dp" android:layout_height="36dp"
+                android:layout_marginEnd="6dp" android:text="@string/action_terminate" android:textSize="10sp" android:visibility="gone" />
+            <Button android:id="@+id/survey_more" android:layout_width="36dp" android:layout_height="36dp"
+                android:layout_marginEnd="6dp" android:contentDescription="@string/survey_more_actions_description" android:text="⋯" android:textSize="16sp" />
+            <Button android:id="@+id/close_survey" android:layout_width="36dp" android:layout_height="36dp"
+                android:contentDescription="@string/close_survey_planner_description" android:text="×" android:textSize="20sp" />
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFE3E6EA" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="42dp"
+            android:background="#FFFFFFFF" android:orientation="horizontal" android:paddingStart="10dp"
+            android:paddingTop="4dp" android:paddingEnd="10dp" android:paddingBottom="4dp">
+            <Button android:id="@+id/tab_area" android:layout_width="0dp" android:layout_height="34dp"
+                android:layout_weight="1" android:text="@string/area" android:textSize="9sp" />
+            <Button android:id="@+id/tab_flight" android:layout_width="0dp" android:layout_height="34dp"
+                android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/feature_flight" android:textSize="9sp" />
+            <Button android:id="@+id/tab_capture" android:layout_width="0dp" android:layout_height="34dp"
+                android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/capture" android:textSize="9sp" />
+            <Button android:id="@+id/tab_terrain" android:layout_width="0dp" android:layout_height="34dp"
+                android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/terrain" android:textSize="9sp" />
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFE3E6EA" />
+
+        <ScrollView android:id="@+id/survey_planner_scroll" android:layout_width="match_parent"
+            android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true"
+            android:overScrollMode="never">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:paddingStart="14dp" android:paddingTop="12dp"
+                android:paddingEnd="14dp" android:paddingBottom="12dp">
+
+                <LinearLayout android:id="@+id/section_area" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/planning_area" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/area_instruction" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp" android:background="@drawable/bg_survey_info" android:padding="10dp"
+                        android:text="@string/survey_boundary_edit_hint"
+                        android:textColor="#FF38546D" android:textSize="9sp" />
+                    <LinearLayout android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone">
+                        <EditText android:id="@+id/area_width" android:layout_width="1dp" android:layout_height="1dp" android:text="60" />
+                        <EditText android:id="@+id/area_height" android:layout_width="1dp" android:layout_height="1dp" android:text="80" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp" android:text="@string/aircraft_capture" android:textColor="#FF5E6670"
+                        android:textSize="10sp" android:textStyle="bold" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp"
+                        android:layout_marginTop="6dp" android:background="@drawable/bg_survey_field"
+                        android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="12dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+                            android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="@string/dji_aircraft" android:textColor="#FF20242A" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:id="@+id/area_camera_status" android:layout_width="match_parent"
+                                android:layout_height="wrap_content" android:maxLines="1" android:text="@string/camera_identifying"
+                                android:textColor="#FF808893" android:textSize="9sp" />
+                        </LinearLayout>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/fixed_camera" android:textColor="#FF3A78C2" android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/section_flight" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/survey_flight_parameters" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/camera_profile_status" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/camera_identifying_compact"
+                        android:textColor="#FF808893" android:textSize="8sp" android:visibility="gone" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                        android:layout_marginTop="6dp" android:background="@drawable/bg_survey_field"
+                        android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="@string/survey_flight_altitude" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/flight_altitude" android:layout_width="72dp" android:layout_height="36dp"
+                            android:background="@android:color/transparent" android:gravity="end|center_vertical"
+                            android:inputType="numberDecimal" android:singleLine="true" android:text="60"
+                            android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end"
+                            android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                        android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field"
+                        android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                            android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="@string/ground_sampling_distance_gsd" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="@string/linked_to_flight_altitude_in_real_time" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/flight_gsd" android:layout_width="72dp" android:layout_height="36dp"
+                            android:background="@android:color/transparent" android:gravity="end|center_vertical"
+                            android:inputType="numberDecimal" android:singleLine="true" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end"
+                            android:text="cm/px" android:textColor="#FF7A828D" android:textSize="9sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                        android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field"
+                        android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                            android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="@string/survey_target_surface_relative_takeoff" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="@string/survey_waypoint_height_formula" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/target_surface_offset" android:layout_width="72dp" android:layout_height="36dp"
+                            android:background="@android:color/transparent" android:gravity="end|center_vertical"
+                            android:inputType="numberDecimal|numberSigned" android:singleLine="true" android:text="0"
+                            android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end"
+                            android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                        android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field"
+                        android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="@string/survey_safe_takeoff_altitude" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/safe_takeoff_altitude" android:layout_width="72dp" android:layout_height="36dp"
+                            android:background="@android:color/transparent" android:gravity="end|center_vertical"
+                            android:inputType="numberDecimal" android:singleLine="true" android:text="30"
+                            android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end"
+                            android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp"
+                        android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field"
+                        android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                            android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="@string/return_home_altitude" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:id="@+id/rth_height_current" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:text="@string/survey_current_flight_controller_value" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/rth_height" android:layout_width="58dp" android:layout_height="36dp"
+                            android:background="@android:color/transparent" android:gravity="end|center_vertical"
+                            android:inputType="number" android:singleLine="true" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="20dp" android:layout_height="wrap_content" android:gravity="end"
+                            android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                        <Button android:id="@+id/set_rth_height" android:layout_width="54dp" android:layout_height="34dp"
+                            android:layout_marginStart="6dp" android:text="@string/action_write" android:textSize="9sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_takeoff_method" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/takeoff_mode" android:layout_width="178dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_altitude_mode" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/altitude_mode" android:layout_width="148dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_route_start" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/start_mode" android:layout_width="148dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_after_mission" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/completion_action" android:layout_width="148dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_route_direction" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/route_heading" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent"
+                            android:gravity="end|center_vertical" android:inputType="numberDecimal|numberSigned" android:singleLine="true" android:text="0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="°" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_heading_strategy" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/oblique_heading_mode" android:layout_width="178dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ascent_speed" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/takeoff_speed" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent"
+                            android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="3.0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="m/s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/descent_speed" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/descent_speed" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent"
+                            android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="2.0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="m/s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp" android:background="@drawable/bg_survey_info" android:padding="7dp"
+                        android:text="@string/vertical_speed_scope_help"
+                        android:textColor="#FF7A828D" android:textSize="8sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/nadir_speed" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/flight_speed" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent"
+                            android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="3.0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="m/s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/oblique_speed" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/oblique_speed" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent"
+                            android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="3.0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="m/s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <TextView android:id="@+id/speed_limit_hint" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                        android:background="@drawable/bg_survey_info" android:padding="7dp"
+                        android:text="@string/survey_speed_limit_calculating"
+                        android:textColor="#FF7A828D" android:textSize="8sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/execution_backend" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/execution_backend" android:layout_width="178dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <EditText android:id="@+id/ue_endpoint" android:layout_width="match_parent" android:layout_height="40dp"
+                        android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field"
+                        android:hint="@string/ue_http_example" android:inputType="textUri"
+                        android:paddingHorizontal="10dp" android:textColor="#FF20242A"
+                        android:textColorHint="#FF9AA1AA" android:textSize="9sp" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/section_capture" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/survey_image_coverage" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_capture_trigger" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/capture_mode" android:layout_width="148dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="12dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/photo_ratio" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/photo_ratio" android:layout_width="148dp" android:layout_height="40dp" />
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/timed_capture_row" android:layout_width="match_parent" android:layout_height="44dp"
+                        android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical"
+                        android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp" android:visibility="gone">
+                        <TextView android:id="@+id/timed_capture_label" android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="@string/survey_timed_capture_interval" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/timed_capture_interval" android:layout_width="72dp" android:layout_height="36dp"
+                            android:background="@android:color/transparent" android:gravity="end|center_vertical"
+                            android:inputType="numberDecimal" android:singleLine="true" android:text="1.0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_front_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/forward_overlap" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="80" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_side_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/side_overlap" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="70" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_front_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/oblique_forward_overlap" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="70" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_side_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/oblique_side_overlap" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="60" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_boundary_expansion" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_ensure_edge_coverage" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/boundary_margin" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_capture_pitch" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/oblique_pitch" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal|numberSigned" android:singleLine="true" android:text="-45" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="°" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/section_terrain" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/survey_height_above_ground" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+                    <CheckBox android:id="@+id/follow_terrain" android:layout_width="match_parent" android:layout_height="44dp"
+                        android:layout_marginTop="6dp" android:background="@drawable/bg_survey_info" android:buttonTint="#FF3A78C2"
+                        android:gravity="center_vertical" android:paddingStart="10dp" android:paddingEnd="10dp"
+                        android:text="@string/survey_enable_terrain_following" android:textColor="#FF244A68" android:textSize="10sp" android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp"
+                        android:text="@string/survey_terrain_workflow_hint"
+                        android:textColor="#FF7A828D" android:textSize="9sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="6dp" android:paddingEnd="6dp">
+                        <Button android:id="@+id/import_dsm" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:text="@string/survey_import_surface_dsm" android:textSize="8sp" />
+                        <Button android:id="@+id/download_terrain_dem" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/survey_download_bare_earth_dem" android:textSize="8sp" />
+                        <Button android:id="@+id/download_building_dsm" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/import_building_height" android:textSize="8sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="1dp"
+                        android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal"
+                        android:paddingStart="10dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_elevation_data_type" android:textColor="#FF30353B" android:textSize="10sp" />
+                        <Spinner android:id="@+id/terrain_kind" android:layout_width="158dp" android:layout_height="38dp" />
+                    </LinearLayout>
+                    <TextView android:id="@+id/dsm_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp" android:background="@drawable/bg_survey_field" android:minHeight="40dp" android:padding="8dp"
+                        android:text="@string/survey_no_elevation_data_hint"
+                        android:textColor="#FF8A5A20" android:textSize="9sp" />
+                    <CheckBox android:id="@+id/dsm_building_confirm" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp" android:buttonTint="#FF3A78C2" android:minHeight="38dp"
+                        android:text="@string/survey_surface_dsm_confirmed"
+                        android:textColor="#FF505862" android:textSize="9sp" />
+                    <EditText android:id="@+id/building_cog_template" android:layout_width="match_parent" android:layout_height="40dp"
+                        android:layout_marginTop="4dp" android:background="@drawable/bg_survey_field"
+                        android:hint="@string/global_building_cog_url" android:inputType="textUri"
+                        android:paddingHorizontal="10dp" android:textColor="#FF20242A" android:textColorHint="#FF9AA1AA" android:textSize="9sp" />
+                    <ProgressBar android:id="@+id/dsm_download_progress" style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout android:id="@+id/survey_action_dock" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:background="#FFFFFFFF" android:orientation="vertical"
+            android:paddingStart="12dp" android:paddingTop="8dp" android:paddingEnd="12dp" android:paddingBottom="10dp">
+            <LinearLayout android:id="@+id/edit_actions_row" android:layout_width="match_parent" android:layout_height="36dp" android:orientation="horizontal">
+                <Button android:id="@+id/center_survey" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginEnd="4dp" android:layout_weight="1" android:text="@string/locate_aircraft" android:textSize="9sp" />
+                <Button android:id="@+id/undo_survey_vertex" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginEnd="4dp" android:layout_weight="1" android:text="@string/undo" android:textSize="9sp" />
+                <Button android:id="@+id/delete_survey_vertex" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginEnd="4dp" android:layout_weight="1" android:text="@string/delete_selected_point" android:textSize="8sp" />
+                <Button android:id="@+id/clear_survey_vertices" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:text="@string/clear" android:textSize="9sp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/capture_view_selector" android:layout_width="match_parent" android:layout_height="50dp"
+                android:layout_marginTop="3dp" android:orientation="vertical" android:visibility="gone">
+                <TextView android:layout_width="wrap_content" android:layout_height="14dp"
+                    android:text="@string/survey_route_color_legend" android:textColor="#FF59616B" android:textSize="8sp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="34dp" android:orientation="horizontal">
+                    <CheckBox android:id="@+id/view_nadir" android:layout_width="0dp" android:layout_height="32dp" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="@drawable/bg_survey_capture_toggle" android:button="@null" android:checked="true" android:gravity="center" android:text="@string/capture_view_1_nadir" android:textColor="#FFFFFFFF" android:textSize="8sp" />
+                    <CheckBox android:id="@+id/view_forward" android:layout_width="0dp" android:layout_height="32dp" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="@drawable/bg_survey_capture_toggle" android:button="@null" android:checked="true" android:gravity="center" android:text="@string/capture_view_2_front" android:textColor="#FFFFFFFF" android:textSize="8sp" />
+                    <CheckBox android:id="@+id/view_backward" android:layout_width="0dp" android:layout_height="32dp" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="@drawable/bg_survey_capture_toggle" android:button="@null" android:checked="true" android:gravity="center" android:text="@string/capture_view_3_rear" android:textColor="#FFFFFFFF" android:textSize="8sp" />
+                    <CheckBox android:id="@+id/view_left" android:layout_width="0dp" android:layout_height="32dp" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="@drawable/bg_survey_capture_toggle" android:button="@null" android:checked="true" android:gravity="center" android:text="@string/capture_view_4_left" android:textColor="#FFFFFFFF" android:textSize="8sp" />
+                    <CheckBox android:id="@+id/view_right" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:background="@drawable/bg_survey_capture_toggle" android:button="@null" android:checked="true" android:gravity="center" android:text="@string/capture_view_5_right" android:textColor="#FFFFFFFF" android:textSize="8sp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/generate_actions_row" android:layout_width="match_parent" android:layout_height="42dp"
+                android:layout_marginTop="5dp" android:orientation="horizontal" android:visibility="gone">
+                <Button android:id="@+id/generate_survey" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginEnd="5dp" android:layout_weight="1" android:text="@string/generate_nadir_route" android:textSize="10sp" />
+                <Button android:id="@+id/generate_five_direction" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginEnd="5dp" android:layout_weight="1" android:text="@string/generate_selected_five_groups" android:textSize="10sp" />
+                <Button android:id="@+id/oblique_angle" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="0.72" android:text="@string/survey_pitch_minus_45" android:textSize="9sp" />
+            </LinearLayout>
+            <Button android:id="@+id/active_recapture_groups" android:layout_width="match_parent"
+                android:layout_height="36dp" android:layout_marginTop="5dp"
+                android:text="@string/survey_recapture_groups_all" android:textSize="9sp" android:visibility="gone" />
+            <LinearLayout android:id="@+id/cloud_actions_row" android:layout_width="match_parent" android:layout_height="52dp"
+                android:layout_marginTop="5dp" android:orientation="horizontal">
+                <Button android:id="@+id/cloud_reconstruction" android:layout_width="0dp"
+                    android:layout_height="50dp" android:layout_marginEnd="4dp" android:layout_weight="1"
+                    android:gravity="start|center_vertical" android:maxLines="2" android:paddingHorizontal="12dp"
+                    android:text="@string/v86_streaming_not_started" android:textAllCaps="false" android:textSize="8sp" />
+                <Button android:id="@+id/open_point_cloud" android:layout_width="104dp"
+                    android:layout_height="50dp" android:maxLines="2" android:text="PLY --"
+                    android:textAllCaps="false" android:textSize="8sp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/primary_actions_row" android:layout_width="match_parent" android:layout_height="36dp"
+                android:layout_marginTop="5dp" android:orientation="horizontal">
+                <Button android:id="@+id/preview_survey" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginEnd="3dp" android:layout_weight="1" android:text="@string/preview" android:textSize="9sp" />
+                <Button android:id="@+id/preflight_survey" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginEnd="3dp" android:layout_weight="1.2" android:text="@string/safety_check" android:textSize="8sp" />
+                <Button android:id="@+id/execute_wayline" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:text="@string/execution" android:textSize="9sp" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone">
+                <Button android:id="@+id/export_kmz" android:layout_width="1dp" android:layout_height="1dp" />
+                <Button android:id="@+id/upload_wayline" android:layout_width="1dp" android:layout_height="1dp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/execution_actions_row" android:layout_width="match_parent"
+                android:layout_height="36dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                <Button android:id="@+id/pause_wayline" android:layout_width="0dp" android:layout_height="34dp"
+                    android:layout_marginEnd="3dp" android:layout_weight="1" android:text="@string/survey_pause" android:textSize="9sp" />
+                <Button android:id="@+id/resume_wayline" android:layout_width="0dp" android:layout_height="34dp"
+                    android:layout_marginEnd="3dp" android:layout_weight="1" android:text="@string/action_continue" android:textSize="9sp" />
+                <Button android:id="@+id/stop_wayline" android:layout_width="0dp" android:layout_height="34dp"
+                    android:layout_weight="1" android:text="@string/action_terminate" android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

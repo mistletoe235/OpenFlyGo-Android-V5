@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="of_hud_glass">#B30A0E13</color>
+    <color name="of_hud_glass_strong">#E60A0E13</color>
+    <color name="of_hud_glass_soft">#8F05080C</color>
+    <color name="of_hud_scrim">#52000000</color>
+    <color name="of_hud_hairline">#24FFFFFF</color>
+    <color name="of_hud_text_primary">#F2FFFFFF</color>
+    <color name="of_hud_text_secondary">#A6FFFFFF</color>
+    <color name="of_hud_text_disabled">#52FFFFFF</color>
+    <color name="of_hud_primary">#FF2997FF</color>
+    <color name="of_hud_success">#FF30D158</color>
+    <color name="of_hud_warning">#FFFF9F0A</color>
+    <color name="of_hud_danger">#FFFF453A</color>
+
+    <dimen name="of_hud_card_radius">11dp</dimen>
+    <dimen name="of_hud_button_radius">8dp</dimen>
+    <dimen name="of_hud_badge_radius">20dp</dimen>
+    <dimen name="of_hud_icon_size">18dp</dimen>
+    <dimen name="of_hud_top_bar_height">54dp</dimen>
+</resources>

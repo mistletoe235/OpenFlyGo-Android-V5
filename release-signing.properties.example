@@ -1,0 +1,6 @@
+# Copy this file to release-signing.properties and keep the real file out of Git.
+# storeFile may be absolute or relative to release-signing.properties.
+storeFile=openfly-release.jks
+storePassword=replace-with-local-secret
+keyAlias=openfly
+keyPassword=replace-with-local-secret

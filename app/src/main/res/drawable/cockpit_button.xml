@@ -1,0 +1,11 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <shape><solid android:color="#1FFFFFFF"/><corners android:radius="@dimen/of_hud_button_radius"/></shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape><solid android:color="#3DFFFFFF"/><corners android:radius="@dimen/of_hud_button_radius"/></shape>
+    </item>
+    <item>
+        <shape><solid android:color="#24FFFFFF"/><stroke android:width="1dp" android:color="#18FFFFFF"/><corners android:radius="@dimen/of_hud_button_radius"/></shape>
+    </item>
+</selector>

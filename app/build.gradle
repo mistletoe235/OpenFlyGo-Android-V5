@@ -1,0 +1,239 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream -> localProperties.load(stream) }
+}
+def aircraftApiKey = localProperties.getProperty(
+        'AIRCRAFT_API_KEY_V5',
+        localProperties.getProperty(
+                'AIRCRAFT_API_KEY',
+                project.findProperty('AIRCRAFT_API_KEY_V5')
+                        ?: project.findProperty('AIRCRAFT_API_KEY')
+                        ?: ''
+        )
+)
+def mapLibreToken = localProperties.getProperty(
+        'MAPLIBRE_TOKEN',
+        project.findProperty('MAPLIBRE_TOKEN') ?: ''
+)
+def baiduMapAk = localProperties.getProperty(
+        'BAIDU_MAP_AK_V5',
+        localProperties.getProperty(
+                'BAIDU_MAP_AK',
+                project.findProperty('BAIDU_MAP_AK_V5')
+                        ?: project.findProperty('BAIDU_MAP_AK')
+                        ?: ''
+        )
+)
+def openFlyApplicationId = localProperties.getProperty(
+        'OPENFLY_APPLICATION_ID_V5',
+        project.findProperty('OPENFLY_APPLICATION_ID_V5') ?: 'com.openfly.go.v5'
+)
+def v86DefaultEndpoint = localProperties.getProperty(
+        'V86_DEFAULT_ENDPOINT',
+        project.findProperty('V86_DEFAULT_ENDPOINT') ?: 'http://127.0.0.1:55000'
+)
+def releaseSigningProperties = new Properties()
+def configuredReleaseSigningFile = project.findProperty('OPENFLY_RELEASE_SIGNING_FILE')
+        ?: System.getenv('OPENFLY_RELEASE_SIGNING_FILE')
+def releaseSigningCandidates = [
+        configuredReleaseSigningFile ? rootProject.file(configuredReleaseSigningFile) : null,
+        rootProject.file('release-signing.properties'),
+].findAll { it != null }
+def releaseSigningFile = releaseSigningCandidates.find { it.exists() }
+if (releaseSigningFile != null) {
+    releaseSigningFile.withInputStream { stream -> releaseSigningProperties.load(stream) }
+}
+def configuredReleaseStoreFile = releaseSigningProperties.getProperty('storeFile')
+def releaseStoreFile = configuredReleaseStoreFile == null ? null : new File(configuredReleaseStoreFile)
+if (releaseStoreFile != null && !releaseStoreFile.isAbsolute()) {
+    releaseStoreFile = new File(releaseSigningFile.parentFile, configuredReleaseStoreFile)
+}
+def releaseSigningReady = releaseSigningFile != null
+        && releaseStoreFile?.exists()
+        && ['storePassword', 'keyAlias', 'keyPassword'].every {
+            releaseSigningProperties.getProperty(it)?.trim()
+        }
+def sharedCppNdkVersion = '29.0.14206865'
+def androidSdkPath = localProperties.getProperty('sdk.dir')
+        ?: System.getenv('ANDROID_SDK_ROOT')
+        ?: System.getenv('ANDROID_HOME')
+def androidSdkDir = androidSdkPath ? new File(androidSdkPath) : rootProject.file('.missing-android-sdk')
+def hostOsName = System.getProperty('os.name').toLowerCase()
+def ndkHostTag = hostOsName.contains('mac')
+        ? 'darwin-x86_64'
+        : (hostOsName.contains('windows') ? 'windows-x86_64' : 'linux-x86_64')
+def configuredSharedCppRuntime = localProperties.getProperty(
+        'OPENFLY_SHARED_CPP_RUNTIME',
+        project.findProperty('OPENFLY_SHARED_CPP_RUNTIME') ?: System.getenv('OPENFLY_SHARED_CPP_RUNTIME')
+)
+def sharedCppRuntime = configuredSharedCppRuntime
+        ? file(configuredSharedCppRuntime)
+        : new File(
+                androidSdkDir,
+                "ndk/${sharedCppNdkVersion}/toolchains/llvm/prebuilt/${ndkHostTag}/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so"
+        )
+def sharedCppRuntimeDir = file("$buildDir/generated/shared-cpp-runtime")
+def hilNativeRateExperimentHz = Integer.parseInt(
+        (project.findProperty('HIL_NATIVE_RATE_EXPERIMENT_HZ') ?: '0').toString()
+)
+
+android {
+    namespace 'edu.playground.djivln'
+    compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
+    ndkVersion sharedCppNdkVersion
+
+    defaultConfig {
+        // Keep the MSDK V4 and V5 applications installable side by side.
+        applicationId openFlyApplicationId
+        minSdkVersion Integer.parseInt(project.ANDROID_MIN_SDK_VERSION)
+        targetSdkVersion Integer.parseInt(project.ANDROID_TARGET_SDK_VERSION)
+        versionCode 1
+        versionName '0.1.0-v5'
+        resourceConfigurations += ['en', 'zh-rCN']
+        if (hilNativeRateExperimentHz > 0) {
+            versionNameSuffix "-hil-rate-${hilNativeRateExperimentHz}"
+        }
+        buildConfigField 'int', 'HIL_NATIVE_RATE_EXPERIMENT_HZ', hilNativeRateExperimentHz.toString()
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        manifestPlaceholders['API_KEY'] = aircraftApiKey
+        manifestPlaceholders['MAPLIBRE_TOKEN'] = mapLibreToken
+        manifestPlaceholders['BAIDU_MAP_AK'] = baiduMapAk
+        buildConfigField 'String', 'V86_DEFAULT_ENDPOINT',
+                '"' + v86DefaultEndpoint.replace('\\', '\\\\').replace('"', '\\"') + '"'
+
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+
+    }
+
+    signingConfigs {
+        release {
+            if (releaseSigningReady) {
+                storeFile releaseStoreFile
+                storePassword releaseSigningProperties.getProperty('storePassword')
+                keyAlias releaseSigningProperties.getProperty('keyAlias')
+                keyPassword releaseSigningProperties.getProperty('keyPassword')
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+        release {
+            if (releaseSigningReady) signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+
+        doNotStrip '*/*/libconstants.so'
+        doNotStrip '*/*/libdji_innertools.so'
+        doNotStrip '*/*/libdjibase.so'
+        doNotStrip '*/*/libDJICSDKCommon.so'
+        doNotStrip '*/*/libDJIFlySafeCore-CSDK.so'
+        doNotStrip '*/*/libdjifs_jni-CSDK.so'
+        doNotStrip '*/*/libDJIRegister.so'
+        doNotStrip '*/*/libdjisdk_jni.so'
+        doNotStrip '*/*/libDJIUpgradeCore.so'
+        doNotStrip '*/*/libDJIUpgradeJNI.so'
+        doNotStrip '*/*/libDJIWaypointV2Core-CSDK.so'
+        doNotStrip '*/*/libdjiwpv2-CSDK.so'
+        doNotStrip '*/*/libFlightRecordEngine.so'
+        doNotStrip '*/*/libvideo-framing.so'
+        doNotStrip '*/*/libwaes.so'
+        doNotStrip '*/*/libagora-rtsa-sdk.so'
+        doNotStrip '*/*/libc++.so'
+        doNotStrip '*/*/libc++_shared.so'
+        doNotStrip '*/*/libmrtc_28181.so'
+        doNotStrip '*/*/libmrtc_agora.so'
+        doNotStrip '*/*/libmrtc_core.so'
+        doNotStrip '*/*/libmrtc_core_jni.so'
+        doNotStrip '*/*/libmrtc_data.so'
+        doNotStrip '*/*/libmrtc_log.so'
+        doNotStrip '*/*/libmrtc_onvif.so'
+        doNotStrip '*/*/libmrtc_rtmp.so'
+        doNotStrip '*/*/libmrtc_rtsp.so'
+    }
+
+    androidResources { generateLocaleConfig true }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+        freeCompilerArgs += ['-Xjvm-default=all']
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    sourceSets {
+        main {
+            // Resolve the DJI/Baidu libc++ collision with one current Android
+            // NDK runtime instead of whichever transitive AAR happens to win.
+            jniLibs.srcDir sharedCppRuntimeDir
+        }
+    }
+}
+
+dependencies {
+    compileOnly deps.aircraftProvided
+    implementation deps.aircraft
+    implementation deps.networkImp
+    implementation deps.androidxCore
+    implementation deps.appcompat
+    implementation deps.constraintLayout
+    implementation 'androidx.exifinterface:exifinterface:1.3.6'
+    implementation project(':uxsdk')
+    implementation 'org.locationtech.jts:jts-core:1.20.0'
+    implementation 'mil.nga:tiff:3.0.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestCompileOnly deps.aircraftProvided
+}
+
+def stageSharedCppRuntime = tasks.register('stageSharedCppRuntime', Copy) {
+    doFirst {
+        if (!sharedCppRuntime.isFile()) {
+            throw new GradleException("Required NDK libc++ runtime is missing: ${sharedCppRuntime}")
+        }
+    }
+    from sharedCppRuntime
+    into new File(sharedCppRuntimeDir, 'arm64-v8a')
+}
+
+def checkLocalizations = tasks.register('checkLocalizations', Exec) {
+    workingDir rootProject.projectDir
+    commandLine 'python3', 'scripts/check_localizations.py', '--strict-hardcoded', '--strict-source', '--strict-all-source'
+}
+
+tasks.named('preBuild').configure {
+    dependsOn stageSharedCppRuntime
+    dependsOn checkLocalizations
+}

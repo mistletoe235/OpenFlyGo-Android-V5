@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dji.v5.ux.core.widget.hsi.HorizontalSituationIndicatorWidget xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:pivotX="0"
+    android:pivotY="0"
+    android:scaleX="0.75"
+    android:scaleY="0.75"
+    android:translationX="6dp"
+    android:translationY="2dp" />

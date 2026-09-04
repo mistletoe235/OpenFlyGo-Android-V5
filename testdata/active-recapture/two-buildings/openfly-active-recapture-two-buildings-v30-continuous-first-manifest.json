@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "variant": "CONTINUOUS_BLOCKS_THEN_SMALL_CROSS_THEN_SCATTERED",
+  "source": "testdata/active-recapture/two-buildings/source-route.json",
+  "source_sha256": "8967a25d8f1cf87a5133d5af1efc5fe8d5d56e1a1e1500f2def7ed285f070f3e",
+  "reordered_source_sha256": "b992790a1acde9f8ee5654e01ba480917d132b6b51006f1598c27769b7d18924",
+  "task_order": [
+    16,
+    10,
+    12,
+    13,
+    14,
+    8,
+    9,
+    11,
+    7,
+    6,
+    18,
+    15,
+    17,
+    19,
+    2,
+    3,
+    4,
+    5,
+    20,
+    21,
+    1,
+    0,
+    22
+  ],
+  "wgs84_fit": "handoff/active_recapture/two_buildings/wgs84_fit_report.json",
+  "speed_mps": 2.8,
+  "validation": {
+    "sortie_count": 1,
+    "photo_count": 636,
+    "capture_waypoint_count": 205,
+    "altitude_photo_counts": {
+      "70.0": 260,
+      "50.0": 372,
+      "52.0": 4
+    },
+    "high_rise_views": [
+      "BACKWARD_OBLIQUE",
+      "FORWARD_OBLIQUE",
+      "LEFT_OBLIQUE",
+      "NADIR",
+      "RIGHT_OBLIQUE"
+    ],
+    "maximum_adjacent_distance_m": 24.737110754366604,
+    "maximum_yaw_step_deg": 45.0,
+    "maximum_gimbal_pitch_step_deg": 14.37405899998091
+  },
+  "sorties": [
+    {
+      "sortie": 1,
+      "file": "openfly-active-recapture-two-buildings-v30-continuous-first.json",
+      "photos": 636,
+      "waypoints": 1027,
+      "path_m": 15718.398,
+      "flight_s": 5613.714,
+      "altitude_min_m": 50.0,
+      "altitude_max_m": 70.0
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="14dp">
+        <TextView android:id="@+id/status_summary" android:layout_width="match_parent" android:layout_height="74dp" android:background="@drawable/cockpit_panel" android:gravity="center_vertical" android:padding="12dp" android:textColor="#FFFFFF" android:textSize="13sp" android:textStyle="bold" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:orientation="horizontal">
+            <TextView android:id="@+id/flight_status" android:layout_width="0dp" android:layout_height="130dp" android:layout_weight="1" android:background="@drawable/cockpit_panel" android:fontFamily="monospace" android:padding="12dp" android:textColor="#DCE4EF" android:textSize="10sp" />
+            <TextView android:id="@+id/power_status" android:layout_width="0dp" android:layout_height="130dp" android:layout_marginStart="8dp" android:layout_weight="1" android:background="@drawable/cockpit_panel" android:fontFamily="monospace" android:padding="12dp" android:textColor="#DCE4EF" android:textSize="10sp" />
+            <TextView android:id="@+id/sensor_status" android:layout_width="0dp" android:layout_height="130dp" android:layout_marginStart="8dp" android:layout_weight="1" android:background="@drawable/cockpit_panel" android:fontFamily="monospace" android:padding="12dp" android:textColor="#DCE4EF" android:textSize="10sp" />
+        </LinearLayout>
+        <Button android:id="@+id/open_qualification" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="8dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/device_qualification_xyz" android:textColor="#FFFFFF" android:textSize="10sp" />
+    </LinearLayout>
+</ScrollView>

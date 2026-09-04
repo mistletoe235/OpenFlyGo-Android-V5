@@ -1,0 +1,28 @@
+{
+  "fit_images": 320,
+  "ordinary_gps_affine_residual_median_m": 6.784212525818493e-10,
+  "ordinary_gps_affine_residual_p95_m": 1.1590495241768636e-09,
+  "ordinary_gps_affine_residual_max_m": 1.307585799369366e-09,
+  "latitude_origin": 31.18077590277778,
+  "longitude_origin": 121.46786461111111,
+  "world_xy_to_east_north_affine": [
+    [
+      1.0000009184637322,
+      6.787245139080679e-14
+    ],
+    [
+      8.936740236720198e-13,
+      0.9999999999999765
+    ],
+    [
+      42.02114715275732,
+      9.680157387243995
+    ]
+  ],
+  "world_z_to_absolute_altitude_linear": [
+    1.0,
+    -8.51170708249634e-15
+  ],
+  "relative_minus_absolute_altitude_m": -26.615999999999993,
+  "warning": "Validate legal altitude, geofence, GNSS offset and obstacle clearance before flight."
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dji_capture_gimbal_timeout">The DJI-route gimbal did not pass angle and settle-time checks within 20 seconds; the route was paused and checkpointed</string>
+</resources>

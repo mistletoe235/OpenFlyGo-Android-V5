@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#020406">
+
+    <FrameLayout
+        android:id="@+id/feature_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/top_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/of_hud_top_bar_height"
+        android:layout_gravity="top"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/hud_top_bar"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="5dp">
+
+        <TextView
+            android:id="@+id/sdk_status"
+            android:layout_width="84dp"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/ic_hud_drone"
+            android:drawablePadding="6dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/state_disconnected"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/aircraft_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/hud_badge"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/aircraft_status_placeholder"
+            android:textColor="#FFB4A9"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/flight_safety_top"
+            android:layout_width="218dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="6dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_hud_shield"
+            android:drawablePadding="6dp"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingHorizontal="10dp"
+            android:text="@string/flight_check_disconnected"
+            android:textColor="#BEC7D2"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/telemetry_status_strip"
+            android:layout_width="260dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/gps_status_text"
+                android:layout_width="58dp"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/ic_hud_satellite"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:text="GPS 0"
+                android:textColor="#D1D8E0"
+                android:textSize="10sp" />
+
+            <edu.playground.djivln.ui.widgets.SignalQualityView
+                android:id="@+id/link_signal_icon"
+                android:layout_width="24dp"
+                android:layout_height="26dp" />
+
+            <TextView
+                android:id="@+id/link_signal_text"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="#D1D8E0"
+                android:textSize="10sp" />
+
+            <edu.playground.djivln.ui.widgets.BatteryRingView
+                android:id="@+id/aircraft_battery_ring"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+            <edu.playground.djivln.ui.widgets.RemoteControllerBatteryView
+                android:id="@+id/rc_battery_text"
+                android:layout_width="41dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="4dp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/overflow_menu"
+            android:layout_width="42dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/more_controls"
+            android:padding="10dp"
+            android:src="@drawable/ic_hud_more" />
+    </LinearLayout>
+
+    <edu.playground.djivln.ui.widgets.FlightEnduranceBarView
+        android:id="@+id/flight_endurance_bar"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_gravity="top"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp" />
+
+    <TextView
+        android:id="@+id/error_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/cockpit_panel"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:textColor="#FF9E9E"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/aircraft_status_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="130dp"
+        android:background="#A0000000"
+        android:maxLines="3"
+        android:padding="7dp"
+        android:text="@string/v5_waiting_aircraft"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/vln_panel_host"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/cockpit_panel_strong" />
+
+    <LinearLayout
+        android:id="@+id/quick_menu"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="54dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/cockpit_panel"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:padding="6dp"
+        android:visibility="gone">
+        <Button android:id="@+id/nav_flight" android:layout_width="match_parent" android:layout_height="32dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/flight_home" android:textColor="#FFFFFF" android:textSize="10sp" />
+        <Button android:id="@+id/nav_survey" android:layout_width="match_parent" android:layout_height="32dp" android:layout_marginTop="3dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/survey_planning" android:textColor="#FFFFFF" android:textSize="10sp" />
+        <Button android:id="@+id/nav_vln" android:layout_width="match_parent" android:layout_height="32dp" android:layout_marginTop="3dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/toggle_vln" android:textColor="#FFFFFF" android:textSize="10sp" />
+        <Button android:id="@+id/nav_hil" android:layout_width="match_parent" android:layout_height="32dp" android:layout_marginTop="3dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/hil_settings" android:textColor="#FFFFFF" android:textSize="10sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/overlay_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:clickable="true"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/overlay_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="28dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/cockpit_panel"
+        android:visibility="gone">
+        <FrameLayout
+            android:id="@+id/overlay_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="48dp" />
+        <TextView
+            android:id="@+id/overlay_title"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="@string/survey_planning"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/overlay_close"
+            android:layout_width="54dp"
+            android:layout_height="38dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="5dp"
+            android:background="@drawable/cockpit_button"
+            android:text="@string/action_close"
+            android:textColor="#FFFFFF" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/survey_photo_capture_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:clickable="false"
+        android:elevation="40dp"
+        android:focusable="false"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/survey_photo_capture_feedback_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/cockpit_panel"
+            android:gravity="center"
+            android:minWidth="118dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+            android:text="@string/captured_indicator"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+</FrameLayout>

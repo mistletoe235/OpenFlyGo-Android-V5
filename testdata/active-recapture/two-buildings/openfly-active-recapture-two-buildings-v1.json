@@ -1,0 +1,5629 @@
+{
+  "schema_version": 11,
+  "id": "2a6cf6f6-e831-4816-8485-befb50cca9ed",
+  "name": "two_buildings 主动补拍",
+  "created_at_epoch_ms": 1787487934080,
+  "coordinate_frame": "WGS84",
+  "camera_profile": {
+    "id": "dji-mini-2-photo-4x3",
+    "image_width_px": 4000,
+    "image_height_px": 3000,
+    "horizontal_fov_deg": 73.7,
+    "vertical_fov_deg": 53.1,
+    "minimum_capture_interval_s": 2.0
+  },
+  "constraints": {
+    "altitude_agl_m": 78.0,
+    "forward_overlap": 0.7,
+    "side_overlap": 0.7,
+    "speed_mps": 2.8,
+    "gimbal_pitch_deg": -90.0,
+    "route_heading_deg": 60.0,
+    "crosshatch": false,
+    "collection_mode": "OBLIQUE_FIVE_DIRECTION",
+    "oblique_gimbal_pitch_deg": -45.0,
+    "boundary_margin_m": 0.0,
+    "altitude_mode": "RELATIVE_TO_TAKEOFF",
+    "target_surface_to_takeoff_m": 0.0,
+    "safe_takeoff_altitude_m": 89.44839362335205,
+    "takeoff_speed_mps": 3.0,
+    "takeoff_mode": "MANUAL",
+    "start_point_mode": "AUTO_NEAREST",
+    "completion_action": "RETURN_TO_HOME",
+    "capture_trigger_mode": "DISTANCE",
+    "timed_capture_interval_s": 2.0,
+    "oblique_forward_overlap": 0.6,
+    "oblique_side_overlap": 0.6,
+    "oblique_heading_mode": "FIXED_CAPTURE_DIRECTION",
+    "enabled_capture_views": [
+      "NADIR",
+      "FORWARD_OBLIQUE",
+      "BACKWARD_OBLIQUE",
+      "LEFT_OBLIQUE",
+      "RIGHT_OBLIQUE",
+      "LOCAL_OBLIQUE"
+    ]
+  },
+  "roi": [
+    {
+      "latitude": 31.17932518940813,
+      "longitude": 121.46631238509659,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.17932079709671,
+      "longitude": 121.46640674569785,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.179307620162458,
+      "longitude": 121.46668982750167,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.17921058851016,
+      "longitude": 121.4696201259906,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.17927491425873,
+      "longitude": 121.46986318068872,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.179323118860705,
+      "longitude": 121.47003117177758,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.17946773266663,
+      "longitude": 121.47053514504414,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.17950682167107,
+      "longitude": 121.47067136864413,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.179676796695777,
+      "longitude": 121.4711961647894,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.179795317963226,
+      "longitude": 121.47125444504331,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.180364842573965,
+      "longitude": 121.47153449637612,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.180689225644127,
+      "longitude": 121.47158799043957,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.180816989656368,
+      "longitude": 121.4714779325772,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.180937446722297,
+      "longitude": 121.47137416902946,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.181328045705328,
+      "longitude": 121.4710377011277,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.18145580971757,
+      "longitude": 121.47092764326531,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.181445025217513,
+      "longitude": 121.4708067816436,
+      "altitude_m": 48.46800000000001
+    },
+    {
+      "latitude": 31.18054854213856,
+      "longitude": 121.46647738738272,
+      "altitude_m": 48.46800000000001
+    }
+  ],
+  "waypoints": [
+    {
+      "point": {
+        "latitude": 31.17932518940813,
+        "longitude": 121.46631238509659,
+        "altitude_m": 74.57797446746827
+      },
+      "heading_deg": 20.35049378680975,
+      "gimbal_pitch_deg": -43.68332602057727,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 0,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17932079709671,
+        "longitude": 121.46640674569785,
+        "altitude_m": 86.57797446746827
+      },
+      "heading_deg": 11.92941393989085,
+      "gimbal_pitch_deg": -50.020588878966905,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 1,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179316404785293,
+        "longitude": 121.46650110629913,
+        "altitude_m": 74.57797446746827
+      },
+      "heading_deg": 3.1090343878697837,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 2,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179312012473876,
+        "longitude": 121.4665954669004,
+        "altitude_m": 86.57797446746827
+      },
+      "heading_deg": 354.2886548358487,
+      "gimbal_pitch_deg": -50.02058887896689,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 3,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179307620162458,
+        "longitude": 121.46668982750167,
+        "altitude_m": 74.57797446746827
+      },
+      "heading_deg": 345.86757498892985,
+      "gimbal_pitch_deg": -43.68332602057727,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 4,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17944784875202,
+        "longitude": 121.46662083383545,
+        "altitude_m": 75.41406601705552
+      },
+      "heading_deg": 337.88449258304234,
+      "gimbal_pitch_deg": -43.74991207440054,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 16.912558015097012,
+      "pass_index": 5,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179588077341577,
+        "longitude": 121.46655184016923,
+        "altitude_m": 76.25015756664277
+      },
+      "heading_deg": 329.90141017715484,
+      "gimbal_pitch_deg": -43.81649812822382,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 5,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179728305931135,
+        "longitude": 121.46648284650301,
+        "altitude_m": 77.08624911623002
+      },
+      "heading_deg": 321.91832777126734,
+      "gimbal_pitch_deg": -43.8830841820471,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 5,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179868534520697,
+        "longitude": 121.4664138528368,
+        "altitude_m": 77.92234066581727
+      },
+      "heading_deg": 313.93524536537984,
+      "gimbal_pitch_deg": -43.94967023587037,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 6,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179995044706914,
+        "longitude": 121.46649404896075,
+        "altitude_m": 77.92234066581727
+      },
+      "heading_deg": 298.5130840466412,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 7,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180121554893134,
+        "longitude": 121.46657424508471,
+        "altitude_m": 77.92234066581727
+      },
+      "heading_deg": 283.0909227279025,
+      "gimbal_pitch_deg": -43.949670235870364,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 8,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18026388397494,
+        "longitude": 121.46654195918406,
+        "altitude_m": 73.13722711054486
+      },
+      "heading_deg": 309.3951474944625,
+      "gimbal_pitch_deg": -42.22303293925368,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 16.113420679748206,
+      "pass_index": 9,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180406213056752,
+        "longitude": 121.46650967328338,
+        "altitude_m": 68.35211355527244
+      },
+      "heading_deg": 335.6993722610225,
+      "gimbal_pitch_deg": -40.49639564263698,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 9,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18054854213856,
+        "longitude": 121.46647738738272,
+        "altitude_m": 63.567000000000014
+      },
+      "heading_deg": 2.0035970275824866,
+      "gimbal_pitch_deg": -38.769758346020296,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 10,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180563730182833,
+        "longitude": 121.46657021032843,
+        "altitude_m": 75.56700000000001
+      },
+      "heading_deg": 355.6782201737964,
+      "gimbal_pitch_deg": -44.09913379431236,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 11,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180578918227106,
+        "longitude": 121.46666303327413,
+        "altitude_m": 63.567000000000014
+      },
+      "heading_deg": 349.1906289532959,
+      "gimbal_pitch_deg": -39.47698078831282,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 12,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18059410627138,
+        "longitude": 121.46675585621983,
+        "altitude_m": 75.56700000000001
+      },
+      "heading_deg": 342.70303773279545,
+      "gimbal_pitch_deg": -44.09913379431236,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 13,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18060929431565,
+        "longitude": 121.46684867916554,
+        "altitude_m": 63.567000000000014
+      },
+      "heading_deg": 336.37766087900934,
+      "gimbal_pitch_deg": -38.769758346020296,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 14,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180628613637246,
+        "longitude": 121.46704358716819,
+        "altitude_m": 62.560400000000016
+      },
+      "heading_deg": 336.19094698796454,
+      "gimbal_pitch_deg": -39.38933348255846,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 18.68649845456075,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18064793295884,
+        "longitude": 121.46723849517085,
+        "altitude_m": 61.55380000000002
+      },
+      "heading_deg": 336.0042330969197,
+      "gimbal_pitch_deg": -40.00890861909663,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18066725228044,
+        "longitude": 121.4674334031735,
+        "altitude_m": 60.54720000000001
+      },
+      "heading_deg": 335.8175192058749,
+      "gimbal_pitch_deg": -40.6284837556348,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180686571602035,
+        "longitude": 121.46762831117614,
+        "altitude_m": 59.54060000000001
+      },
+      "heading_deg": 335.63080531483,
+      "gimbal_pitch_deg": -41.24805889217296,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18070589092363,
+        "longitude": 121.4678232191788,
+        "altitude_m": 58.53400000000001
+      },
+      "heading_deg": 335.4440914237852,
+      "gimbal_pitch_deg": -41.86763402871113,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180725210245225,
+        "longitude": 121.46801812718145,
+        "altitude_m": 57.527400000000014
+      },
+      "heading_deg": 335.25737753274035,
+      "gimbal_pitch_deg": -42.4872091652493,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18074452956682,
+        "longitude": 121.4682130351841,
+        "altitude_m": 56.520800000000015
+      },
+      "heading_deg": 335.07066364169555,
+      "gimbal_pitch_deg": -43.10678430178746,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180763848888418,
+        "longitude": 121.46840794318676,
+        "altitude_m": 55.51420000000002
+      },
+      "heading_deg": 334.8839497506507,
+      "gimbal_pitch_deg": -43.72635943832563,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180783168210013,
+        "longitude": 121.46860285118942,
+        "altitude_m": 54.50760000000001
+      },
+      "heading_deg": 334.6972358596059,
+      "gimbal_pitch_deg": -44.34593457486379,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180802487531608,
+        "longitude": 121.46879775919207,
+        "altitude_m": 53.50100000000001
+      },
+      "heading_deg": 334.510521968561,
+      "gimbal_pitch_deg": -44.96550971140196,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180821806853203,
+        "longitude": 121.46899266719473,
+        "altitude_m": 52.49440000000001
+      },
+      "heading_deg": 334.3238080775162,
+      "gimbal_pitch_deg": -45.585084847940124,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180841126174798,
+        "longitude": 121.46918757519737,
+        "altitude_m": 51.48780000000001
+      },
+      "heading_deg": 334.13709418647136,
+      "gimbal_pitch_deg": -46.20465998447829,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180860445496396,
+        "longitude": 121.46938248320002,
+        "altitude_m": 50.48120000000001
+      },
+      "heading_deg": 333.95038029542656,
+      "gimbal_pitch_deg": -46.82423512101646,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18087976481799,
+        "longitude": 121.46957739120268,
+        "altitude_m": 49.47460000000001
+      },
+      "heading_deg": 333.7636664043817,
+      "gimbal_pitch_deg": -47.443810257554624,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 15,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180899084139586,
+        "longitude": 121.46977229920533,
+        "altitude_m": 48.46800000000001
+      },
+      "heading_deg": 333.5769525133369,
+      "gimbal_pitch_deg": -48.06338539409279,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 16,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18095865602854,
+        "longitude": 121.4698363154712,
+        "altitude_m": 60.46800000000001
+      },
+      "heading_deg": 323.47105540312424,
+      "gimbal_pitch_deg": -54.86529388192749,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 17,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181018227917495,
+        "longitude": 121.46990033173705,
+        "altitude_m": 48.46800000000001
+      },
+      "heading_deg": 312.64259447521226,
+      "gimbal_pitch_deg": -50.0,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 18,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18107779980645,
+        "longitude": 121.46996434800292,
+        "altitude_m": 60.46800000000001
+      },
+      "heading_deg": 301.81413354730034,
+      "gimbal_pitch_deg": -54.86529388192749,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 19,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.1811373716954,
+        "longitude": 121.47002836426877,
+        "altitude_m": 48.46800000000001
+      },
+      "heading_deg": 291.70823643708763,
+      "gimbal_pitch_deg": -48.06338539409279,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 20,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180974316692968,
+        "longitude": 121.4700926647063,
+        "altitude_m": 51.42120000000001
+      },
+      "heading_deg": 304.53741279337885,
+      "gimbal_pitch_deg": -52.25704685468351,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 19.12745160740891,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180811261690533,
+        "longitude": 121.47015696514384,
+        "altitude_m": 54.37440000000001
+      },
+      "heading_deg": 317.3665891496701,
+      "gimbal_pitch_deg": -56.450708315274234,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.1806482066881,
+        "longitude": 121.47022126558139,
+        "altitude_m": 57.327600000000004
+      },
+      "heading_deg": 330.19576550596133,
+      "gimbal_pitch_deg": -60.64436977586495,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180485151685666,
+        "longitude": 121.47028556601892,
+        "altitude_m": 60.280800000000006
+      },
+      "heading_deg": 343.0249418622526,
+      "gimbal_pitch_deg": -64.83803123645568,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180322096683234,
+        "longitude": 121.47034986645644,
+        "altitude_m": 63.23400000000001
+      },
+      "heading_deg": 355.8541182185438,
+      "gimbal_pitch_deg": -69.0316926970464,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180159041680803,
+        "longitude": 121.47041416689399,
+        "altitude_m": 66.1872
+      },
+      "heading_deg": 8.683294574835031,
+      "gimbal_pitch_deg": -73.22535415763711,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179995986678367,
+        "longitude": 121.47047846733152,
+        "altitude_m": 69.1404
+      },
+      "heading_deg": 21.512470931126302,
+      "gimbal_pitch_deg": -77.41901561822783,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179832931675936,
+        "longitude": 121.47054276776906,
+        "altitude_m": 72.09360000000001
+      },
+      "heading_deg": 34.341647287417516,
+      "gimbal_pitch_deg": -81.61267707881856,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.1796698766735,
+        "longitude": 121.47060706820659,
+        "altitude_m": 75.0468
+      },
+      "heading_deg": 47.170823643708786,
+      "gimbal_pitch_deg": -85.80633853940928,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 21,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.17950682167107,
+        "longitude": 121.47067136864413,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 16.030671979926062,
+      "pass_index": 22,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179602987101788,
+        "longitude": 121.47086572744387,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 22,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179651069817147,
+        "longitude": 121.47096290684372,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 22,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179699152532507,
+        "longitude": 121.47106008624358,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 22,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179795317963226,
+        "longitude": 121.47125444504331,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 22,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179915721344205,
+        "longitude": 121.47131365078558,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 15.000000000000007,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 16.029702159730185,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180036124725184,
+        "longitude": 121.47137285652784,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18015652810616,
+        "longitude": 121.47143206227011,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 285.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18027693148714,
+        "longitude": 121.47149126801237,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.1801704946902,
+        "longitude": 121.47127614987747,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18008534525265,
+        "longitude": 121.47110405536954,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18006405789326,
+        "longitude": 121.47106103174255,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.17995762109632,
+        "longitude": 121.47084591360765,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179893759018157,
+        "longitude": 121.47071684272669,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179851184299384,
+        "longitude": 121.47063079547273,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179744747502443,
+        "longitude": 121.47041567733781,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179702172783667,
+        "longitude": 121.47032963008385,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179638310705503,
+        "longitude": 121.47020055920291,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179531873908566,
+        "longitude": 121.46998544106799,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179510586549178,
+        "longitude": 121.46994241744102,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.17942543711163,
+        "longitude": 121.46977032293309,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.17931900031469,
+        "longitude": 121.46955520479817,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 23,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179389284754954,
+        "longitude": 121.46951311574992,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 195.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 15.78844281716482,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179459569195224,
+        "longitude": 121.46947102670167,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.17952985363549,
+        "longitude": 121.46942893765342,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 105.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179600138075756,
+        "longitude": 121.46938684860517,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179709046832592,
+        "longitude": 121.4696069627886,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179781652670485,
+        "longitude": 121.46975370557757,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.17981795558943,
+        "longitude": 121.46982707697205,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179926864346267,
+        "longitude": 121.47004719115549,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179963167265214,
+        "longitude": 121.47012056254997,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180035773103103,
+        "longitude": 121.47026730533894,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18014468185994,
+        "longitude": 121.47048741952237,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18025359061678,
+        "longitude": 121.47070753370582,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18032619645467,
+        "longitude": 121.47085427649478,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180362499373615,
+        "longitude": 121.47092764788925,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18047140813045,
+        "longitude": 121.47114776207269,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180507711049398,
+        "longitude": 121.47122113346718,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18058031688729,
+        "longitude": 121.47136787625614,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180689225644127,
+        "longitude": 121.47158799043957,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 24,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180753107650247,
+        "longitude": 121.47153296150839,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 15.000000000000007,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 15.461495381076535,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180816989656368,
+        "longitude": 121.4714779325772,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180880871662485,
+        "longitude": 121.47142290364602,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 285.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180944753668605,
+        "longitude": 121.47136787471483,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180838405885428,
+        "longitude": 121.47115293648456,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18076750736331,
+        "longitude": 121.47100964433105,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18073205810225,
+        "longitude": 121.47093799825429,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18062571031907,
+        "longitude": 121.47072306002403,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18059026105801,
+        "longitude": 121.47065141394727,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180519362535893,
+        "longitude": 121.47050812179376,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180413014752716,
+        "longitude": 121.47029318356348,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18030666696954,
+        "longitude": 121.47007824533323,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180235768447417,
+        "longitude": 121.46993495317972,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18020031918636,
+        "longitude": 121.46986330710295,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18009397140318,
+        "longitude": 121.4696483688727,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180058522142122,
+        "longitude": 121.46957672279594,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179987623620004,
+        "longitude": 121.46943343064243,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179881275836824,
+        "longitude": 121.46921849241215,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 25,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.179951560277093,
+        "longitude": 121.4691764033639,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 195.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 15.118720727060056,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18002184471736,
+        "longitude": 121.46913431431565,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180092129157625,
+        "longitude": 121.4690922252674,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 105.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180162413597895,
+        "longitude": 121.46905013621915,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180266200407413,
+        "longitude": 121.46925989849625,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18033539161376,
+        "longitude": 121.46939974001431,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18036998721693,
+        "longitude": 121.46946966077334,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180473774026453,
+        "longitude": 121.46967942305042,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180508369629624,
+        "longitude": 121.46974934380945,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18057756083597,
+        "longitude": 121.46988918532752,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18068134764549,
+        "longitude": 121.47009894760461,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18078513445501,
+        "longitude": 121.4703087098817,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180854325661358,
+        "longitude": 121.47044855139977,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18088892126453,
+        "longitude": 121.47051847215879,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180992708074047,
+        "longitude": 121.47072823443588,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181027303677222,
+        "longitude": 121.47079815519491,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18109649488357,
+        "longitude": 121.47093799671298,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181200281693087,
+        "longitude": 121.47114775899007,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.00000000000001,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 26,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181264163699208,
+        "longitude": 121.47109273005888,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 15.000000000000007,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 14.064654501786125,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181328045705328,
+        "longitude": 121.4710377011277,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18139192771145,
+        "longitude": 121.4709826721965,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 285.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18145580971757,
+        "longitude": 121.47092764326531,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181352049004417,
+        "longitude": 121.47071793373128,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18128979257653,
+        "longitude": 121.47059210801086,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.18124828829127,
+        "longitude": 121.47050822419725,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181144527578116,
+        "longitude": 121.47029851466321,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181123775435488,
+        "longitude": 121.47025657275641,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.181040766864967,
+        "longitude": 121.47008880512918,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180957758294447,
+        "longitude": 121.46992103750196,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180937006151815,
+        "longitude": 121.46987909559515,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180833245438667,
+        "longitude": 121.46966938606111,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180791741153406,
+        "longitude": 121.4695855022475,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180729484725514,
+        "longitude": 121.46945967652708,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180625724012362,
+        "longitude": 121.46924996699305,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -90.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 27,
+      "capture_view": "NADIR"
+    },
+    {
+      "point": {
+        "latitude": 31.180538292768972,
+        "longitude": 121.46918639309509,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 195.0,
+      "gimbal_pitch_deg": -78.75,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 20.129268615902028,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18045086152558,
+        "longitude": 121.46912281919711,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -67.5,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180363430282185,
+        "longitude": 121.46905924529915,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 105.0,
+      "gimbal_pitch_deg": -56.25,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18027599903879,
+        "longitude": 121.46899567140119,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18037828092692,
+        "longitude": 121.46920239209969,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18048056281505,
+        "longitude": 121.46940911279819,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180582844703178,
+        "longitude": 121.46961583349669,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180685126591307,
+        "longitude": 121.4698225541952,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180787408479436,
+        "longitude": 121.4700292748937,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180889690367565,
+        "longitude": 121.4702359955922,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180991972255693,
+        "longitude": 121.4704427162907,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181094254143822,
+        "longitude": 121.4706494369892,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18119653603195,
+        "longitude": 121.4708561576877,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181298817920084,
+        "longitude": 121.47106287838622,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 28,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181178360854155,
+        "longitude": 121.47116664193396,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 19.275762301876284,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181057903788226,
+        "longitude": 121.4712704054817,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180937446722297,
+        "longitude": 121.47137416902946,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180816989656368,
+        "longitude": 121.4714779325772,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18070936138636,
+        "longitude": 121.47126040637035,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18060173311635,
+        "longitude": 121.4710428801635,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180494104846343,
+        "longitude": 121.47082535395664,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18045822875634,
+        "longitude": 121.47075284522103,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180386476576334,
+        "longitude": 121.47060782774979,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18027884830633,
+        "longitude": 121.47039030154293,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18017122003632,
+        "longitude": 121.47017277533608,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180099467856316,
+        "longitude": 121.47002775786484,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180063591766313,
+        "longitude": 121.46995524912923,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179955963496305,
+        "longitude": 121.46973772292237,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.1798483352263,
+        "longitude": 121.46952019671552,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17974070695629,
+        "longitude": 121.46930267050867,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 29,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179608177344758,
+        "longitude": 121.46938203437915,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 22.30871762712165,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179475647733227,
+        "longitude": 121.46946139824963,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179343118121693,
+        "longitude": 121.46954076212012,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17921058851016,
+        "longitude": 121.4696201259906,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179320666521793,
+        "longitude": 121.46984260334091,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179430744533427,
+        "longitude": 121.4700650806912,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179540822545057,
+        "longitude": 121.4702875580415,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17965090055669,
+        "longitude": 121.4705100353918,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179760978568325,
+        "longitude": 121.4707325127421,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179871056579955,
+        "longitude": 121.4709549900924,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17998113459159,
+        "longitude": 121.4711774674427,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180091212603223,
+        "longitude": 121.47139994479299,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 60.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 30,
+      "capture_view": "FORWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180091212603223,
+        "longitude": 121.47139994479299,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 15.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 17.793826914178304,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180091212603223,
+        "longitude": 121.47139994479299,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180091212603223,
+        "longitude": 121.47139994479299,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 285.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180091212603223,
+        "longitude": 121.47139994479299,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17998113459159,
+        "longitude": 121.4711774674427,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179871056579955,
+        "longitude": 121.4709549900924,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179760978568325,
+        "longitude": 121.4707325127421,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17965090055669,
+        "longitude": 121.4705100353918,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179540822545057,
+        "longitude": 121.4702875580415,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179430744533427,
+        "longitude": 121.4700650806912,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179320666521793,
+        "longitude": 121.46984260334091,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17921058851016,
+        "longitude": 121.4696201259906,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 31,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179343118121693,
+        "longitude": 121.46954076212012,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 19.258852680730612,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179475647733227,
+        "longitude": 121.46946139824963,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179608177344758,
+        "longitude": 121.46938203437915,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17974070695629,
+        "longitude": 121.46930267050867,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.1798483352263,
+        "longitude": 121.46952019671552,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179955963496305,
+        "longitude": 121.46973772292237,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180063591766313,
+        "longitude": 121.46995524912923,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180099467856316,
+        "longitude": 121.47002775786484,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18017122003632,
+        "longitude": 121.47017277533608,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18027884830633,
+        "longitude": 121.47039030154293,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180386476576334,
+        "longitude": 121.47060782774979,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18045822875634,
+        "longitude": 121.47075284522103,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180494104846343,
+        "longitude": 121.47082535395664,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18060173311635,
+        "longitude": 121.4710428801635,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18070936138636,
+        "longitude": 121.47126040637035,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180816989656368,
+        "longitude": 121.4714779325772,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 32,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180937446722297,
+        "longitude": 121.47137416902946,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 21.327108359351023,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181057903788226,
+        "longitude": 121.4712704054817,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181178360854155,
+        "longitude": 121.47116664193396,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181298817920084,
+        "longitude": 121.47106287838622,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18119653603195,
+        "longitude": 121.4708561576877,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181094254143822,
+        "longitude": 121.4706494369892,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180991972255693,
+        "longitude": 121.4704427162907,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180889690367565,
+        "longitude": 121.4702359955922,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180787408479436,
+        "longitude": 121.4700292748937,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180685126591307,
+        "longitude": 121.4698225541952,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180582844703178,
+        "longitude": 121.46961583349669,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18048056281505,
+        "longitude": 121.46940911279819,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18037828092692,
+        "longitude": 121.46920239209969,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18027599903879,
+        "longitude": 121.46899567140119,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 33,
+      "capture_view": "BACKWARD_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180344916392052,
+        "longitude": 121.46904578329041,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 285.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 22.16790496972979,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180413833745313,
+        "longitude": 121.46909589517965,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18022401383088,
+        "longitude": 121.46922377609782,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180034193916452,
+        "longitude": 121.469351657016,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17984437400202,
+        "longitude": 121.46947953793418,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17965455408759,
+        "longitude": 121.46960741885236,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17946473417316,
+        "longitude": 121.46973529977053,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17927491425873,
+        "longitude": 121.46986318068872,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 34,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179323118860705,
+        "longitude": 121.47003117177758,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 21.157868894382872,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17937132346268,
+        "longitude": 121.47019916286642,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179419528064656,
+        "longitude": 121.47036715395528,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17946773266663,
+        "longitude": 121.47053514504414,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17964513398707,
+        "longitude": 121.47041563048313,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17982253530751,
+        "longitude": 121.47029611592212,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17999993662795,
+        "longitude": 121.4701766013611,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18017733794839,
+        "longitude": 121.4700570868001,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18035473926883,
+        "longitude": 121.46993757223909,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180532140589268,
+        "longitude": 121.46981805767808,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180709541909707,
+        "longitude": 121.46969854311708,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18088694323015,
+        "longitude": 121.46957902855607,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 35,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180956703478568,
+        "longitude": 121.46973249769201,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 21.88485806749584,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18102646372699,
+        "longitude": 121.46988596682795,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18109622397541,
+        "longitude": 121.4700394359639,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18116598422383,
+        "longitude": 121.47019290509984,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180979835782825,
+        "longitude": 121.47031831256103,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18079368734182,
+        "longitude": 121.47044372002223,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180607538900812,
+        "longitude": 121.47056912748343,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180421390459806,
+        "longitude": 121.47069453494463,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.1802352420188,
+        "longitude": 121.47081994240583,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180049093577793,
+        "longitude": 121.47094534986701,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179862945136783,
+        "longitude": 121.4710707573282,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179676796695777,
+        "longitude": 121.4711961647894,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 36,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179814405871415,
+        "longitude": 121.47126383110675,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 20.499413582886227,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179952015047053,
+        "longitude": 121.47133149742409,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18008962422269,
+        "longitude": 121.47139916374144,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180227233398327,
+        "longitude": 121.47146683005877,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180364842573965,
+        "longitude": 121.47153449637612,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180544873014554,
+        "longitude": 121.47141321058737,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180724903455147,
+        "longitude": 121.47129192479862,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18090493389574,
+        "longitude": 121.47117063900986,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181084964336332,
+        "longitude": 121.4710493532211,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18126499477692,
+        "longitude": 121.47092806743235,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181445025217513,
+        "longitude": 121.4708067816436,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 330.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 37,
+      "capture_view": "LEFT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181445025217513,
+        "longitude": 121.4708067816436,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 285.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 15.401482687801645,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181445025217513,
+        "longitude": 121.4708067816436,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 240.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181445025217513,
+        "longitude": 121.4708067816436,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 195.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181445025217513,
+        "longitude": 121.4708067816436,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18126499477692,
+        "longitude": 121.47092806743235,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.181084964336332,
+        "longitude": 121.4710493532211,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18090493389574,
+        "longitude": 121.47117063900986,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180724903455147,
+        "longitude": 121.47129192479862,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180544873014554,
+        "longitude": 121.47141321058737,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180364842573965,
+        "longitude": 121.47153449637612,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 38,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180227233398327,
+        "longitude": 121.47146683005877,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 21.456627675960434,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18008962422269,
+        "longitude": 121.47139916374144,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179952015047053,
+        "longitude": 121.47133149742409,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179814405871415,
+        "longitude": 121.47126383110675,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179676796695777,
+        "longitude": 121.4711961647894,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179862945136783,
+        "longitude": 121.4710707573282,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180049093577793,
+        "longitude": 121.47094534986701,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.1802352420188,
+        "longitude": 121.47081994240583,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180421390459806,
+        "longitude": 121.47069453494463,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180607538900812,
+        "longitude": 121.47056912748343,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18079368734182,
+        "longitude": 121.47044372002223,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180979835782825,
+        "longitude": 121.47031831256103,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18116598422383,
+        "longitude": 121.47019290509984,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 39,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18109622397541,
+        "longitude": 121.4700394359639,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 21.068531822546667,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18102646372699,
+        "longitude": 121.46988596682795,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180956703478568,
+        "longitude": 121.46973249769201,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18088694323015,
+        "longitude": 121.46957902855607,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180709541909707,
+        "longitude": 121.46969854311708,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180532140589268,
+        "longitude": 121.46981805767808,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18035473926883,
+        "longitude": 121.46993757223909,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18017733794839,
+        "longitude": 121.4700570868001,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17999993662795,
+        "longitude": 121.4701766013611,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17982253530751,
+        "longitude": 121.47029611592212,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17964513398707,
+        "longitude": 121.47041563048313,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17946773266663,
+        "longitude": 121.47053514504414,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 40,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179419528064656,
+        "longitude": 121.47036715395528,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 21.86317463456708,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17937132346268,
+        "longitude": 121.47019916286642,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.179323118860705,
+        "longitude": 121.47003117177758,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17927491425873,
+        "longitude": 121.46986318068872,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17946473417316,
+        "longitude": 121.46973529977053,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17965455408759,
+        "longitude": 121.46960741885236,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.17984437400202,
+        "longitude": 121.46947953793418,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180034193916452,
+        "longitude": 121.469351657016,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18022401383088,
+        "longitude": 121.46922377609782,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180413833745313,
+        "longitude": 121.46909589517965,
+        "altitude_m": 78.0
+      },
+      "heading_deg": 150.0,
+      "gimbal_pitch_deg": -45.0,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 41,
+      "capture_view": "RIGHT_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180447211081297,
+        "longitude": 121.46929946564244,
+        "altitude_m": 77.93871040259467
+      },
+      "heading_deg": 149.26251507035357,
+      "gimbal_pitch_deg": -44.664890762110474,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 19.73943095678499,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180480588417282,
+        "longitude": 121.46950303610522,
+        "altitude_m": 77.87742080518935
+      },
+      "heading_deg": 148.52503014070714,
+      "gimbal_pitch_deg": -44.32978152422095,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180513965753267,
+        "longitude": 121.469706606568,
+        "altitude_m": 77.81613120778401
+      },
+      "heading_deg": 147.78754521106072,
+      "gimbal_pitch_deg": -43.99467228633143,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180547343089252,
+        "longitude": 121.46991017703078,
+        "altitude_m": 77.75484161037869
+      },
+      "heading_deg": 147.0500602814143,
+      "gimbal_pitch_deg": -43.6595630484419,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180580720425233,
+        "longitude": 121.47011374749357,
+        "altitude_m": 77.69355201297336
+      },
+      "heading_deg": 146.31257535176786,
+      "gimbal_pitch_deg": -43.32445381055238,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180614097761218,
+        "longitude": 121.47031731795636,
+        "altitude_m": 77.63226241556804
+      },
+      "heading_deg": 145.57509042212143,
+      "gimbal_pitch_deg": -42.98934457266285,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180647475097203,
+        "longitude": 121.47052088841913,
+        "altitude_m": 77.5709728181627
+      },
+      "heading_deg": 144.837605492475,
+      "gimbal_pitch_deg": -42.65423533477333,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180680852433188,
+        "longitude": 121.47072445888192,
+        "altitude_m": 77.50968322075738
+      },
+      "heading_deg": 144.10012056282858,
+      "gimbal_pitch_deg": -42.31912609688381,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 42,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180714229769173,
+        "longitude": 121.4709280293447,
+        "altitude_m": 77.44839362335205
+      },
+      "heading_deg": 143.36263563318215,
+      "gimbal_pitch_deg": -41.98401685899428,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 43,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180742485537962,
+        "longitude": 121.47101659059412,
+        "altitude_m": 89.44839362335205
+      },
+      "heading_deg": 151.3055227741891,
+      "gimbal_pitch_deg": -48.222337247666026,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 44,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18077074130675,
+        "longitude": 121.47110515184353,
+        "altitude_m": 77.44839362335205
+      },
+      "heading_deg": 159.57981452125148,
+      "gimbal_pitch_deg": -43.14293029768374,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 45,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180798997075538,
+        "longitude": 121.47119371309294,
+        "altitude_m": 89.44839362335205
+      },
+      "heading_deg": 167.85410626831387,
+      "gimbal_pitch_deg": -48.22233724766602,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 46,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180827252844328,
+        "longitude": 121.47128227434236,
+        "altitude_m": 77.44839362335205
+      },
+      "heading_deg": 175.7969934093208,
+      "gimbal_pitch_deg": -41.98401685899428,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 47,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180741335179412,
+        "longitude": 121.47123624298055,
+        "altitude_m": 73.64297907706049
+      },
+      "heading_deg": 219.79623950658475,
+      "gimbal_pitch_deg": -41.02917077015727,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 10.5065357208366,
+      "pass_index": 48,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.1806554175145,
+        "longitude": 121.47119021161873,
+        "altitude_m": 69.83756453076893
+      },
+      "heading_deg": 263.79548560384876,
+      "gimbal_pitch_deg": -40.07432468132026,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 48,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18056949984959,
+        "longitude": 121.47114418025691,
+        "altitude_m": 66.03214998447737
+      },
+      "heading_deg": 307.7947317011127,
+      "gimbal_pitch_deg": -39.119478592483254,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 48,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180483582184674,
+        "longitude": 121.47109814889511,
+        "altitude_m": 62.226735438185806
+      },
+      "heading_deg": 351.79397779837666,
+      "gimbal_pitch_deg": -38.164632503646246,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 49,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180496024638817,
+        "longitude": 121.47100477119943,
+        "altitude_m": 74.22673543818581
+      },
+      "heading_deg": 0.12317144938815261,
+      "gimbal_pitch_deg": -45.41397698384897,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 50,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18050846709296,
+        "longitude": 121.47091139350377,
+        "altitude_m": 62.226735438185806
+      },
+      "heading_deg": 8.837895817590564,
+      "gimbal_pitch_deg": -39.42110945241303,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 51,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.1805209095471,
+        "longitude": 121.4708180158081,
+        "altitude_m": 74.22673543818581
+      },
+      "heading_deg": 17.552620185792918,
+      "gimbal_pitch_deg": -45.41397698384897,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 52,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18053335200124,
+        "longitude": 121.47072463811243,
+        "altitude_m": 62.226735438185806
+      },
+      "heading_deg": 25.881813836804483,
+      "gimbal_pitch_deg": -38.164632503646246,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 53,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18048111574254,
+        "longitude": 121.47072011271699,
+        "altitude_m": 65.4507461305841
+      },
+      "heading_deg": 63.426870636341576,
+      "gimbal_pitch_deg": -39.544305882879,
+      "kind": "PASS_START",
+      "capture_action": "START_DISTANCE_INTERVAL",
+      "capture_interval_m": 5.821097187914924,
+      "pass_index": 54,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18042887948384,
+        "longitude": 121.47071558732154,
+        "altitude_m": 68.67475682298237
+      },
+      "heading_deg": 100.97192743587867,
+      "gimbal_pitch_deg": -40.92397926211176,
+      "kind": "TRANSIT",
+      "capture_action": "NONE",
+      "capture_interval_m": null,
+      "pass_index": 54,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18037664322514,
+        "longitude": 121.4707110619261,
+        "altitude_m": 71.89876751538065
+      },
+      "heading_deg": 138.51698423541575,
+      "gimbal_pitch_deg": -42.303652641344506,
+      "kind": "PASS_END",
+      "capture_action": "STOP_DISTANCE_INTERVAL",
+      "capture_interval_m": null,
+      "pass_index": 54,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18032440696644,
+        "longitude": 121.47070653653066,
+        "altitude_m": 75.12277820777894
+      },
+      "heading_deg": 176.06204103495287,
+      "gimbal_pitch_deg": -43.68332602057726,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 55,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180295148006294,
+        "longitude": 121.47061841994818,
+        "altitude_m": 87.12277820777894
+      },
+      "heading_deg": 167.64096118803394,
+      "gimbal_pitch_deg": -50.0205888789669,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 56,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180265889046147,
+        "longitude": 121.47053030336569,
+        "altitude_m": 75.12277820777894
+      },
+      "heading_deg": 158.8205816360129,
+      "gimbal_pitch_deg": -44.99999999999999,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 57,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.180236630086,
+        "longitude": 121.4704421867832,
+        "altitude_m": 87.12277820777894
+      },
+      "heading_deg": 150.00020208399184,
+      "gimbal_pitch_deg": -50.0205888789669,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 58,
+      "capture_view": "LOCAL_OBLIQUE"
+    },
+    {
+      "point": {
+        "latitude": 31.18020737112585,
+        "longitude": 121.47035407020071,
+        "altitude_m": 75.12277820777894
+      },
+      "heading_deg": 141.57912223707294,
+      "gimbal_pitch_deg": -43.68332602057726,
+      "kind": "CAPTURE_POINT",
+      "capture_action": "CAPTURE_ON_REACH",
+      "capture_interval_m": null,
+      "pass_index": 59,
+      "capture_view": "LOCAL_OBLIQUE"
+    }
+  ],
+  "estimated_path_m": 5851.311709753523,
+  "estimated_photo_count": 339,
+  "estimated_flight_s": 2632.96747365758,
+  "terrain_plan": null,
+  "active_mapping": {
+    "schema_version": 1,
+    "selection_method": "existing seven-region micro-sequences + Android SurveyPlanner R8/R9 five-direction scan + established automatic bridge rule",
+    "ground_truth_used": false,
+    "gs_used_for_selection": false,
+    "ordinary_gps_used": true,
+    "source_capture_count": 339,
+    "survey_capture_count": 113,
+    "bridge_capture_count": 226,
+    "source_estimated_route_distance_m": 6006.141266038782,
+    "regions": [
+      {
+        "region_id": "1",
+        "priority": 1,
+        "kind": "LOCAL_PRECISE_RECAPTURE",
+        "risk_score": 159.40472103840426,
+        "reason": [
+          "online_reconstruction_risk",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.18127844748567,
+          "longitude": 121.46650718341148,
+          "absolute_altitude_m": 24.994797150293977
+        },
+        "pass_indices": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "suggested_survey_photos": 5
+      },
+      {
+        "region_id": "2",
+        "priority": 2,
+        "kind": "LOCAL_PRECISE_RECAPTURE",
+        "risk_score": 125.87083131791375,
+        "reason": [
+          "online_reconstruction_risk",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.181305044968333,
+          "longitude": 121.4695369107267,
+          "absolute_altitude_m": 19.008826828996334
+        },
+        "pass_indices": [
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "suggested_survey_photos": 5
+      },
+      {
+        "region_id": "3",
+        "priority": 3,
+        "kind": "LOCAL_PRECISE_RECAPTURE",
+        "risk_score": 116.10187430870442,
+        "reason": [
+          "online_reconstruction_risk",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.181030523992025,
+          "longitude": 121.47100611199416,
+          "absolute_altitude_m": 23.196965217590325
+        },
+        "pass_indices": [
+          48,
+          49,
+          50,
+          51,
+          52,
+          53
+        ],
+        "suggested_survey_photos": 5
+      },
+      {
+        "region_id": "4",
+        "priority": 4,
+        "kind": "LOCAL_PRECISE_RECAPTURE",
+        "risk_score": 88.33293414514436,
+        "reason": [
+          "online_reconstruction_risk",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.1802488565291,
+          "longitude": 121.47133187300341,
+          "absolute_altitude_m": 31.28355449721926
+        },
+        "pass_indices": [
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "suggested_survey_photos": 5
+      },
+      {
+        "region_id": "5",
+        "priority": 5,
+        "kind": "LOCAL_PRECISE_RECAPTURE",
+        "risk_score": 68.06920820956802,
+        "reason": [
+          "online_reconstruction_risk",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.17977923973464,
+          "longitude": 121.47075032804035,
+          "absolute_altitude_m": 30.615229924519852
+        },
+        "pass_indices": [
+          54,
+          55,
+          56,
+          57,
+          58,
+          59
+        ],
+        "suggested_survey_photos": 5
+      },
+      {
+        "region_id": "6",
+        "priority": 6,
+        "kind": "LOCAL_PRECISE_RECAPTURE",
+        "risk_score": 49.604492301263114,
+        "reason": [
+          "online_reconstruction_risk",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.179837538496418,
+          "longitude": 121.46653413607483,
+          "absolute_altitude_m": 32.52745772543407
+        },
+        "pass_indices": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "suggested_survey_photos": 5
+      },
+      {
+        "region_id": "7",
+        "priority": 7,
+        "kind": "LOCAL_PRECISE_RECAPTURE",
+        "risk_score": 47.57755763484417,
+        "reason": [
+          "online_reconstruction_risk",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.180244179494238,
+          "longitude": 121.46595891745359,
+          "absolute_altitude_m": 33.55640316009521
+        },
+        "pass_indices": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "suggested_survey_photos": 3
+      },
+      {
+        "region_id": "R8",
+        "priority": 8,
+        "kind": "HIGH_RISE_AREA_SCAN",
+        "risk_score": 42.00014201569564,
+        "reason": [
+          "insufficient_high_oblique_coverage",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.18067025281195,
+          "longitude": 121.47042031104031,
+          "absolute_altitude_m": 31.03878474235534
+        },
+        "pass_indices": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41
+        ],
+        "suggested_survey_photos": 40
+      },
+      {
+        "region_id": "R9",
+        "priority": 9,
+        "kind": "HIGH_RISE_AREA_SCAN",
+        "risk_score": 38.52939548813066,
+        "reason": [
+          "insufficient_high_oblique_coverage",
+          "sfm_surface_support_deficit"
+        ],
+        "target_wgs84": {
+          "latitude": 31.180111472596412,
+          "longitude": 121.47013004191851,
+          "absolute_altitude_m": 36.14829281171162
+        },
+        "pass_indices": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41
+        ],
+        "suggested_survey_photos": 40
+      }
+    ],
+    "passes": [
+      {
+        "pass_index": 0,
+        "region_id": "6",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 1,
+        "region_id": "6",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 2,
+        "region_id": "6",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 3,
+        "region_id": "6",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 4,
+        "region_id": "6",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 5,
+        "region_id": "7",
+        "role": "RECONSTRUCTION_BRIDGE",
+        "capture_role": "BRIDGE",
+        "source": "ACTIVE_MAPPING_COMPILER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 6,
+        "region_id": "7",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 7,
+        "region_id": "7",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 8,
+        "region_id": "7",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 9,
+        "region_id": "1",
+        "role": "RECONSTRUCTION_BRIDGE",
+        "capture_role": "BRIDGE",
+        "source": "ACTIVE_MAPPING_COMPILER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 10,
+        "region_id": "1",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 11,
+        "region_id": "1",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 12,
+        "region_id": "1",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 13,
+        "region_id": "1",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 14,
+        "region_id": "1",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 15,
+        "region_id": "2",
+        "role": "RECONSTRUCTION_BRIDGE",
+        "capture_role": "BRIDGE",
+        "source": "ACTIVE_MAPPING_COMPILER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 16,
+        "region_id": "2",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 17,
+        "region_id": "2",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 18,
+        "region_id": "2",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 19,
+        "region_id": "2",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 20,
+        "region_id": "2",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 21,
+        "region_id": "R8_R9",
+        "role": "RECONSTRUCTION_BRIDGE",
+        "capture_role": "BRIDGE",
+        "source": "ACTIVE_MAPPING_COMPILER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 22,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 23,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 24,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 25,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 26,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 27,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 28,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 29,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 30,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 31,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 32,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 33,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 34,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 35,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 36,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 37,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 38,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 39,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 40,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 41,
+        "region_id": "R8_R9",
+        "role": "HIGH_RISE_SCAN",
+        "capture_role": "MIXED",
+        "source": "ANDROID_SURVEY_PLANNER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 42,
+        "region_id": "4",
+        "role": "RECONSTRUCTION_BRIDGE",
+        "capture_role": "BRIDGE",
+        "source": "ACTIVE_MAPPING_COMPILER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 43,
+        "region_id": "4",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 44,
+        "region_id": "4",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 45,
+        "region_id": "4",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 46,
+        "region_id": "4",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 47,
+        "region_id": "4",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 48,
+        "region_id": "3",
+        "role": "RECONSTRUCTION_BRIDGE",
+        "capture_role": "BRIDGE",
+        "source": "ACTIVE_MAPPING_COMPILER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 49,
+        "region_id": "3",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 50,
+        "region_id": "3",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 51,
+        "region_id": "3",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 52,
+        "region_id": "3",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 53,
+        "region_id": "3",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 54,
+        "region_id": "5",
+        "role": "RECONSTRUCTION_BRIDGE",
+        "capture_role": "BRIDGE",
+        "source": "ACTIVE_MAPPING_COMPILER",
+        "required_for_reconstruction_bridge": true
+      },
+      {
+        "pass_index": 55,
+        "region_id": "5",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 56,
+        "region_id": "5",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 57,
+        "region_id": "5",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 58,
+        "region_id": "5",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      },
+      {
+        "pass_index": 59,
+        "region_id": "5",
+        "role": "LOCAL_PRECISE_CAPTURE",
+        "capture_role": "SURVEY",
+        "source": "ACTIVE_MAPPING_RESEARCH",
+        "required_for_reconstruction_bridge": false
+      }
+    ]
+  }
+}

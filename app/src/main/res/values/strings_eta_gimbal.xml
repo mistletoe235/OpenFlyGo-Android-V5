@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dji_capture_gimbal_timeout">DJI 航线云台在 20 秒内未通过角度与稳定时间检查；航线已暂停并保存断点</string>
+</resources>

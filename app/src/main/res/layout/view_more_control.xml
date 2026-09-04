@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingStart="14dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button android:id="@+id/tab_link" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="@string/link" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/tab_flight" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/autopilot" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/tab_execution" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/execution" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/tab_system" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/settings_system" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <View android:layout_width="6dp" android:layout_height="1dp" />
+        <ImageButton android:id="@+id/close_more" android:layout_width="42dp" android:layout_height="34dp" android:layout_marginStart="6dp" android:background="@drawable/cockpit_button" android:contentDescription="@string/close_more_controls" android:padding="8dp" android:src="@drawable/ic_hud_close" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/content_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/model_transport_hint" android:textColor="@color/of_hud_text_secondary" android:textSize="11sp" android:textStyle="bold" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                    <Button android:id="@+id/transport_local" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="LOCAL" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/transport_aoa" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="4dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="USB AOA" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/transport_ethernet" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="4dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/transport_ethernet" android:textColor="#FFFFFF" android:textSize="10sp" />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/ethernet_endpoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/cockpit_field"
+                    android:hint="http://192.168.60.2:5802"
+                    android:inputType="textUri"
+                    android:paddingHorizontal="9dp"
+                    android:singleLine="true"
+                    android:text="http://192.168.60.2:5802"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#778392"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="5dp" android:orientation="horizontal">
+                    <Button android:id="@+id/import_model" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/import_model_zip" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/download_model" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/model_download_uavflow" android:textColor="#FFFFFF" android:textSize="10sp" />
+                </LinearLayout>
+                <Button android:id="@+id/stop_threshold" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="5dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/uavflow_stop_threshold_default" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="5dp" android:orientation="horizontal">
+                    <Button android:id="@+id/model_health" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/model_health" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/model_load" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="3dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/action_load" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/model_preflight" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="3dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/action_preflight" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/model_start" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="3dp" android:layout_weight="1" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="@string/action_start" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/model_stop" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="3dp" android:layout_weight="1" android:background="@drawable/cockpit_button_danger" android:minHeight="0dp" android:text="@string/action_stop" android:textColor="#FFAAA0" android:textSize="10sp" />
+                    <Button android:id="@+id/model_reset" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="3dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/action_reset" android:textColor="#FFFFFF" android:textSize="10sp" />
+                </LinearLayout>
+                <TextView android:id="@+id/link_status" android:layout_width="match_parent" android:layout_height="110dp" android:layout_marginTop="6dp" android:background="#B0050B11" android:fontFamily="monospace" android:padding="8dp" android:text="@string/local_openfly_status" android:textColor="#DCE4EF" android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/content_flight" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/flight_control_safety" android:textColor="@color/of_hud_text_secondary" android:textSize="12sp" android:textStyle="bold" />
+                <Button android:id="@+id/device_qualification" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="5dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/device_qualification_vs_xyz" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <TextView android:id="@+id/speed_limit_label" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/horizontal_limit_default" android:textColor="#FFFFFF" android:textSize="11sp" />
+                <SeekBar android:id="@+id/speed_limit" android:layout_width="match_parent" android:layout_height="38dp" android:max="38" android:progress="8" />
+                <CheckBox android:id="@+id/gps_closure" android:layout_width="match_parent" android:layout_height="36dp" android:buttonTint="#19D3A2" android:checked="true" android:text="@string/gps_position_loop" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <CheckBox android:id="@+id/velocity_estimate" android:layout_width="match_parent" android:layout_height="36dp" android:buttonTint="#19D3A2" android:checked="false" android:text="@string/velocity_estimate" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <TextView android:id="@+id/flight_state" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:background="#B0050B11" android:fontFamily="monospace" android:minHeight="62dp" android:padding="7dp" android:text="@string/safety_gate_waiting" android:textColor="#DCE4EF" android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/content_execution" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/vln_relative_position_execution" android:textColor="@color/of_hud_text_secondary" android:textSize="12sp" android:textStyle="bold" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="@string/inference_image_source" android:textColor="#9AA9B8" android:textSize="10sp" />
+                <Spinner android:id="@+id/camera_source" android:layout_width="match_parent" android:layout_height="38dp" android:layout_marginTop="4dp" android:background="@drawable/cockpit_field" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="@string/uavflow_horizon_help" android:textColor="#9AA9B8" android:textSize="10sp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                    <Button android:id="@+id/chunk_mode" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/uavflow_on" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Spinner android:id="@+id/executed_prefix" android:layout_width="96dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:background="@drawable/cockpit_field" />
+                    <Button android:id="@+id/fly_through" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/vln_flythrough_on" android:textColor="#FFFFFF" android:textSize="10sp" />
+                </LinearLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/chunk_flythrough_help" android:textColor="#9AA9B8" android:textSize="9sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="7dp" android:text="@string/manual_xyz_relative_position" android:textColor="#9AA9B8" android:textSize="10sp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                    <EditText android:id="@+id/manual_x" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="@drawable/cockpit_field" android:hint="@string/manual_x_forward_hint" android:inputType="numberDecimal|numberSigned" android:paddingHorizontal="8dp" android:textColor="#FFFFFF" android:textColorHint="#778392" android:textSize="10sp" />
+                    <EditText android:id="@+id/manual_y" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="4dp" android:layout_weight="1" android:background="@drawable/cockpit_field" android:hint="@string/manual_y_right_hint" android:inputType="numberDecimal|numberSigned" android:paddingHorizontal="8dp" android:textColor="#FFFFFF" android:textColorHint="#778392" android:textSize="10sp" />
+                    <EditText android:id="@+id/manual_z" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="4dp" android:layout_weight="1" android:background="@drawable/cockpit_field" android:hint="@string/manual_z_up_hint" android:inputType="numberDecimal|numberSigned" android:paddingHorizontal="8dp" android:textColor="#FFFFFF" android:textColorHint="#778392" android:textSize="10sp" />
+                    <Button android:id="@+id/manual_xyz" android:layout_width="92dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="@string/manual_xyz_execute" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/manual_xyz_stop" android:layout_width="58dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:background="@drawable/cockpit_button_danger" android:minHeight="0dp" android:text="@string/action_stop" android:textColor="#FFAAA0" android:textSize="10sp" />
+                </LinearLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/xyz_safety_limits" android:textColor="#9AA9B8" android:textSize="9sp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="6dp" android:orientation="horizontal">
+                    <Button android:id="@+id/infer_once" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="@string/vln_infer_once" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/preview_frame" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/preview_current_frame" android:textColor="#FFFFFF" android:textSize="10sp" />
+                    <Button android:id="@+id/open_log" android:layout_width="0dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/runtime_logs" android:textColor="#FFFFFF" android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/content_system" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/simulator_category" android:textColor="@color/of_hud_text_secondary" android:textSize="12sp" android:textStyle="bold" />
+                <Button android:id="@+id/app_language" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="5dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/choose_language" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <Button android:id="@+id/dji_account_login" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="5dp" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="@string/login_dji_account" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <TextView android:id="@+id/dji_account_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/dji_account_checking" android:textColor="#FFB65C" android:textSize="9sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="7dp" android:text="@string/simulator_aircraft_start_map" android:textColor="#9FE8D7" android:textSize="10sp" android:visibility="gone" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="38dp" android:layout_marginTop="4dp" android:orientation="horizontal" android:visibility="gone">
+                    <EditText android:id="@+id/simulator_origin_latitude" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/cockpit_field" android:hint="@string/latitude" android:inputType="numberDecimal|numberSigned" android:paddingHorizontal="8dp" android:singleLine="true" android:textColor="#FFFFFF" android:textColorHint="#708090" android:textSize="10sp" />
+                    <EditText android:id="@+id/simulator_origin_longitude" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginStart="5dp" android:layout_weight="1" android:background="@drawable/cockpit_field" android:hint="@string/longitude" android:inputType="numberDecimal|numberSigned" android:paddingHorizontal="8dp" android:singleLine="true" android:textColor="#FFFFFF" android:textColorHint="#708090" android:textSize="10sp" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="5dp" android:orientation="horizontal" android:visibility="gone">
+                    <Button android:id="@+id/simulator_origin_apply" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/save_start" android:textColor="#FFFFFF" android:textSize="9sp" />
+                    <Button android:id="@+id/simulator_origin_aircraft" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginStart="5dp" android:layout_weight="1" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/use_aircraft_location" android:textColor="#FFFFFF" android:textSize="9sp" />
+                </LinearLayout>
+                <Button android:id="@+id/simulator_toggle" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="5dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/dji_simulator_waiting" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/simulator_start_map_hint" android:textColor="#9FE8D7" android:textSize="9sp" />
+                <TextView android:id="@+id/simulator_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/simulator_msdk5_only" android:textColor="#9AA9B8" android:textSize="9sp" />
+                <Button android:id="@+id/export_diagnostic_log" android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="7dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/export_diagnostics_download" android:textColor="#FFFFFF" android:textSize="9sp" />
+                <TextView android:id="@+id/diagnostic_log_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/telemetry_log_retention" android:textColor="#9AA9B8" android:textSize="9sp" />
+                <Button android:id="@+id/rc_phone_charging" android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="7dp" android:alpha="0.35" android:background="@drawable/cockpit_button" android:enabled="false" android:minHeight="0dp" android:text="@string/rc_phone_charging_unavailable" android:textColor="#FFFFFF" android:textSize="9sp" />
+                <CheckBox android:id="@+id/aoa_enabled" android:layout_width="match_parent" android:layout_height="36dp" android:buttonTint="#19D3A2" android:text="@string/allow_usb_aoa" android:textColor="#FFFFFF" android:textSize="10sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="@string/simulator_control_hil_only" android:textColor="#9AA9B8" android:textSize="10sp" />
+                <FrameLayout android:id="@+id/hil_inline_host" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" />
+            </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
+</LinearLayout>

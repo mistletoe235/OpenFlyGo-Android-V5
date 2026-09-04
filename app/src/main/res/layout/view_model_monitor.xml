@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+        <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:text="@string/runtime_logs" android:textColor="#FFFFFF" android:textSize="13sp" android:textStyle="bold" />
+        <Button android:id="@+id/follow_log" android:layout_width="60dp" android:layout_height="28dp" android:background="@drawable/cockpit_button_primary" android:minHeight="0dp" android:text="@string/logs_follow_on" android:textColor="#FFFFFF" android:textSize="9sp" />
+        <Button android:id="@+id/clear_log" android:layout_width="46dp" android:layout_height="28dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/clear" android:textColor="#FFFFFF" android:textSize="9sp" />
+        <Button android:id="@+id/close_log" android:layout_width="46dp" android:layout_height="28dp" android:background="@drawable/cockpit_button" android:minHeight="0dp" android:text="@string/action_close" android:textColor="#FFFFFF" android:textSize="9sp" />
+    </LinearLayout>
+    <ScrollView android:id="@+id/log_scroll" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="#E6050B11">
+        <TextView android:id="@+id/log_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="monospace" android:padding="5dp" android:text="@string/v5_log_started" android:textColor="#66E3B4" android:textIsSelectable="true" android:textSize="9sp" />
+    </ScrollView>
+</LinearLayout>
