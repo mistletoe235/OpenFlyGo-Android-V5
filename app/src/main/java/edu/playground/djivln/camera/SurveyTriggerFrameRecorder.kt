@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
+import java.util.concurrent.RejectedExecutionException
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 class SurveyTriggerFrameRecorder(
@@ -71,14 +73,26 @@ class SurveyTriggerFrameRecorder(
             reportSkipped(trigger, text(R.string.trigger_frame_save_queue_busy, "Frame save queue is busy"), "save_queue_busy")
             return
         }
-        worker.execute { captureNow(trigger, frame, telemetry) }
+        val released = AtomicBoolean(false)
+        val releaseCapture = {
+            if (released.compareAndSet(false, true)) pending.decrementAndGet()
+            Unit
+        }
+        try {
+            worker.execute { captureNow(trigger, frame, telemetry, releaseCapture) }
+        } catch (error: RejectedExecutionException) {
+            releaseCapture()
+            reportSkipped(trigger, error.message ?: error.javaClass.simpleName)
+        }
     }
 
     private fun captureNow(
         trigger: SurveyPhotoTrigger,
         frame: CameraFrame,
         telemetry: SurveyFrameTelemetry?,
+        releaseCapture: () -> Unit,
     ) {
+        var awaitingSave = false
         try {
             val sampledAtNanos = SystemClock.elapsedRealtimeNanos()
             val frameAgeMillis = (sampledAtNanos - frame.capturedAtNanos) / 1_000_000L
@@ -123,55 +137,66 @@ class SurveyTriggerFrameRecorder(
                 append(".")
                 append(encoded.extension)
             }
+            val frameWidth = frame.width
+            val frameHeight = frame.height
+            val frameSourceId = frame.sourceId
+            val frameSequence = frame.sequence
+            val callbackHandled = AtomicBoolean(false)
             save(DIRECTORY, displayName, encoded.mimeType, encoded.bytes) { result ->
-                result.getOrNull()?.let { savedPath ->
-                    onSaved(
-                        SavedFrame(
-                            trigger = trigger,
-                            metadata = metadata,
-                            displayName = displayName,
-                            mimeType = encoded.mimeType,
-                            bytes = encoded.bytes,
-                            savedPath = savedPath,
-                            width = frame.width,
-                            height = frame.height,
-                            sourceId = frame.sourceId,
+                if (!callbackHandled.compareAndSet(false, true)) return@save
+                try {
+                    result.getOrNull()?.let { savedPath ->
+                        onSaved(
+                            SavedFrame(
+                                trigger = trigger,
+                                metadata = metadata,
+                                displayName = displayName,
+                                mimeType = encoded.mimeType,
+                                bytes = encoded.bytes,
+                                savedPath = savedPath,
+                                width = frameWidth,
+                                height = frameHeight,
+                                sourceId = frameSourceId,
+                            ),
+                        )
+                    }
+                    result.exceptionOrNull()?.let { error ->
+                        onSkipped(
+                            context?.getString(R.string.trigger_frame_save_failed, error.message ?: error.javaClass.simpleName)
+                                ?: "Video frame save failed: ${error.message ?: error.javaClass.simpleName}",
+                        )
+                    }
+                    onEvent(
+                        "trigger_frame_saved",
+                        trigger.fields(result.exceptionOrNull()?.message) + mapOf(
+                            "success" to result.isSuccess,
+                            "saved_path" to result.getOrNull(),
+                            "frame_source" to frameSourceId,
+                            "frame_sequence" to frameSequence,
+                            "frame_width" to frameWidth,
+                            "frame_height" to frameHeight,
+                            "frame_age_ms" to frameAgeMillis,
+                            "frame_after_trigger_ms" to frameAfterTriggerMillis,
+                            "sample_delay_ms" to ((sampledAtNanos - trigger.triggeredAtNanos) / 1_000_000L),
+                            "frame_epoch_ms" to metadata.frameEpochMillis,
+                            "gps_exif_written" to metadata.hasFreshAircraftGps,
+                            "gps_latitude" to metadata.latitude,
+                            "gps_longitude" to metadata.longitude,
+                            "altitude_asl_m" to metadata.altitudeAboveSeaLevelMeters,
+                            "altitude_asl_source" to metadata.altitudeAboveSeaLevelSource,
+                            "gps_age_ms" to metadata.gpsAgeMillis,
+                            "telemetry_after_frame_ms" to metadata.telemetryAfterFrameMillis,
                         ),
                     )
+                } finally {
+                    releaseCapture()
                 }
-                result.exceptionOrNull()?.let { error ->
-                    onSkipped(
-                        context?.getString(R.string.trigger_frame_save_failed, error.message ?: error.javaClass.simpleName)
-                            ?: "Video frame save failed: ${error.message ?: error.javaClass.simpleName}",
-                    )
-                }
-                onEvent(
-                    "trigger_frame_saved",
-                    trigger.fields(result.exceptionOrNull()?.message) + mapOf(
-                        "success" to result.isSuccess,
-                        "saved_path" to result.getOrNull(),
-                        "frame_source" to frame.sourceId,
-                        "frame_sequence" to frame.sequence,
-                        "frame_width" to frame.width,
-                        "frame_height" to frame.height,
-                        "frame_age_ms" to frameAgeMillis,
-                        "frame_after_trigger_ms" to frameAfterTriggerMillis,
-                        "sample_delay_ms" to ((sampledAtNanos - trigger.triggeredAtNanos) / 1_000_000L),
-                        "frame_epoch_ms" to metadata.frameEpochMillis,
-                        "gps_exif_written" to metadata.hasFreshAircraftGps,
-                        "gps_latitude" to metadata.latitude,
-                        "gps_longitude" to metadata.longitude,
-                        "altitude_asl_m" to metadata.altitudeAboveSeaLevelMeters,
-                        "altitude_asl_source" to metadata.altitudeAboveSeaLevelSource,
-                        "gps_age_ms" to metadata.gpsAgeMillis,
-                        "telemetry_after_frame_ms" to metadata.telemetryAfterFrameMillis,
-                    ),
-                )
             }
+            awaitingSave = true
         } catch (error: Throwable) {
             reportSkipped(trigger, error.message ?: error.javaClass.simpleName)
         } finally {
-            pending.decrementAndGet()
+            if (!awaitingSave) releaseCapture()
         }
     }
 

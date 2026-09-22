@@ -17,12 +17,14 @@ class DjiKmzAppCaptureCoordinator(
         val passIndex: Int,
         val captureView: SurveyCaptureView,
         val reason: String,
+        val waypointIndex: Int = 0,
     )
 
     data class GimbalTarget(
         val passIndex: Int,
         val captureView: SurveyCaptureView,
         val pitchDegrees: Double,
+        val waypointIndex: Int = 0,
     )
 
     data class Progress(
@@ -42,8 +44,13 @@ class DjiKmzAppCaptureCoordinator(
     private var pendingAdvance = false
     private var pendingRequest: Request? = null
     private var recoveryEntryPoint: GeoPoint? = null
+    private var continuousCaptureIndices: Set<Int> = emptySet()
+    private val missedPointPasses = mutableSetOf<Int>()
+    private val unreportedMisses = mutableSetOf<Int>()
 
     val active: Boolean get() = mission != null
+
+    fun isPending(request: Request): Boolean = pendingRequest === request
 
     fun progress(waypointIndex: Int?): Progress? {
         advancePastCompletedPasses(waypointIndex)
@@ -58,8 +65,11 @@ class DjiKmzAppCaptureCoordinator(
         )
     }
 
-    fun arm(mission: SurveyMission) {
+    fun arm(mission: SurveyMission, continuousCaptureIndices: Set<Int> = emptySet()) {
         this.mission = mission
+        this.continuousCaptureIndices = continuousCaptureIndices
+        missedPointPasses.clear()
+        unreportedMisses.clear()
         passes = mission.surveyPasses()
         passCursor = 0
         passStarted = false
@@ -72,8 +82,8 @@ class DjiKmzAppCaptureCoordinator(
         )
     }
 
-    fun armFromBreakpoint(mission: SurveyMission, breakpoint: WaylineBreakpoint) {
-        arm(mission)
+    fun armFromBreakpoint(mission: SurveyMission, breakpoint: WaylineBreakpoint, continuousCaptureIndices: Set<Int> = emptySet()) {
+        arm(mission, continuousCaptureIndices)
         while (passCursor < passes.size && breakpoint.waypointId > passes[passCursor].lastWaypointIndex) {
             advancePass()
         }
@@ -95,6 +105,9 @@ class DjiKmzAppCaptureCoordinator(
         pendingRequest = null
         recoveryEntryPoint = null
         distanceCapture.reset()
+        continuousCaptureIndices = emptySet()
+        missedPointPasses.clear()
+        unreportedMisses.clear()
     }
 
     /**
@@ -110,6 +123,7 @@ class DjiKmzAppCaptureCoordinator(
             passIndex = pass.start.passIndex,
             captureView = pass.start.captureView,
             pitchDegrees = pass.start.gimbalPitchDegrees,
+            waypointIndex = pass.firstWaypointIndex,
         )
     }
 
@@ -147,6 +161,10 @@ class DjiKmzAppCaptureCoordinator(
         }
         if (pass.isPointCapture) {
             if (!cameraReady || !hasReached(pass.start.point, position, waypointIndex, pass.firstWaypointIndex)) return null
+            if (pass.firstWaypointIndex in continuousCaptureIndices &&
+                (distanceMeters(pass.start.point, position) > 2.0 ||
+                    kotlin.math.abs(pass.start.point.altitudeMeters - position.altitudeMeters) > 2.0)
+            ) return null
             if (!distanceCapture.onWaypointReached(pass.start, position, nowElapsedMillis, true)) return null
             pendingAdvance = true
             return request(pass, position, "point_capture")
@@ -188,14 +206,22 @@ class DjiKmzAppCaptureCoordinator(
         return null
     }
 
-    fun onCaptureResult(position: GeoPoint, nowElapsedMillis: Long, success: Boolean) {
-        if (pendingRequest == null) return
-        distanceCapture.onCaptureResult(position, nowElapsedMillis, success)
+    fun onCaptureResult(position: GeoPoint, nowElapsedMillis: Long, success: Boolean, expectedRequest: Request? = null) {
+        val request = pendingRequest ?: return
+        if (expectedRequest != null && expectedRequest !== request) return
+        val samePass = passes.getOrNull(passCursor)?.start?.passIndex == request.passIndex
+        if (samePass) distanceCapture.onCaptureResult(position, nowElapsedMillis, success)
         pendingRequest = null
-        if (pendingAdvance) advancePass()
+        if (!success && mission?.recaptureFlightMode == RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL) {
+            recordMiss(request.passIndex)
+        }
+        if (pendingAdvance && samePass) advancePass()
     }
 
     fun cancelPendingCapture() {
+        if (mission?.recaptureFlightMode == RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL) {
+            pendingRequest?.let { recordMiss(it.passIndex) }
+        }
         pendingRequest = null
         pendingAdvance = false
         distanceCapture.cancelPendingCapture()
@@ -206,6 +232,7 @@ class DjiKmzAppCaptureCoordinator(
         passIndex = pass.start.passIndex,
         captureView = pass.start.captureView,
         reason = reason,
+        waypointIndex = pass.firstWaypointIndex,
     ).also { pendingRequest = it }
 
     private fun advancePass() {
@@ -220,8 +247,24 @@ class DjiKmzAppCaptureCoordinator(
 
     private fun advancePastCompletedPasses(waypointIndex: Int?) {
         while (passCursor < passes.size && waypointIndex != null && waypointIndex > passes[passCursor].lastWaypointIndex) {
+            val pass = passes[passCursor]
+            if (mission?.recaptureFlightMode == RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL &&
+                pass.isPointCapture && pendingRequest?.passIndex != pass.start.passIndex
+            ) recordMiss(pass.start.passIndex)
             advancePass()
         }
+    }
+
+    fun drainMissedPointPasses(): List<Int> = unreportedMisses.toList().also { unreportedMisses.clear() }
+
+    fun finish() {
+        if (mission?.recaptureFlightMode != RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL) return
+        pendingRequest?.let { recordMiss(it.passIndex) }
+        passes.drop(passCursor).filter { it.isPointCapture }.forEach { recordMiss(it.start.passIndex) }
+    }
+
+    private fun recordMiss(passIndex: Int) {
+        if (missedPointPasses.add(passIndex)) unreportedMisses.add(passIndex)
     }
 
     private fun hasReached(

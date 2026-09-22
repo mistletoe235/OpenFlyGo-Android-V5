@@ -46,6 +46,11 @@ class SurveyFrameExifWriterInstrumentedTest {
                 groundSpeedMetersPerSecond = 5.0,
                 groundTrackDegrees = 53.130102,
                 gimbalPitchDegrees = -80.0,
+                gimbalYawDegrees = 15.0,
+                gimbalYawRelativeToAircraftHeadingDegrees = 20.0,
+                cameraYawDegrees = 15.0,
+                cameraYawSource = "absolute_gimbal_attitude_cross_checked",
+                cameraYawConsistencyErrorDegrees = 5.0,
                 gpsSatelliteCount = 18,
                 gpsSignalLevel = "LEVEL_5",
                 gpsAgeMillis = 60L,
@@ -63,7 +68,7 @@ class SurveyFrameExifWriterInstrumentedTest {
         assertEquals(31.1815535, latLong[0], 1e-6)
         assertEquals(121.4736515, latLong[1], 1e-6)
         assertEquals(18.5, exif.getAltitude(Double.NaN), 0.01)
-        assertEquals(350.0, exif.getAttributeDouble(ExifInterface.TAG_GPS_IMG_DIRECTION, Double.NaN), 0.001)
+        assertEquals(15.0, exif.getAttributeDouble(ExifInterface.TAG_GPS_IMG_DIRECTION, Double.NaN), 0.001)
         assertEquals(18.0, exif.getAttributeDouble(ExifInterface.TAG_GPS_SPEED, Double.NaN), 0.001)
         assertEquals(53.13, exif.getAttributeDouble(ExifInterface.TAG_GPS_TRACK, Double.NaN), 0.001)
         assertEquals("350", exif.getAttribute(ExifInterface.TAG_SUBSEC_TIME_ORIGINAL))
@@ -73,6 +78,8 @@ class SurveyFrameExifWriterInstrumentedTest {
                 .contains("\"gps_source\":\"aircraft_telemetry\""),
         )
         assertTrue(exif.getAttribute(ExifInterface.TAG_USER_COMMENT).orEmpty().contains("\"yaw_deg\":340"))
+        assertTrue(exif.getAttribute(ExifInterface.TAG_USER_COMMENT).orEmpty().contains("\"aircraft_heading_deg_true\":350"))
+        assertTrue(exif.getAttribute(ExifInterface.TAG_USER_COMMENT).orEmpty().contains("\"camera_yaw_deg_true\":15"))
         assertTrue(exif.getAttribute(ExifInterface.TAG_USER_COMMENT).orEmpty().contains("\"gimbal_pitch_deg\":-80"))
         assertTrue(
             exif.getAttribute(ExifInterface.TAG_USER_COMMENT)

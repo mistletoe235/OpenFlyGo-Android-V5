@@ -20,6 +20,11 @@ data class SurveyFrameTelemetry(
     val gimbalPitchDegrees: Double?,
     val gpsSatelliteCount: Int?,
     val gpsSignalLevel: String?,
+    val gimbalRollDegrees: Double? = null,
+    val gimbalYawDegrees: Double? = null,
+    val gimbalYawRelativeToAircraftHeadingDegrees: Double? = null,
+    val gimbalAttitudeUpdatedAtNanos: Long = 0L,
+    val gimbalYawRelativeUpdatedAtNanos: Long = 0L,
 )
 
 data class SurveyFrameMetadata(
@@ -48,6 +53,16 @@ data class SurveyFrameMetadata(
     val frameAfterTriggerMillis: Long,
     val telemetryAfterFrameMillis: Long,
     val altitudeAboveSeaLevelSource: String? = null,
+    val gimbalRollDegrees: Double? = null,
+    val gimbalYawDegrees: Double? = null,
+    val gimbalYawRelativeToAircraftHeadingDegrees: Double? = null,
+    val cameraRollDegrees: Double? = null,
+    val cameraPitchDegrees: Double? = null,
+    val cameraYawDegrees: Double? = null,
+    val cameraYawSource: String? = null,
+    val cameraYawConsistencyErrorDegrees: Double? = null,
+    val gimbalAttitudeAgeMillis: Long? = null,
+    val gimbalYawRelativeAgeMillis: Long? = null,
 ) {
     val hasFreshAircraftGps: Boolean
         get() = latitude != null && longitude != null
@@ -81,6 +96,12 @@ object SurveyFrameMetadataPolicy {
         val velocityAgeMillis = telemetry
             ?.takeIf { it.velocityUpdatedAtNanos > 0L }
             ?.let { nanosToMillis(it.sampledAtNanos - it.velocityUpdatedAtNanos) }
+        val gimbalAttitudeAgeMillis = telemetry
+            ?.takeIf { it.gimbalAttitudeUpdatedAtNanos > 0L }
+            ?.let { nanosToMillis(it.sampledAtNanos - it.gimbalAttitudeUpdatedAtNanos) }
+        val gimbalYawRelativeAgeMillis = telemetry
+            ?.takeIf { it.gimbalYawRelativeUpdatedAtNanos > 0L }
+            ?.let { nanosToMillis(it.sampledAtNanos - it.gimbalYawRelativeUpdatedAtNanos) }
         // DJI state listeners may only publish when a value changes. The snapshot is sampled at
         // frame receipt, so an unchanged attitude/velocity remains the current value even when its
         // change timestamp is old. Gate these fields on fresh aircraft GPS, while retaining the
@@ -97,6 +118,15 @@ object SurveyFrameMetadataPolicy {
         }
         val absoluteAltitude = telemetry?.altitudeAboveSeaLevelMeters
             ?.takeIf { location != null && isCredibleAbsoluteAltitude(it, telemetry.relativeAltitudeMeters) }
+        val cameraOrientation = CameraOrientationResolver.resolve(
+            // Camera attitude remains useful when aircraft GPS is unavailable (for example during
+            // an indoor ground check). Only standard geotags are gated by fresh GPS below.
+            aircraftHeadingDegrees = telemetry?.headingDegrees,
+            gimbalRollDegrees = telemetry?.gimbalRollDegrees,
+            gimbalPitchDegrees = telemetry?.gimbalPitchDegrees,
+            absoluteGimbalYawDegrees = telemetry?.gimbalYawDegrees,
+            relativeGimbalYawDegrees = telemetry?.gimbalYawRelativeToAircraftHeadingDegrees,
+        )
         return SurveyFrameMetadata(
             frameEpochMillis = frameEpochMillis,
             latitude = location?.latitude,
@@ -127,6 +157,18 @@ object SurveyFrameMetadataPolicy {
                 nanosToMillis(it.sampledAtNanos - frameCapturedAtNanos)
             } ?: 0L,
             altitudeAboveSeaLevelSource = absoluteAltitude?.let { "aircraft_asl" },
+            gimbalRollDegrees = telemetry?.gimbalRollDegrees?.takeIf(Double::isFinite),
+            gimbalYawDegrees = telemetry?.gimbalYawDegrees?.takeIf(Double::isFinite)?.let(::normalizeHeading),
+            gimbalYawRelativeToAircraftHeadingDegrees = telemetry
+                ?.gimbalYawRelativeToAircraftHeadingDegrees
+                ?.takeIf(Double::isFinite),
+            cameraRollDegrees = cameraOrientation.rollDegrees,
+            cameraPitchDegrees = cameraOrientation.pitchDegrees,
+            cameraYawDegrees = cameraOrientation.yawDegrees,
+            cameraYawSource = cameraOrientation.yawSource,
+            cameraYawConsistencyErrorDegrees = cameraOrientation.yawConsistencyErrorDegrees,
+            gimbalAttitudeAgeMillis = gimbalAttitudeAgeMillis,
+            gimbalYawRelativeAgeMillis = gimbalYawRelativeAgeMillis,
         )
     }
 

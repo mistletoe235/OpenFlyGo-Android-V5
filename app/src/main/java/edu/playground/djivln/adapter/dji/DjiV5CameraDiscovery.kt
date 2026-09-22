@@ -10,6 +10,7 @@ import dji.sdk.keyvalue.value.common.ComponentIndexType
 import dji.v5.common.callback.CommonCallbacks
 import dji.v5.common.error.IDJIError
 import dji.v5.manager.KeyManager
+import edu.playground.djivln.survey.SurveyCameraModePolicy
 import edu.playground.djivln.survey.CameraProfile
 import edu.playground.djivln.survey.DjiCameraProfileCatalog
 import edu.playground.djivln.R
@@ -27,11 +28,22 @@ class DjiV5CameraDiscovery(
         val streamSource: CameraVideoStreamSourceType?,
         val availableStreamSources: List<CameraVideoStreamSourceType>,
         val cameraProfile: CameraProfile,
+        val captureProfile: CameraProfile?,
         val cameraProfileLabel: String,
         val profileVerified: Boolean,
         val officialSourceUrl: String?,
         val minimumIntervalFromAircraftSeconds: Double?,
     )
+
+    private val surveyCameraReadback = edu.playground.djivln.survey.SurveyCameraReadbackCache()
+
+    private fun <Value> readMode(key: dji.sdk.keyvalue.key.DJIKey<Value>, name: String): Any? =
+        surveyCameraReadback.read(name) { completion ->
+            keyManager.getValue(key, object : CommonCallbacks.CompletionCallbackWithParam<Value> {
+                override fun onSuccess(value: Value) = completion(value)
+                override fun onFailure(error: IDJIError) = completion(null)
+            })
+        }
 
     @Volatile private var lastConnectedIndex = ComponentIndexType.LEFT_OR_MAIN
     @Volatile private var lastDiagnosticSummary: String? = null
@@ -65,6 +77,30 @@ class DjiV5CameraDiscovery(
             keyManager.getValue(KeyTools.createKey(CameraKey.KeyCameraVideoStreamSource, index))
         }.getOrNull()
         val resolved = DjiCameraProfileCatalog.resolve(productType, cameraType, streamSource?.name, context = context)
+        surveyCameraReadback.changeSource(if (index in connected) listOf(index, productType, cameraType, streamSource) else null)
+        val ratioName = readMode(KeyTools.createKey(CameraKey.KeyPhotoRatio, index), "ratio")?.toString()
+        val ratio = when (ratioName) {
+            "RATIO_4COLON3" -> 4.0 / 3.0
+            "RATIO_3COLON2" -> 3.0 / 2.0
+            "RATIO_16COLON9" -> 16.0 / 9.0
+            else -> null
+        }
+        val resolutionName = readMode(KeyTools.createKey(CameraKey.KeyPhotoResolution, index), "resolution")?.toString()
+        val megapixels = when (resolutionName) {
+            "RESOLUTION_12MP" -> 12
+            "RESOLUTION_20MP" -> 20
+            "RESOLUTION_48MP" -> 48
+            else -> null
+        }
+        val zoom = (readMode(KeyTools.createKey(CameraKey.KeyCameraZoomRatios, index), "zoom") as? Number)?.toDouble()
+        val orientation = readMode(KeyTools.createKey(CameraKey.KeyCameraOrientation, index), "orientation")?.toString()
+        val miniPortraitCamera = resolved.profile.id.startsWith("dji-mini-3") ||
+            resolved.profile.id.startsWith("dji-mini-4")
+        val captureProfile = SurveyCameraModePolicy.captureGeometry(resolved.profile, ratio)
+        val modeIssue = SurveyCameraModePolicy.issue(
+            captureProfile ?: resolved.profile, ratio, megapixels, true, zoom, true,
+            when (orientation) { "DEFAULT" -> true; "CW90", "CW180", "CW270" -> false; else -> null }, miniPortraitCamera,
+        )
         return Selection(
             index = index,
             cameraConnected = index in connected,
@@ -73,8 +109,9 @@ class DjiV5CameraDiscovery(
             streamSource = streamSource,
             availableStreamSources = availableStreamSources,
             cameraProfile = resolved.profile,
-            cameraProfileLabel = resolved.displayName,
-            profileVerified = resolved.verifiedProfile,
+            captureProfile = captureProfile,
+            cameraProfileLabel = resolved.displayName + (modeIssue?.let { " · [${it.name}]" } ?: ""),
+            profileVerified = index in connected && resolved.verifiedProfile && captureProfile != null && modeIssue == null,
             officialSourceUrl = resolved.officialSourceUrl,
             minimumIntervalFromAircraftSeconds = null,
         ).also(::logWhenChanged)

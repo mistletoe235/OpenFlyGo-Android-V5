@@ -17,14 +17,14 @@ class DjiCameraProfileCatalogTest {
         assertEquals(
             DjiWaylineCaptureStrategy.WPML_PHOTO_ACTION,
             DjiCameraProfileCatalog.waylineCaptureStrategy(
-                DjiCameraProfileCatalog.resolve("M3E").profile,
+                DjiCameraProfileCatalog.resolve("M3E", "WIDE_CAMERA").profile,
             ),
         )
     }
 
     @Test fun resolvesConsumerAndEnterpriseSdkNames() {
         val mini = DjiCameraProfileCatalog.resolve("DJI_MINI_4_PRO", "DJI_MINI_4_PRO")
-        val enterprise = DjiCameraProfileCatalog.resolve("DJI_MAVIC_3_ENTERPRISE_SERIES", "M3E")
+        val enterprise = DjiCameraProfileCatalog.resolve("DJI_MAVIC_3_ENTERPRISE_SERIES", "M3E", "WIDE_CAMERA")
 
         assertTrue(mini.verifiedProfile)
         assertEquals(4032, mini.profile.imageWidthPixels)

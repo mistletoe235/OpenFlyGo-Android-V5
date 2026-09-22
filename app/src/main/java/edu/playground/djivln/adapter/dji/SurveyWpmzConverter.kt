@@ -2,6 +2,7 @@ package edu.playground.djivln.adapter.dji
 
 import android.content.Context
 import edu.playground.djivln.R
+import edu.playground.djivln.survey.SurveyFeatureAvailability
 import com.dji.wpmzsdk.manager.WPMZManager
 import dji.sdk.wpmz.value.mission.ActionGimbalRotateParam
 import dji.sdk.wpmz.value.mission.ActionAircraftHoverParam
@@ -56,6 +57,7 @@ data class DjiWpmzMission(
     val mission: WaylineMission,
     val config: WaylineMissionConfig,
     val wayline: Wayline,
+    val continuousCaptureWaypointIndices: Set<Int> = emptySet(),
 )
 
 data class WpmzValidationResult(
@@ -199,6 +201,11 @@ internal object DjiWpmzContractValidator {
             val start = group.startIndex ?: return@forEachIndexed
             val expectedPitch = waypoints.getOrNull(start)?.gimbalHeadingParam?.pitchAngle
             val explicitPitches = gimbalPitchByStartIndex[start].orEmpty()
+            if (start in model.continuousCaptureWaypointIndices &&
+                waypoints[start].turnParam.turnMode == WaylineWaypointTurnMode.TO_POINT_AND_PASS_WITH_CONTINUITY_CURVATURE &&
+                waypoints[start].gimbalHeadingParam.headingMode == WaylineWaypointGimbalHeadingMode.SMOOTH_TRANSITION &&
+                expectedPitch != null && expectedPitch.isFinite() && expectedPitch in -90.0..30.0
+            ) return@forEachIndexed
             if (expectedPitch == null || explicitPitches.none { kotlin.math.abs(it - expectedPitch) < 1e-6 }) {
                 add("photoGroup[$index] has no matching explicit gimbal pitch at waypoint $start: $expectedPitch")
             }
@@ -251,6 +258,7 @@ object SurveyWpmzConverter {
         includePhotoActions: Boolean = true,
         waylineId: Int = 0,
     ): DjiWpmzMission {
+        SurveyFeatureAvailability.requireSupportedMission(source)
         val maximumMissionAltitude = source.waypoints.maxOfOrNull { it.point.altitudeMeters }
             ?: source.constraints.safeTakeoffAltitudeMeters
         require(globalRthHeightMeters + 0.5 >= maximumMissionAltitude) {
@@ -324,6 +332,8 @@ object SurveyWpmzConverter {
                         waypoints = source.waypoints,
                         index = index,
                         allowTransitPassThrough = smoothActiveRecapture,
+                        allowCapturePassThrough = source.recaptureFlightMode ==
+                            edu.playground.djivln.survey.RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL,
                     )
                     turnParam = WaylineWaypointTurnParam(turn.mode, turn.dampingMeters)
                     speed = source.constraints.speedForCaptureView(waypoint.captureView)
@@ -337,11 +347,30 @@ object SurveyWpmzConverter {
             waylineStartActions = emptyList()
             actionGroups = passes.flatMapIndexed { passListIndex, pass ->
                 if (pass.isTransitOnly) return@flatMapIndexed emptyList()
+                val continuousCapture = pass.isPointCapture && waypoints[pass.firstWaypointIndex].turnParam.turnMode ==
+                    WaylineWaypointTurnMode.TO_POINT_AND_PASS_WITH_CONTINUITY_CURVATURE
+                if (continuousCapture) {
+                    if (!includePhotoActions) return@flatMapIndexed emptyList()
+                    return@flatMapIndexed listOf(createActionGroup(
+                        groupId = nextGroupId++,
+                        startIndex = pass.firstWaypointIndex,
+                        endIndex = pass.lastWaypointIndex,
+                        trigger = WaylineActionTrigger(WaylineActionTriggerType.REACH_POINT, 0.0, 0.0),
+                        actions = listOf(createPhotoAction(
+                            nextActionId++, payloadPositionIndex, payloadLensType,
+                            "P${pass.start.passIndex}_${pass.start.captureView.name}",
+                        )),
+                    ))
+                }
                 val previousPass = passes.getOrNull(passListIndex - 1)
                 val requiresSettle = pass.isPointCapture || previousPass == null ||
                     previousPass.isTransitOnly ||
                     previousPass.start.captureView != pass.start.captureView ||
-                    previousPass.start.gimbalPitchDegrees != pass.start.gimbalPitchDegrees
+                    previousPass.start.gimbalPitchDegrees != pass.start.gimbalPitchDegrees ||
+                    headingDifference(
+                        previousPass.end.headingDegrees,
+                        pass.start.headingDegrees,
+                    ) > CAPTURE_HEADING_SETTLE_THRESHOLD_DEGREES
                 val gimbalAction = createGimbalRotateAction(
                     actionId = nextActionId++,
                     payloadPositionIndex = payloadPositionIndex,
@@ -409,7 +438,11 @@ object SurveyWpmzConverter {
                 hasPrecomputedWaypointHeights = source.terrainPlan != null,
             )
         }
-        return DjiWpmzMission(mission, config, wayline)
+        val continuousIndices = source.waypoints.indices.filter { index ->
+            source.waypoints[index].kind == SurveyWaypointKind.CAPTURE_POINT &&
+                wayline.waypoints[index].turnParam.turnMode == WaylineWaypointTurnMode.TO_POINT_AND_PASS_WITH_CONTINUITY_CURVATURE
+        }.toSet()
+        return DjiWpmzMission(mission, config, wayline, continuousIndices)
     }
 
     internal fun normalizeDjiWaypointYaw(headingDegrees: Double): Double {
@@ -435,8 +468,8 @@ object SurveyWpmzConverter {
             roll = 0.0
             enableYaw = false
             yaw = 0.0
-            enableRotateTime = false
-            rotateTime = 0.0
+            enableRotateTime = true
+            rotateTime = CAPTURE_GIMBAL_ROTATION_SECONDS
             base = GimbalHeadingYawBase.AIRCRAFT
         }
     }
@@ -460,7 +493,7 @@ object SurveyWpmzConverter {
     private fun createHoverAction(actionId: Int) = WaylineActionInfo().apply {
         this.actionId = actionId
         actionType = WaylineActionType.HOVER
-        aircraftHoverParam = ActionAircraftHoverParam(1.0)
+        aircraftHoverParam = ActionAircraftHoverParam(CAPTURE_STABILIZATION_SECONDS)
     }
 
     private fun createActionGroup(
@@ -495,6 +528,13 @@ object SurveyWpmzConverter {
         )
     }
 
+    private fun headingDifference(first: Double, second: Double): Double =
+        kotlin.math.abs(((second - first) % 360.0 + 540.0) % 360.0 - 180.0)
+
+    private const val CAPTURE_HEADING_SETTLE_THRESHOLD_DEGREES = 3.0
+    private const val CAPTURE_GIMBAL_ROTATION_SECONDS = 2.0
+    private const val CAPTURE_STABILIZATION_SECONDS = 2.0
+
 }
 
 data class DjiWpmzTurnSpec(
@@ -503,19 +543,46 @@ data class DjiWpmzTurnSpec(
 )
 
 object DjiWpmzRoutePolicy {
+    fun continuousCaptureIndices(mission: SurveyMission): Set<Int> {
+        if (mission.recaptureFlightMode != edu.playground.djivln.survey.RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL) {
+            return emptySet()
+        }
+        return DjiWaylinePartition.segments(mission).flatMap { segment ->
+            segment.mission.waypoints.indices.filter { index ->
+                segment.mission.waypoints[index].kind == SurveyWaypointKind.CAPTURE_POINT &&
+                    turn(segment.mission.waypoints, index, true, true).mode ==
+                    WaylineWaypointTurnMode.TO_POINT_AND_PASS_WITH_CONTINUITY_CURVATURE
+            }.map { segment.globalWaypointIndex(it) }
+        }.toSet()
+    }
+
     fun turn(
         waypoints: List<SurveyWaypoint>,
         index: Int,
         allowTransitPassThrough: Boolean,
+        allowCapturePassThrough: Boolean = false,
     ): DjiWpmzTurnSpec {
         val stop = DjiWpmzTurnSpec(
             WaylineWaypointTurnMode.TO_POINT_AND_STOP_WITH_DISCONTINUITY_CURVATURE,
             0.0,
         )
         val waypoint = waypoints.getOrNull(index) ?: return stop
-        if (!allowTransitPassThrough || waypoint.kind != SurveyWaypointKind.TRANSIT ||
-            index == 0 || index == waypoints.lastIndex
-        ) return stop
+        if (index == 0 || index == waypoints.lastIndex) return stop
+        val continuousCapture = allowCapturePassThrough && waypoint.kind == SurveyWaypointKind.CAPTURE_POINT
+        if (continuousCapture) {
+            val previous = waypoints[index - 1]
+            val next = waypoints[index + 1]
+            val incomingBearing = bearing(previous.point, waypoint.point)
+            val outgoingBearing = bearing(waypoint.point, next.point)
+            if (angleDifference(incomingBearing, outgoingBearing) > 30.0 ||
+                angleDifference(previous.headingDegrees, waypoint.headingDegrees) > 5.0 ||
+                angleDifference(waypoint.headingDegrees, next.headingDegrees) > 5.0 ||
+                kotlin.math.abs(previous.gimbalPitchDegrees - waypoint.gimbalPitchDegrees) > 3.0 ||
+                kotlin.math.abs(next.gimbalPitchDegrees - waypoint.gimbalPitchDegrees) > 3.0 ||
+                kotlin.math.abs(previous.point.altitudeMeters - waypoint.point.altitudeMeters) > 0.5 ||
+                kotlin.math.abs(next.point.altitudeMeters - waypoint.point.altitudeMeters) > 0.5
+            ) return stop
+        } else if (!allowTransitPassThrough || waypoint.kind != SurveyWaypointKind.TRANSIT) return stop
 
         val incomingDistance = distanceMeters(waypoints[index - 1].point, waypoint.point)
         val outgoingDistance = distanceMeters(waypoint.point, waypoints[index + 1].point)
@@ -537,6 +604,14 @@ object DjiWpmzRoutePolicy {
             kotlin.math.cos(Math.toRadians((start.latitude + end.latitude) / 2.0))
         return kotlin.math.hypot(north, east)
     }
+
+    private fun bearing(start: GeoPoint, end: GeoPoint): Double = Math.toDegrees(kotlin.math.atan2(
+        (end.longitude - start.longitude) * kotlin.math.cos(Math.toRadians((start.latitude + end.latitude) / 2.0)),
+        end.latitude - start.latitude,
+    ))
+
+    private fun angleDifference(first: Double, second: Double): Double =
+        kotlin.math.abs(((second - first) % 360.0 + 540.0) % 360.0 - 180.0)
 
     fun realTimeTerrainIncreaseHeight(hasPrecomputedWaypointHeights: Boolean): Boolean = false
 

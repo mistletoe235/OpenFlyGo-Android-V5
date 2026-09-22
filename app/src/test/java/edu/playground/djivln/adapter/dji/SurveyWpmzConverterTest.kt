@@ -19,6 +19,7 @@ import java.io.File
 import dji.sdk.wpmz.value.mission.WaylineWaypointYawMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class SurveyWpmzConverterTest {
@@ -286,7 +287,7 @@ class SurveyWpmzConverterTest {
         }
     }
 
-    @Test fun `precomputed terrain heights disable a second realtime height increase`() {
+    @Test fun `disabled terrain missions cannot be exported as DJI KMZ`() {
         val planned = SurveyRegressionMissionFactory.create(
             center = GeoPoint(31.025, 121.435),
             fiveDirection = false,
@@ -307,9 +308,9 @@ class SurveyWpmzConverterTest {
             ),
         )
 
-        val converted = SurveyWpmzConverter.convert(source)
-
-        assertEquals(false, converted.wayline.realTimeFollowSurfaceIncreaseHeight)
+        assertThrows(IllegalArgumentException::class.java) {
+            SurveyWpmzConverter.convert(source)
+        }
     }
 
     @Test
@@ -382,26 +383,33 @@ class SurveyWpmzConverterTest {
                 assertEquals(WaylineGimbalActuatorRotateMode.ABSOLUTE_ANGLE, rotateMode)
                 assertEquals(true, enablePitch)
                 assertEquals(pass.start.gimbalPitchDegrees, pitch, 1e-6)
-                assertEquals(false, enableRotateTime)
-                assertEquals(0.0, rotateTime, 1e-6)
+                assertEquals(true, enableRotateTime)
+                assertEquals(2.0, rotateTime, 1e-6)
             }
         }
     }
 
     @Test
-    fun `consecutive passes with the same capture view do not repeat hover`() {
+    fun `consecutive passes settle after heading changes but not for aligned headings`() {
         val source = SurveyRegressionMissionFactory.create(
             center = GeoPoint(31.025, 121.435),
             fiveDirection = false,
         )
-        val converted = SurveyWpmzConverter.convert(source)
-        val passes = source.surveyPasses()
-
-        passes.forEachIndexed { index, pass ->
-            val setupActions = converted.wayline.actionGroups
-                .single { it.startIndex == pass.firstWaypointIndex && it.endIndex == pass.firstWaypointIndex }
-                .actions
-            assertEquals(index == 0, setupActions.any { it.actionType == WaylineActionType.HOVER })
+        assertTrue(source.surveyPasses().size > 1)
+        for ((headingChange, mustSettle) in listOf(0.0 to false, 3.0 to false, 3.1 to true, 180.0 to true)) {
+            val controlled = source.copy(waypoints = source.waypoints.map { waypoint ->
+                val heading = if (waypoint.passIndex % 2 == 0) 359.0 else (359.0 + headingChange) % 360.0
+                waypoint.copy(headingDegrees = heading)
+            })
+            val converted = SurveyWpmzConverter.convert(controlled)
+            controlled.surveyPasses().forEachIndexed { index, pass ->
+                val setupActions = converted.wayline.actionGroups
+                    .single { it.startIndex == pass.firstWaypointIndex && it.endIndex == pass.firstWaypointIndex }
+                    .actions
+                assertEquals("heading change=$headingChange pass=$index", index == 0 || mustSettle,
+                    setupActions.any { it.actionType == WaylineActionType.HOVER })
+            }
+            assertTrue(DjiWpmzContractValidator.validate(converted).isEmpty())
         }
     }
 

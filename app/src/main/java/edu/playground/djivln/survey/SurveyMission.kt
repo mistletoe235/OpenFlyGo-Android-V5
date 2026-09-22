@@ -350,8 +350,12 @@ data class SurveyMission(
     val estimatedFlightSeconds: Double,
     val terrainPlan: SurveyTerrainPlan? = null,
     val activeMapping: ActiveMappingMetadata? = null,
+    val recaptureFlightMode: RecaptureFlightMode = RecaptureFlightMode.STOP_AND_CAPTURE,
 ) {
     init {
+        require(recaptureFlightMode == RecaptureFlightMode.STOP_AND_CAPTURE || activeMapping != null) {
+            "continuous capture is only supported for active recapture missions"
+        }
         require(id.isNotBlank()) { "mission id must not be blank" }
         require(name.isNotBlank()) { "mission name must not be blank" }
         require(roi.size >= 3) { "mission ROI must contain at least three points" }

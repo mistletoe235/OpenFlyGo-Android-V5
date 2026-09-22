@@ -97,7 +97,7 @@ class DjiV5TelemetrySource(
     private fun rebindTelemetry() {
         runCatching { KeyManager.getInstance().cancelListen(listenerOwner) }
         listenersInstalled = false
-        update { it.copy(unsupportedFields = emptySet()) }
+        update(DjiTelemetrySnapshotPolicy::rebind)
         installListeners()
         listenersInstalled = true
         readSnapshot()
@@ -191,14 +191,12 @@ class DjiV5TelemetrySource(
         }
         safeListen("velocity") {
             FlightControllerKey.KeyAircraftVelocity.create().listen(listenerOwner) { value ->
+                val receivedAtNanos = clockNanos()
+                val velocity = value?.let { sample ->
+                    TelemetryNormalizer.nedVelocity(sample.x, sample.y, sample.z)
+                }
                 update {
-                    it.copy(
-                        velocity = value?.let { velocity ->
-                            TelemetryNormalizer.nedVelocity(velocity.x, velocity.y, velocity.z)
-                        },
-                        velocityUpdatedAtNanos = clockNanos(),
-                        flightStateUpdatedAtNanos = clockNanos(),
-                    )
+                    DjiTelemetrySnapshotPolicy.velocityPush(it, velocity, receivedAtNanos)
                 }
             }
         }
@@ -325,10 +323,28 @@ class DjiV5TelemetrySource(
                 update { it.copy(maxFlightRadiusEnabled = value) }
             }
         }
-        safeListen("gimbalPitchDegrees") {
+        safeListen("gimbalAttitude") {
             GimbalKey.KeyGimbalAttitude.create(cameraDiscovery.current().index).listen(listenerOwner) { value ->
-                update { it.copy(gimbalPitchDegrees = value?.pitch?.takeIf(Double::isFinite)) }
+                update {
+                    it.copy(
+                        gimbalPitchDegrees = value?.pitch?.takeIf(Double::isFinite),
+                        gimbalRollDegrees = value?.roll?.takeIf(Double::isFinite),
+                        gimbalYawDegrees = value?.yaw?.takeIf(Double::isFinite),
+                        gimbalAttitudeUpdatedAtNanos = clockNanos(),
+                    )
+                }
             }
+        }
+        safeListen("gimbalYawRelativeToAircraftHeading") {
+            GimbalKey.KeyYawRelativeToAircraftHeading.create(cameraDiscovery.current().index)
+                .listen(listenerOwner) { value ->
+                    update {
+                        it.copy(
+                            gimbalYawRelativeToAircraftHeadingDegrees = value?.takeIf(Double::isFinite),
+                            gimbalYawRelativeUpdatedAtNanos = clockNanos(),
+                        )
+                    }
+                }
         }
         safeListen("flightMode") {
             FlightControllerKey.KeyFlightModeString.create().listen(listenerOwner) { value ->
@@ -516,10 +532,8 @@ class DjiV5TelemetrySource(
         safeRead("velocity") {
             manager.getValue(FlightControllerKey.KeyAircraftVelocity.create())?.let { velocity ->
                 update {
-                    it.copy(
-                        velocity = TelemetryNormalizer.nedVelocity(velocity.x, velocity.y, velocity.z),
-                        velocityUpdatedAtNanos = clockNanos(),
-                        flightStateUpdatedAtNanos = clockNanos(),
+                    DjiTelemetrySnapshotPolicy.cachedVelocity(
+                        it, TelemetryNormalizer.nedVelocity(velocity.x, velocity.y, velocity.z),
                     )
                 }
             }
@@ -619,9 +633,26 @@ class DjiV5TelemetrySource(
                 )
             }
         }
-        safeRead("gimbalPitchDegrees") {
-            manager.getValue(GimbalKey.KeyGimbalAttitude.create(cameraDiscovery.current().index))?.pitch?.let { pitch ->
-                update { it.copy(gimbalPitchDegrees = pitch.takeIf(Double::isFinite)) }
+        safeRead("gimbalAttitude") {
+            manager.getValue(GimbalKey.KeyGimbalAttitude.create(cameraDiscovery.current().index))?.let { attitude ->
+                update {
+                    it.copy(
+                        gimbalPitchDegrees = attitude.pitch.takeIf(Double::isFinite),
+                        gimbalRollDegrees = attitude.roll.takeIf(Double::isFinite),
+                        gimbalYawDegrees = attitude.yaw.takeIf(Double::isFinite),
+                        gimbalAttitudeUpdatedAtNanos = clockNanos(),
+                    )
+                }
+            }
+        }
+        safeRead("gimbalYawRelativeToAircraftHeading") {
+            manager.getValue(GimbalKey.KeyYawRelativeToAircraftHeading.create(cameraDiscovery.current().index))?.let { relativeYaw ->
+                update {
+                    it.copy(
+                        gimbalYawRelativeToAircraftHeadingDegrees = relativeYaw.takeIf(Double::isFinite),
+                        gimbalYawRelativeUpdatedAtNanos = clockNanos(),
+                    )
+                }
             }
         }
         safeRead("remoteControllerSticks") {

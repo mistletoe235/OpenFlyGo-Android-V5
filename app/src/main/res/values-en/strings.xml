@@ -108,6 +108,14 @@
     <string name="survey_more_actions_description">More route actions</string>
     <string name="survey_route_start">Route Start</string>
     <string name="survey_recapture_groups_all">Recapture groups: All</string>
+    <string name="recapture_continuous_switch">Continuous recapture (experimental)</string>
+    <string name="recapture_continuous_eligible">Eligible fly-through capture points: %1$d/%2$d. The rest still stop.</string>
+    <string name="recapture_continuous_confirm">Eligible capture points fly through without the fixed one-second hover. Sharp turns, closely spaced points and internal wayline boundaries may still stop. Unready camera or pose can cause missed captures, which are reported, not counted as successful. This mode supports DJI KMZ simulation and real flight, but full real-flight image-quality validation is not complete; use a short low-speed mission and review it on site first. Changing mode clears this mission’s checkpoint and cached route. Preflight, regenerate and upload again.</string>
+    <string name="recapture_stop_confirm">Restore stop-and-capture. This clears this mission’s checkpoint and cached route. Preflight, regenerate and upload again.</string>
+    <string name="recapture_mode_changed">Recapture mode changed. Preflight and upload the route again.</string>
+    <string name="recapture_continuous_dji_only">Continuous recapture supports only active-recapture missions using the DJI KMZ backend. Select DJI wayline execution, or disable continuous recapture for stop-and-capture.</string>
+    <string name="recapture_capture_missed">Missed recapture warning: %1$d points unconfirmed. Check logs and recapture.</string>
+    <string name="dji_capture_pose_timeout">Aircraft heading or gimbal pose did not stabilize after arrival; the mission was paused automatically.</string>
     <string name="planning_area">Planning Area</string>
     <string name="aircraft_capture">Aircraft &amp; Capture</string>
     <string name="survey_takeoff_method">Takeoff Method</string>
@@ -1411,7 +1419,7 @@
     <string name="survey_preflight_passed">Safety preflight passed: %1$d boundary points, %2$d waypoints; camera=%3$s</string>
     <string name="survey_preflight_passed_simulator_takeoff">Safety preflight passed: %1$d boundary points, %2$d waypoints; camera=%3$s; Simulator will take off first, then run the strict checks again after stabilizing</string>
     <string name="survey_preflight_failed_prefix">Safety preflight failed: </string>
-    <string name="current_camera_not_calibrated">The current camera is not calibrated</string>
+    <string name="current_camera_not_calibrated">Camera parameters are unconfirmed or differ from the mission: check lens, photo ratio, resolution and 1x zoom</string>
     <string name="current_camera_changed_regenerate">The current camera has changed; regenerate the route</string>
     <string name="preflight_no_commands_sent_suffix">; VS was not requested and no flight or camera command was sent</string>
     <string name="unnamed_area_route">Unnamed area route</string>
@@ -1762,4 +1770,22 @@
     <string name="public_inference_not_included">On-device inference is not included in this public release</string>
     <string name="remote_inference_waiting">Waiting for a user-configured remote service</string>
     <string name="hil_camera_source">HIL camera source</string>
+    <string name="v86_remote_open">Open existing cloud session</string>
+    <string name="v86_remote_upload">Capture and upload from this device</string>
+    <string name="v86_remote_endpoint">Service root URL (HTTP/HTTPS, not SSH)</string>
+    <string name="v86_remote_token">Access code</string>
+    <string name="v86_remote_session">Existing session ID</string>
+    <string name="v86_remote_description">Read-only: view point clouds and download approved missions. No uploads, processing or flight commands. HTTP sends the access code in plaintext; prefer HTTPS.</string>
+    <string name="v86_remote_refresh">Connect / refresh result</string>
+    <string name="v86_remote_cloud">Download and view point cloud</string>
+    <string name="v86_remote_mission">Download / preview mission</string>
+    <string name="v86_remote_loading">Reading cloud data…</string>
+    <string name="v86_remote_failed">Cloud request failed: %1$s</string>
+    <string name="v86_remote_unapproved">Unapproved missions are read-only previews. Relative-height tests provide point clouds only.</string>
+    <string name="v86_remote_preview_only">Read-only route preview: no mission activation or flight control. North-up; no terrain or obstacle information.</string>
+    <string name="v86_remote_preview_stats">%1$d waypoints · height above takeoff %2$s–%3$s m</string>
+    <string name="v86_cloud_continuous_option">Request continuous recapture (experimental schema 14; DJI KMZ execution required)</string>
+    <string name="v86_remote_cloud_ready">Point cloud opened; this is not a live obstacle map.</string>
+    <string name="v86_remote_review">Import only loads the route; it does not take off or execute. Check the map, coordinates and altitude, then complete preflight checks.</string>
+    <string name="v86_remote_import">Import mission (no execution)</string>
 </resources>

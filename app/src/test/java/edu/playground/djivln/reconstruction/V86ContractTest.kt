@@ -11,6 +11,21 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class V86ContractTest {
+    @Test fun `session explicitly requests continuous schema without changing default`() {
+        val stopped = V86SessionConfig("test", 69.73, 25.0, "DJI").toJson()
+        assertEquals("[13,14]", stopped.getJSONArray("supported_mission_schemas").toString())
+        assertEquals("STOP_AND_CAPTURE", stopped.getString("recapture_flight_mode"))
+        val continuous = V86SessionConfig("test", 69.73, 25.0, "DJI",
+            recaptureFlightMode = edu.playground.djivln.survey.RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL).toJson()
+        assertEquals("CONTINUOUS_EXPERIMENTAL", continuous.getString("recapture_flight_mode"))
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `relative height test cannot request continuous flight`() {
+        V86SessionConfig("test", 69.73, null, "DJI", relativeHeightTest = true,
+            recaptureFlightMode = edu.playground.djivln.survey.RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL).toJson()
+    }
+
     @Test
     fun `relative height test keeps asl null and disables mission`() {
         val config = V86SessionConfig("test", 69.73, null, "DJI", relativeHeightTest = true).toJson()

@@ -73,6 +73,13 @@ data class AircraftSnapshot(
     val maxFlightRadiusMeters: Int? = null,
     val maxFlightRadiusEnabled: Boolean? = null,
     val gimbalPitchDegrees: Double? = null,
+    val gimbalRollDegrees: Double? = null,
+    /** Absolute gimbal yaw reported by DJI in the NED frame. */
+    val gimbalYawDegrees: Double? = null,
+    /** Gimbal yaw offset relative to the aircraft nose. */
+    val gimbalYawRelativeToAircraftHeadingDegrees: Double? = null,
+    val gimbalAttitudeUpdatedAtNanos: Long = 0L,
+    val gimbalYawRelativeUpdatedAtNanos: Long = 0L,
     val flightMode: String? = null,
     val isFlying: Boolean = false,
     val landingConfirmationNeeded: Boolean = false,

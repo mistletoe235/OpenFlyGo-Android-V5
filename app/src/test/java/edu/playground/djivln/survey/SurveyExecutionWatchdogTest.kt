@@ -61,6 +61,11 @@ class SurveyExecutionWatchdogTest {
         assertTrue(decision.reason!!.contains("untrusted"))
     }
 
+    @Test
+    fun cameraGeometryMismatchRequestsResumablePause() {
+        assertRecoverablePause(SurveyExecutionBlock.CAMERA_GEOMETRY_UNVERIFIED)
+    }
+
     private fun assertRecoverablePause(block: SurveyExecutionBlock) {
         val decision = SurveyExecutionWatchdog.inspect(
             SurveyExecutionState.RUNNING,

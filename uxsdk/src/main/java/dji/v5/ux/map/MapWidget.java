@@ -143,8 +143,20 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
     private Drawable rcIcon;
     private boolean djiRcLocationValid;
     private LocationManager systemLocationManager;
-    private final LocationListener systemLocationListener = location -> {
-        if (!djiRcLocationValid) updateSystemRcLocation(location);
+    private final LocationListener systemLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            if (!djiRcLocationValid) updateSystemRcLocation(location);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+        @Override
+        public void onProviderEnabled(@NonNull String provider) {}
+
+        @Override
+        public void onProviderDisabled(@NonNull String provider) {}
     };
     //endregion
 

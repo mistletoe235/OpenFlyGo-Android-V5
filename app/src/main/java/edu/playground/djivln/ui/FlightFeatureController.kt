@@ -396,6 +396,11 @@ class FlightFeatureController(
     }
 
     private fun bindPreview() {
+        if (!latestSnapshot.connected) {
+            previewPort.unbind()
+            showPreviewStatus(activity.getString(R.string.camera_not_connected))
+            return
+        }
         val surface = previewSurface ?: return
         if (previewWidth <= 0 || previewHeight <= 0) return
         runCatching { previewPort.bind(activeCameraIndex, surface, previewWidth, previewHeight) }
@@ -509,8 +514,9 @@ class FlightFeatureController(
 
     fun render(snapshot: AircraftSnapshot, diagnostics: String) {
         val aircraftJustConnected = snapshot.connected && !latestSnapshot.connected
+        val aircraftJustDisconnected = !snapshot.connected && latestSnapshot.connected
         latestSnapshot = snapshot
-        if (aircraftJustConnected) bindPreview()
+        if (aircraftJustConnected || aircraftJustDisconnected) bindPreview()
         refreshActiveCamera()
         binding.telemetry.text = buildString {
             appendLine("ALT ${snapshot.relativeAltitudeMeters?.let { "%.1f m".format(it) } ?: "-"}  AGL ${snapshot.altitudeAboveGroundMeters?.let { "%.1f".format(it) } ?: "-"}")
@@ -1575,11 +1581,7 @@ class FlightFeatureController(
         activeCameraIndex = camera.index
         lastCameraRebindElapsedMillis = SystemClock.elapsedRealtime()
         cameraController.bind(camera.index, force = true)
-        val surface = previewSurface
-        if (surface != null && previewWidth > 0 && previewHeight > 0) {
-            runCatching { previewPort.bind(camera.index, surface, previewWidth, previewHeight) }
-                .onFailure { binding.telemetry.text = activity.getString(R.string.camera_switch_failed, it.message) }
-        }
+        bindPreview()
     }
 
     private fun selectNextLens() {
@@ -1589,10 +1591,7 @@ class FlightFeatureController(
                 result.fold(
                     onSuccess = { source ->
                         cameraController.bind(activeCameraIndex, force = true)
-                        val surface = previewSurface
-                        if (surface != null && previewWidth > 0 && previewHeight > 0) {
-                            runCatching { previewPort.bind(activeCameraIndex, surface, previewWidth, previewHeight) }
-                        }
+                        bindPreview()
                         rail.renderLens(source.name, cameraDiscovery.current().availableStreamSources.size)
                         cameraController.showMessage(
                             activity.getString(R.string.camera_lens_switched, source.name.toCameraSourceLabel()),

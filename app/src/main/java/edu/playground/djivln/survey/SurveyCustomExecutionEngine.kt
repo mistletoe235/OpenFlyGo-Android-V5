@@ -78,6 +78,7 @@ class SurveyCustomExecutionEngine(
     private val gimbalPortFactory: (ComponentIndexType) -> GimbalPort,
     private val snapshot: () -> AircraftSnapshot,
     private val cameraIndex: () -> ComponentIndexType = { ComponentIndexType.LEFT_OR_MAIN },
+    private val cameraGeometryMatches: (SurveyMission) -> Boolean = { false },
     private val latestHilFrame: (maxAgeMillis: Long) -> HilFrameProtocol.Frame? = { null },
     private val saveHilCapture: (
         displayName: String,
@@ -719,6 +720,7 @@ class SurveyCustomExecutionEngine(
         checkPreflight = true,
         allowNotFlying = allowSimulatorAutoTakeoff,
         allowGroundedPositionUnavailable = allowSimulatorAutoTakeoff,
+        checkCameraGeometry = false,
     )
 
     private fun pauseInternal(reason: String, completion: () -> Unit = {}) {
@@ -1405,6 +1407,7 @@ class SurveyCustomExecutionEngine(
         checkPreflight: Boolean,
         allowNotFlying: Boolean = false,
         allowGroundedPositionUnavailable: Boolean = false,
+        checkCameraGeometry: Boolean = true,
     ): SurveyExecutionGateResult {
         val aircraft = snapshot()
         val location = aircraft.aircraftLocation
@@ -1418,7 +1421,7 @@ class SurveyCustomExecutionEngine(
             ((SystemClock.elapsedRealtimeNanos() - telemetryUpdatedAtNanos).coerceAtLeast(0L) / 1_000_000L)
         } else Long.MAX_VALUE
         val velocity = aircraft.velocity
-        return SurveySimulatorGate.evaluate(
+        val result = SurveySimulatorGate.evaluate(
             mission = mission,
             telemetry = SurveyExecutionTelemetry(
                 connected = aircraft.connected,
@@ -1459,6 +1462,10 @@ class SurveyCustomExecutionEngine(
             } else SurveyExecutionEnvironment.REAL_AIRCRAFT_MANUAL_TAKEOFF,
             checkPreflightReadiness = checkPreflight,
         )
+        if (!checkCameraGeometry || backend == SurveyExecutionBackend.UE_HIL || cameraGeometryMatches(mission)) return result
+        return result.copy(allowed = false, blocks = LinkedHashSet(result.blocks).apply {
+            add(SurveyExecutionBlock.CAMERA_GEOMETRY_UNVERIFIED)
+        })
     }
 
     private fun cameraReady(): Boolean = cameraController.currentSnapshot().let {

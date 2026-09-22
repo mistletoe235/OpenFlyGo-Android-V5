@@ -93,8 +93,8 @@ android {
         applicationId openFlyApplicationId
         minSdkVersion Integer.parseInt(project.ANDROID_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_TARGET_SDK_VERSION)
-        versionCode 1
-        versionName '0.1.0-v5'
+        versionCode Integer.parseInt((project.findProperty('OPENFLY_VERSION_CODE') ?: '1').toString())
+        versionName (project.findProperty('OPENFLY_VERSION_NAME') ?: '0.1.0-v5').toString()
         resourceConfigurations += ['en', 'zh-rCN']
         if (hilNativeRateExperimentHz > 0) {
             versionNameSuffix "-hil-rate-${hilNativeRateExperimentHz}"

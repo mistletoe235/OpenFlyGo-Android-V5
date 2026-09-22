@@ -44,7 +44,7 @@ class SurveyFrameExifWriter(
                 if (metadata.hasFreshAircraftGps) {
                     setLatLong(requireNotNull(metadata.latitude), requireNotNull(metadata.longitude))
                     metadata.altitudeAboveSeaLevelMeters?.let(::setAltitude)
-                    metadata.headingDegrees?.let { heading ->
+                    metadata.cameraYawDegrees?.let { heading ->
                         setAttribute(ExifInterface.TAG_GPS_IMG_DIRECTION_REF, "T")
                         setAttribute(
                             ExifInterface.TAG_GPS_IMG_DIRECTION,
@@ -75,12 +75,32 @@ class SurveyFrameExifWriter(
                         .put("frame_after_trigger_ms", metadata.frameAfterTriggerMillis)
                         .put("telemetry_after_frame_ms", metadata.telemetryAfterFrameMillis)
                         .put("heading_deg_true", metadata.headingDegrees ?: JSONObject.NULL)
+                        .put("aircraft_heading_deg_true", metadata.headingDegrees ?: JSONObject.NULL)
                         .put("heading_age_ms", metadata.headingAgeMillis ?: JSONObject.NULL)
                         .put("roll_deg", metadata.rollDegrees ?: JSONObject.NULL)
                         .put("pitch_deg", metadata.pitchDegrees ?: JSONObject.NULL)
                         .put("yaw_deg", metadata.yawDegrees ?: JSONObject.NULL)
                         .put("attitude_age_ms", metadata.attitudeAgeMillis ?: JSONObject.NULL)
                         .put("gimbal_pitch_deg", metadata.gimbalPitchDegrees ?: JSONObject.NULL)
+                        .put("gimbal_roll_deg", metadata.gimbalRollDegrees ?: JSONObject.NULL)
+                        .put("gimbal_yaw_deg_ned", metadata.gimbalYawDegrees ?: JSONObject.NULL)
+                        .put(
+                            "gimbal_yaw_relative_to_aircraft_deg",
+                            metadata.gimbalYawRelativeToAircraftHeadingDegrees ?: JSONObject.NULL,
+                        )
+                        .put("gimbal_attitude_age_ms", metadata.gimbalAttitudeAgeMillis ?: JSONObject.NULL)
+                        .put(
+                            "gimbal_yaw_relative_age_ms",
+                            metadata.gimbalYawRelativeAgeMillis ?: JSONObject.NULL,
+                        )
+                        .put("camera_roll_deg", metadata.cameraRollDegrees ?: JSONObject.NULL)
+                        .put("camera_pitch_deg", metadata.cameraPitchDegrees ?: JSONObject.NULL)
+                        .put("camera_yaw_deg_true", metadata.cameraYawDegrees ?: JSONObject.NULL)
+                        .put("camera_yaw_source", metadata.cameraYawSource ?: JSONObject.NULL)
+                        .put(
+                            "camera_yaw_consistency_error_deg",
+                            metadata.cameraYawConsistencyErrorDegrees ?: JSONObject.NULL,
+                        )
                         .put("velocity_north_mps", metadata.velocityNorthMetersPerSecond ?: JSONObject.NULL)
                         .put("velocity_east_mps", metadata.velocityEastMetersPerSecond ?: JSONObject.NULL)
                         .put("velocity_up_mps", metadata.velocityUpMetersPerSecond ?: JSONObject.NULL)

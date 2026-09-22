@@ -58,6 +58,7 @@ enum class SurveyExecutionBlock {
     MISSION_TOO_LONG,
     MISSION_ALTITUDE_UNSAFE,
     CAMERA_TRIGGER_UNSAFE,
+    CAMERA_GEOMETRY_UNVERIFIED,
     RC_SIGNAL_WEAK,
     GPS_SATELLITES_LOW,
     GPS_SIGNAL_WEAK,
@@ -68,6 +69,7 @@ enum class SurveyExecutionBlock {
     MAX_FLIGHT_RADIUS_TOO_SMALL,
     FLIGHT_CONTROLLER_FAILSAFE_ACTIVE,
     TERRAIN_REAL_FLIGHT_NOT_VERIFIED,
+    TERRAIN_FEATURE_DISABLED,
 }
 
 data class SurveyExecutionGateResult(
@@ -95,6 +97,7 @@ object SurveySimulatorGate {
         checkPreflightReadiness: Boolean = true,
     ): SurveyExecutionGateResult {
         val blocks = linkedSetOf<SurveyExecutionBlock>()
+        if (!SurveyFeatureAvailability.supportsMission(mission)) blocks += SurveyExecutionBlock.TERRAIN_FEATURE_DISABLED
         if (!telemetry.connected) blocks += SurveyExecutionBlock.AIRCRAFT_DISCONNECTED
         if (environment == SurveyExecutionEnvironment.DJI_SIMULATOR) {
             if (!telemetry.simulatorActive) blocks += SurveyExecutionBlock.SIMULATOR_REQUIRED

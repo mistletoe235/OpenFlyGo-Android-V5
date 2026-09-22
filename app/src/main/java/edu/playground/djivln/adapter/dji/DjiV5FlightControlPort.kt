@@ -24,6 +24,7 @@ import edu.playground.djivln.control.BodyVelocityToDjiAxes
 import edu.playground.djivln.control.ProcessVirtualStickPortLease
 import edu.playground.djivln.control.VirtualStickLifecycleGuard
 import edu.playground.djivln.control.VirtualStickPortLease
+import edu.playground.djivln.control.VirtualStickSendPolicy
 import edu.playground.djivln.domain.flight.BodyVelocityCommand
 import edu.playground.djivln.domain.flight.ControlOwner
 import edu.playground.djivln.domain.flight.FlightControlCompletion
@@ -41,6 +42,7 @@ class DjiV5FlightControlPort(
         val completion: FlightControlCompletion,
         val timeout: Runnable,
         val advancedModeConfigured: Boolean = false,
+        val advancedModeObserved: Boolean = false,
     )
 
     private data class PendingRelease(
@@ -72,6 +74,9 @@ class DjiV5FlightControlPort(
             val next = synchronized(this@DjiV5FlightControlPort) {
                 actualEnabled = state.isVirtualStickEnable
                 actualOwner = rawOwner
+                pendingAcquire?.let { pending ->
+                    pendingAcquire = pending.copy(advancedModeObserved = state.isVirtualStickAdvancedModeEnabled)
+                }
                 action = lifecycle.observeActual(state.isVirtualStickEnable)
                 updateLocked {
                     it.copy(
@@ -230,22 +235,15 @@ class DjiV5FlightControlPort(
         }
         runCatching {
             if (actualEnabled && actualOwner == ControlOwner.APP) {
-                manager.sendVirtualStickAdvancedParam(buildParam(BodyVelocityCommand.ZERO))
+                send(BodyVelocityCommand.ZERO)
             }
         }
         requestDisableFromManager()
     }
 
     override fun send(command: BodyVelocityCommand): Result<Unit> {
-        if (!lease.isHolder(leaseOwner)) {
-            return Result.failure(
-                IllegalStateException("Virtual Stick command rejected: this port does not hold the lease"),
-            )
-        }
-        val snapshot = state()
-        if (!snapshot.enabled || snapshot.owner != ControlOwner.APP) {
-            return Result.failure(IllegalStateException("Virtual Stick authority unavailable: $snapshot"))
-        }
+        val issue = VirtualStickSendPolicy.issue(state(), lease.isHolder(leaseOwner), command)
+        if (issue != null) return Result.failure(IllegalStateException(issue))
         return runCatching { manager.sendVirtualStickAdvancedParam(buildParam(command)) }
     }
 
@@ -296,11 +294,12 @@ class DjiV5FlightControlPort(
         var completion: FlightControlCompletion? = null
         synchronized(this) {
             val pending = pendingAcquire ?: return
-            if (!pending.advancedModeConfigured ||
+            if (!VirtualStickSendPolicy.acquireConfirmed(
+                    pending.advancedModeConfigured, pending.advancedModeObserved, current, lease.isHolder(leaseOwner),
+                ) ||
                 !actualEnabled ||
                 actualOwner != ControlOwner.APP ||
-                !lifecycle.accepts(pending.token) ||
-                !lease.isHolder(leaseOwner)
+                !lifecycle.accepts(pending.token)
             ) return
             timeoutHandler.removeCallbacks(pending.timeout)
             pendingAcquire = null

@@ -42,6 +42,11 @@ class SurveyFrameMetadataPolicyTest {
                 gimbalPitchDegrees = -80.0,
                 gpsSatelliteCount = 18,
                 gpsSignalLevel = "LEVEL_5",
+                gimbalRollDegrees = 0.5,
+                gimbalYawDegrees = 15.0,
+                gimbalYawRelativeToAircraftHeadingDegrees = 20.0,
+                gimbalAttitudeUpdatedAtNanos = 10_340_000_000L,
+                gimbalYawRelativeUpdatedAtNanos = 10_350_000_000L,
             ),
         )
 
@@ -57,6 +62,16 @@ class SurveyFrameMetadataPolicyTest {
         assertEquals(350L, metadata.frameAfterTriggerMillis)
         assertEquals(10L, metadata.telemetryAfterFrameMillis)
         assertEquals(1_700_000_000_350L, metadata.frameEpochMillis)
+        assertEquals(15.0, metadata.cameraYawDegrees!!, 0.0)
+        assertEquals(-80.0, metadata.cameraPitchDegrees!!, 0.0)
+        assertEquals(0.5, metadata.cameraRollDegrees!!, 0.0)
+        assertEquals(
+            CameraOrientationResolver.SOURCE_ABSOLUTE_GIMBAL_CROSS_CHECKED,
+            metadata.cameraYawSource,
+        )
+        assertEquals(5.0, metadata.cameraYawConsistencyErrorDegrees!!, 0.0)
+        assertEquals(20L, metadata.gimbalAttitudeAgeMillis)
+        assertEquals(10L, metadata.gimbalYawRelativeAgeMillis)
     }
 
     @Test
@@ -91,6 +106,8 @@ class SurveyFrameMetadataPolicyTest {
         assertEquals(null, metadata.altitudeAboveSeaLevelMeters)
         assertEquals(null, metadata.headingDegrees)
         assertEquals(2_500L, metadata.gpsAgeMillis)
+        assertEquals(90.0, metadata.cameraYawDegrees!!, 0.0)
+        assertEquals(CameraOrientationResolver.SOURCE_AIRCRAFT_HEADING_FALLBACK, metadata.cameraYawSource)
     }
 
     @Test

@@ -11,8 +11,8 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 /** Stores the bearer access code encrypted by a non-exportable Android Keystore key. */
-class V86SecureTokenStore(context: Context) {
-    private val preferences = context.applicationContext.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
+class V86SecureTokenStore(context: Context, namespace: String = "v86_secure") {
+    private val preferences = context.applicationContext.getSharedPreferences(namespace, Context.MODE_PRIVATE)
 
     fun save(token: String) {
         if (token.isBlank()) {

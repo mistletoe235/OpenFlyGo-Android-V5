@@ -2,6 +2,7 @@ package edu.playground.djivln.reconstruction
 
 import org.json.JSONArray
 import org.json.JSONObject
+import edu.playground.djivln.survey.RecaptureFlightMode
 
 data class V86SessionConfig(
     val name: String,
@@ -12,9 +13,11 @@ data class V86SessionConfig(
     val autoPreview: Boolean = true,
     val maximumTasks: Int = 10,
     val relativeHeightTest: Boolean = false,
+    val recaptureFlightMode: RecaptureFlightMode = RecaptureFlightMode.STOP_AND_CAPTURE,
 ) {
     fun toJson(): JSONObject {
         require(if (relativeHeightTest) takeoffAbsoluteAltitudeMeters == null else takeoffAbsoluteAltitudeMeters?.isFinite() == true)
+        require(!relativeHeightTest || recaptureFlightMode == RecaptureFlightMode.STOP_AND_CAPTURE)
         return JSONObject()
         .put("name", name)
         .put("horizontal_fov_deg", horizontalFovDegrees)
@@ -25,6 +28,8 @@ data class V86SessionConfig(
         .put("enable_scal3r", enableScal3r)
         .put("auto_preview", autoPreview)
         .put("maximum_tasks", maximumTasks)
+        .put("supported_mission_schemas", JSONArray(listOf(13, 14)))
+        .put("recapture_flight_mode", recaptureFlightMode.name)
     }
 }
 
