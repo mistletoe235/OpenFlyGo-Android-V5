@@ -1,81 +1,81 @@
-# HIL 快速上手（手机端）
+# Phone-side HIL quickstart
 
-HIL = hardware-in-the-loop，硬件在环。本指南面向已准备好兼容 OpenFly 的 UE/AirSim
-场景与 HIL 适配器的用户；UE 程序 / 场景获取、安装和工作站部署见项目总入口的对应指南。
-**普通 AirSim、ROS 或一个能打开的 UE 窗口，不会自动实现 OpenFly HIL 协议。**
+[English](HIL_QUICKSTART.md) · [Chinese reference](HIL_QUICKSTART.zh-CN.md)
 
-## 1. 分清三种模式
+HIL means hardware-in-the-loop. Start with a compatible OpenFly UE/AirSim scene
+and HIL adapter; use the [main simulator guide](https://github.com/mistletoe235/OpenFlyScan/blob/main/docs/simulator.md)
+for installation and downloads. A generic AirSim/ROS setup or a running UE window
+does not automatically implement the OpenFly HIL protocol.
 
-| 模式 | 是否需要 DJI 硬件 | 证明什么 |
+## 1. Distinguish the operating modes
+
+| Mode | DJI hardware required? | What it checks |
 | --- | --- | --- |
-| Android 离线回归 / Xcode iOS Simulator 的 Mock | 不需要 | UI、规划、协议及软件状态机；不是 DJI 控制器验收 |
-| DJI 内置 Simulator + 手机 + UE HIL | 需要受支持的飞机、遥控器及手机 | DJI 仿真状态、控制链路、UE 虚拟相机和任务执行 |
-| 实飞 | 需要，且关闭仿真 | 真正飞行；必须重新检查场地与所有飞行条件 |
+| Android offline regression / Xcode Simulator Mock | No | UI, planning, protocol and software state machines; not DJI controller acceptance |
+| DJI Simulator + phone + UE HIL | Supported aircraft, controller and phone | DJI simulated state, control, UE virtual camera and mission execution |
+| Real flight | Yes; simulation must be off | Actual flight, requiring a fresh site and flight-readiness review |
 
-主链路：手机控制 DJI 仿真飞控 → 手机把仿真位姿发给 UE → UE 渲染并向手机回传图像。
-UE 的碰撞 / STOP 是软件安全事件；渲染图像和 GS 点云**不会注入飞机的视觉避障传感器**。
+The phone controls the DJI simulated flight controller, sends simulated poses to
+UE, and receives UE-rendered images. UE collision/STOP events are software safety
+events. GS imagery and point clouds are **not injected into DJI obstacle sensors**.
 
-## 2. 准备与网络
+## 2. Preparation and networking
 
-1. 使用 README 对应的 App / 机型组合。先完成 SDK 注册和遥控器 USB 连接。
-2. **拆桨、固定飞机并保持可断电 / 接管。** 未确认 DJI Simulator 激活前，不进行起飞或控制测试。
-3. 打开兼容的 UE HIL 场景，不要同时运行争用端口的预览 / 第二个 HIL 实例。
-4. 手机和 UE 电脑接入同一可信局域网，App 填 **UE 电脑的局域网 IP**，不是手机 IP、
-   `127.0.0.1`、SSH 主机别名或云端重建 URL。也可让电脑加入手机热点，使用热点发现模式。
-5. 允许下列本地流量；先检查网络隔离、防火墙和路由，不关闭全机防火墙来解决问题。
+1. Select the README's compatible app/aircraft combination. Complete SDK registration and controller USB connection.
+2. **Remove propellers, secure the aircraft and keep power-off/manual takeover available.** Do not test takeoff or control until DJI Simulator activation is confirmed.
+3. Open a compatible UE HIL scene. Avoid a second HIL/preview instance competing for ports.
+4. Connect the phone and UE computer to a trusted LAN. Enter the **UE computer's LAN IP**, not the phone address, `127.0.0.1`, an SSH alias or a reconstruction-service URL. Alternatively, join the phone hotspot and use hotspot discovery.
+5. Permit the traffic below; check network isolation, routing and firewall rules rather than disabling the entire firewall.
 
-| 接收端 | 默认端口 | 内容与方向 |
+| Receiver | Default port | Traffic |
 | --- | --- | --- |
-| UE 电脑 | UDP 30020 | 手机 → UE：HELLO、POSE、心跳、PING |
-| 手机 | UDP 30021 | UE → 手机：心跳、PONG、安全事件；适配器也应支持向收到请求的源端点回包 |
-| 手机 | TCP 30022 | 常用模式为手机监听、UE 主动连接并推送图像；客户端也保留连接 UE 图像端口的兼容路径 |
-| UE 观察服务（可选） | HTTP 30010 | 航线 / 遥测 / 目标 / 拍照事件；与 HIL UDP/TCP 和云端重建服务分开配置 |
+| UE computer | UDP 30020 | Phone to UE: HELLO, POSE, heartbeat and PING |
+| Phone | UDP 30021 | UE to phone: heartbeat, PONG and safety events; adapters should also support replies to the request's source endpoint |
+| Phone | TCP 30022 | Normally phone-listen/UE-connect for image delivery; a compatibility path also allows the phone to connect to a UE image port |
+| Optional UE observer | HTTP 30010 | Routes, telemetry, targets and capture events; configured separately from HIL and cloud reconstruction |
 
-HIL 的 peer/session/序号检查不是密码认证，本协议不提供传输加密。**仅在可信局域网或
-受控 VPN 中使用，不向公网映射 HIL 端口。** 云端 Bearer 访问码也不是 HIL 的凭据。
-TCP 帧使用协议头和完整 JPEG/PNG 载荷，不是 RTSP URL 或向 socket 裸写一张 JPEG。
+Peer/session/sequence checks are not cryptographic authentication, and the HIL
+protocol does not encrypt transport. **Use a trusted LAN or controlled VPN; do not
+expose HIL ports publicly.** Cloud bearer tokens are not HIL credentials. TCP frames
+require the protocol header and complete JPEG/PNG payload, not an RTSP URL or a raw
+JPEG written directly to the socket.
 
-## 3. 手机操作
+## 3. Phone operation
 
-1. 在更多 / 设置中找到 **UE HIL / UE/AirSim 硬件在环** 面板；选择局域网或热点连接方式。
-   iOS 个人热点有自动发现和“UE 热点 IP”手动兜底；填写电脑加入热点后拿到的地址。
-2. 在模拟器未运行、飞机位于地面时设置仿真起点，并与 UE 场景的 WGS84 原点 / 高度基准一致。
-   不在模拟飞行中修改原点或强制重启 Simulator。
-3. 启动 HIL，检查 DJI 内置 Simulator 的实际状态；HIL 网络启动成功不代表飞控仿真成功。
-   若设备不提供 Simulator 或启动失败，在这里停止，不能把后续命令发到真机模式。
-4. 依次确认 **peer 心跳在线 → DJI Simulator 激活且位姿新鲜 → TCP 图像在线且帧数增长**。
-   将图像源切为 **UE / UE 虚拟相机**，检查手机画面与场景一致。
-5. 先做短距离低速的仿真操纵 / 小范围航线，检查方向、高度、画面与相机视角；再测试暂停、
-   断连、恢复和碰撞事件。所有起飞 / 执行只在仿真状态确认后显式操作。
-6. 结束时先让模拟飞机降落，停止任务和 HIL / Simulator，再关闭 UE。转实飞前重新核对
-   Simulator 已关闭、图像源恢复 DJI、Home / GPS / 相机正常，不沿用仿真的地理任务直接飞。
+1. Open the UE HIL panel in More/settings and choose LAN or hotspot mode. iOS personal-hotspot mode provides discovery and a manual UE hotspot IP fallback; use the address assigned to the computer.
+2. Set the simulated start location while the simulator is stopped and the aircraft is on the ground. Match the UE scene's WGS84 origin and altitude datum. Do not change the origin or force-restart Simulator during simulated flight.
+3. Start HIL and verify the actual DJI Simulator state. A working network session is not proof of simulated flight control. Stop if Simulator is unavailable or fails to start; do not issue the next commands in real-aircraft mode.
+4. Confirm peer heartbeat, active DJI Simulator with fresh poses, and an online TCP image stream with increasing frame count. Select the UE virtual camera and check the displayed scene.
+5. Begin with short, slow simulated control or a small survey. Check direction, altitude and camera view, then pause, disconnect, resume and collision handling. Takeoff/execution always requires explicit action after simulation is confirmed.
+6. Land the simulated aircraft, stop the mission and HIL/Simulator, then close UE. Before real flight, confirm Simulator is off, the DJI camera is restored, and home/GPS/camera states are valid. Do not directly reuse a simulation's geographic mission for real flight.
 
-坐标约定：世界系 ENU（东、北、上），机体系 FRU（前、右、上），长度米、速度米/秒，
-航向真北 0° 且顺时针为正，云台向下为负。AirSim 的 NED、UE 的厘米 / 坐标手性必须由
-适配器显式转换，不能在手机和 UE 两边重复换轴。
+Coordinates use world ENU (east/north/up), body FRU (forward/right/up), meters and
+meters per second. Heading is zero at true north and positive clockwise; downward
+gimbal pitch is negative. The adapter must explicitly convert AirSim NED and UE
+centimeters/handedness. Do not apply the same axis conversion twice.
 
-## 4. 频率与各端差异
+## 4. Rates and platform differences
 
-- Android V4 可请求 DJI Simulator 状态频率，默认配置为 100 Hz；实际能力仍以固件回调为准。
-- V5 公共 Simulator API 没有同等的更新频率设置；手机位姿发送频率不是新鲜飞控样本频率。
-  静止时重复发送同一状态不能算作传感器更新。
-- iOS 同样要分别看飞控状态、UDP 和 TCP 的新鲜度；Xcode Mock 能跑不代表真机 HIL 已验收。
-- 默认停拍航线可用于初次 HIL；V5 连续补拍只允许对应的 DJI KMZ 路径，不应在自定义 / UE
-  后端强行加载 schema 14 任务。
+- V4 can request a DJI Simulator state rate, configured at 100 Hz by default; actual callback behavior depends on firmware.
+- The public V5 Simulator API has no equivalent rate setting. Phone pose-send rate is not fresh controller-sample rate; retransmitting unchanged state is not a sensor update.
+- On iOS, inspect controller, UDP and TCP freshness separately. Xcode Mock success is not hardware HIL acceptance.
+- Start HIL validation with default stop-and-capture missions. V5 continuous reacquisition requires its DJI KMZ execution path; do not force these missions through a custom/UE backend. V4/iOS have a separate app-side schema 14 implementation, not the V5 KMZ path, and still require hardware validation.
 
-## 5. 排查顺序
+## 5. Troubleshooting
 
-| 现象 | 优先检查 |
+| Symptom | Check first |
 | --- | --- |
-| 没有 peer | 同一网络、电脑 IP、UDP 30020 / 30021、防火墙、热点隔离、是否真正运行 HIL 适配器 |
-| peer 在线但无位姿 | SDK 注册、飞机连接、Simulator 激活、原始状态新鲜度；不要只看网络灯 |
-| 位姿在线但没图像 | 相机来源 UE、TCP 30022、连接方向、帧协议和帧计数 |
-| 画面方向 / 地图位置错误 | WGS84 原点、ENU/NED 转换、米与厘米、航向零轴；暂停后修配置 |
-| 原地不动 / 执行按钮不可用 | 页面具体预检原因、当前任务后端、Simulator 状态、控制权和遥测时效 |
-| 断连后没有自动继续 | 这是安全行为；确认状态、查看断点，然后手动恢复 |
-| HTTP 观察桥失败而 HIL 正常 | 30010 观察服务独立；V4 Release HTTP / iOS ATS 限制也需核对，不改为全局放行 |
+| No peer | LAN membership, computer IP, UDP 30020/30021, firewall, hotspot isolation and a running HIL adapter |
+| Peer online, no poses | SDK registration, aircraft link, Simulator activation and fresh raw state; not just the network indicator |
+| Poses online, no images | UE camera selection, TCP 30022, connection direction, framing and frame counter |
+| Wrong view or map position | WGS84 origin, ENU/NED conversion, meters/centimeters and heading reference; pause before adjusting |
+| No movement / execution disabled | Reported preflight block, backend, Simulator state, control authority and telemetry freshness |
+| No automatic resume after disconnect | Expected safety behavior; inspect state/checkpoint and explicitly resume |
+| Observer HTTP fails while HIL works | Port 30010 is separate; also check V4 Release HTTP/iOS ATS restrictions rather than globally bypassing them |
 
-“重建点云看起来没有障碍”不等于 HIL 有碰撞几何。GS 视觉渲染、碰撞代理和 DJI 避障是三件事。
-自动化 RAW 回归脚本可能主动执行模拟起飞 / 杆量 / 降落；不是只读诊断，不在真机实飞会话运行。
+GS visual rendering, collision proxies and DJI obstacle avoidance are separate.
+An apparently clear point cloud does not establish collision geometry. Automated
+RAW regression scripts may command simulated takeoff, stick inputs and landing;
+they are not read-only diagnostics and must not run in real-flight sessions.
 
-开发者参考：[V4 / V5 状态与频率差异](V4_V5_HIL_PARITY.md)、[航线执行与 HTTP 观察接口](SURVEY_EXECUTION_INTERFACE.md)。
+Developer references: [V4/V5 state and rate differences](V4_V5_HIL_PARITY.md), [survey execution and HTTP observation](SURVEY_EXECUTION_INTERFACE.md).

@@ -1,85 +1,74 @@
-# Existing cloud session: point clouds and routes
+# Cloud uploads, point clouds and reacquisition
 
-## 中文操作：连接工作站、上传、点云与补拍
+[English](CLOUD_ROUTE_WORKFLOW.md) · [Chinese reference](CLOUD_ROUTE_WORKFLOW.zh-CN.md)
 
-### 部署边界与需要拿到的配置
+## Workstation connection
 
-**工作站安装、GPU / 模型配置、服务启动、HTTPS / VPN 部署，由总入口仓库的工作站文档统一说明。**
-这里只说明 App 端；不要求用户在手机上 SSH，也不在本仓库提供未经验证的服务启动命令。
-请向工作站部署者取得：
+Workstation installation, GPU/model setup and HTTPS/VPN deployment are documented
+in the [main workstation guide](https://github.com/mistletoe235/OpenFlyScan/blob/main/docs/workstation.md).
+The phone uses HTTP/HTTPS, not SSH. Obtain the following from the deployer:
 
-| 配置 | App 怎么填 |
+| Setting | Enter in the app |
 | --- | --- |
-| 服务根地址 | 例如 `https://reconstruction.example.com`，替换为手机可访问的真实地址；不带 `/api` 或会话路径 |
-| Bearer 访问码 | 只填访问码本身，App 添加 `Authorization: Bearer ...`；不放到 URL、截图或日志 |
-| 已有会话 ID | 只读查看已有结果时需要；必须是目标服务上的 ID，不是任务名称或完整 URL |
-| 航线兼容性 | Android V4 / V5 / iOS 可读 schema 1–14。默认输出 schema 13，连续补拍显式使用 14 |
-| 起飞点绝对海拔 | 本机新建采集会话时确认真实 ASL 和来源，并与服务器的高度基准一致 |
+| Service root | A reachable URL such as `https://reconstruction.example.com`, without `/api` or a session path |
+| Bearer access code | The token only; the app adds `Authorization: Bearer ...`. Keep it out of URLs, screenshots and logs |
+| Existing session ID | Needed for result browsing; use an ID on the selected server, not a task name or complete URL |
+| Mission compatibility | All clients accept schemas 1–14; default exports use 13, explicitly requested continuous reacquisition uses 14 |
+| Takeoff ASL | The actual absolute altitude and its source, consistent with the server's datum |
 
-手机的 `localhost` / `127.0.0.1` 是手机自身，不是远程电脑。即使服务在电脑监听 `55000`，
-也要用手机可达的主机地址 / HTTPS 入口；VPN、热点与 DNS 须从手机侧验证。
-V4 Release 禁止明文 HTTP，Debug 可用于受控局域网 HTTP 测试；V5 当前允许 HTTP 但仍建议
-HTTPS，明文会暴露照片与访问码。不要用关闭证书校验解决 HTTPS 报错。
+On a phone, `localhost`/`127.0.0.1` refers to the phone, not the workstation.
+Even if the workstation listens on port 55000, use its phone-reachable host or
+HTTPS gateway. Verify VPN, hotspot routing and DNS from the phone. V4 Release
+blocks cleartext HTTP; Debug can test it on a controlled LAN. V5 permits HTTP but
+HTTPS is preferred because cleartext exposes images and credentials. Do not
+bypass certificate checks to resolve HTTPS errors.
 
-### 路径 A：本机实时采集与上传
+## Capture and upload from this device
 
-1. 先完成飞机连接、相机配置和小范围航线规划，打开“云端重建 → 本机采集与上传重建”。
-2. 保存根地址与访问码；核对任务名、相机水平 FOV、相机型号、真实起飞点 ASL 和补拍任务预算，
-   创建会话并记下 ID。不要把飞机显示的相对起飞高度填成绝对海拔。
-3. 通过预检后按正常流程执行航线。App 在有效拍照触发后保存新图传帧与关联元数据，并排队上传；
-   **不是持续上传整个视频，也不是自动下载 SD 卡上的全分辨率原片**。
-4. 观察“已拍 / 已传 / 待传 / 未入队”。图传、GPS 时效、ASL 或落盘不合格时可能拍了照但没入队，
-   必须处理原因；没有网络时保留队列，恢复后重试。同一照片序号重试不能在服务器重复计数。
-5. 完成采集且“待传 = 0”后再点“结束采集 / 结束上传”。这会 finalize 会话；任务跑完不代表
-   所有图片已经上传。处理中刷新状态，按需显式重试，不反复新建会话来掩盖失败。
-6. 点云就绪后点“查看 PLY / 下载并查看点云”。支持旋转、缩放和适配视图；预览是重建结果，
-   不是实时避障地图。渐进预览是否出现取决于工作站，不保证每传一张图就刷新点云。
+1. Connect the aircraft, confirm the camera profile and plan a small survey. Open the local capture/upload section of cloud reconstruction.
+2. Save the root URL and access code. Check task name, horizontal camera FOV, camera model, actual takeoff ASL and reacquisition-task budget, then create a session and record its ID. Relative flight height is not ASL.
+3. Execute through the normal preflight workflow. After valid capture triggers, the app saves fresh downlink frames with metadata and queues them for upload. This is neither continuous video streaming nor automatic transfer of full-resolution SD originals.
+4. Monitor captured, uploaded, pending and rejected/not-queued counts. Invalid/stale video, GPS, ASL or disk writes can leave a captured photo unqueued. Resolve the cause. Network failures preserve the queue for retry; retrying a sequence number must not double-count it on the server.
+5. After capture finishes and pending uploads reach zero, explicitly finish collection/upload to finalize the session. Route completion does not mean upload completion. Refresh processing status and retry explicitly when needed rather than repeatedly creating replacement sessions.
+6. When ready, open the PLY and rotate, zoom or fit the view. This is a reconstruction result, not a live obstacle map. Progressive updates depend on the workstation, not a guaranteed refresh for every uploaded image.
 
-**先试历史照片**：可在本机上传流程中用系统文件夹选择器选已有 JPG/JPEG，授权只读目录。
-App 会检查照片 EXIF 并压缩上传；它不是给缺失 GPS / 海拔的任意图片补造位置。
-V5 的 `relative_height_test` 是测试分支，允许的输出边界与正式 ASL 会话不同，**不能导入为实飞补拍**。
+To try historical photos first, select a read-only folder of JPG/JPEG files in
+the local upload workflow. The app checks EXIF and compresses for upload; it does
+not invent missing GPS or altitude. V5's `relative_height_test` branch has different
+output limits from production ASL sessions and cannot supply real-flight missions.
 
-### 路径 B：只读查看已有结果
+## Read an existing session
 
-1. “云端重建 → 打开已有云端会话”，填写服务根地址、访问码和会话 ID。
-2. 点“连接 / 刷新结果”，读取 `GET /api/sessions/{id}/result`，等待 `point_cloud` / 航线产物就绪。
-3. “下载并查看点云”只读取点云；未批准的航线打开独立只读路线图，已批准的航线进入导入确认。
-4. 该入口**不会上传照片、创建 / finalize / retry 服务任务、接管本机上传队列或执行飞机**。
-   不能在这里补传一份来自另一台手机的采集队列；候选相机 / 风险叠加也不能视为该入口必备功能。
+Open the existing-session browser, enter the service root, token and session ID,
+and connect/refresh. It reads `GET /api/sessions/{id}/result`. View the ready point
+cloud or download the mission: unapproved missions use a separate read-only diagram;
+approved missions proceed to import confirmation. This entry does not create,
+finalize, retry or cancel server tasks, upload photos, take over the local queue,
+or control the aircraft. It cannot resume another phone's pending uploads.
 
-### 补拍航线从下载到执行
+## From a proposed route to reacquisition
 
-1. 未批准的航线允许下载并查看只读路线图，不进入本地执行任务。导入仍要求结果和航线审核
-   字段允许；`test_only` / `relative_height_test` 保持仅点云。V4 的 `execution_review`
-   校验不变，不删除或重写审核字段。
-2. 导入后只进入本地规划器。核对任务 ID、schema、补拍组 / 拍照点数量、真实起飞点和
-   WGS84 / ASL 转换；换起飞点后尤其不能盲用旧的相对高度。
-3. 检查目标点之间的整条飞行路径、返航高度、净空、相机 / 云台视角及估计时长；
-   点云稀疏、漏建或过时不能作为通行证。运行 / 暂停任务有锁时先处理原任务。
-4. 先用 HIL / 仿真和少量补拍点验证，完成本地安全预检，再按所选执行后端显式准备 / 执行。
-   V5 DJI KMZ 需完成对应生成 / 上传 / 准备；V4 Mini 2 保持 App 前台与控制链路。
-5. 默认 schema 13 是停车稳定后拍照。V5“飞行 → 连续补拍（实验）”只针对主动补拍、需确认，
-   仅 DJI KMZ 路径支持；更改后任务 ID / 旧断点 / 已生成上传的 KMZ 失效，要重新准备。
-   Android V4 的新建云端会话也有“连续补拍（实验）”选项（默认关闭），通过 App 侧
-   Virtual Stick 执行符合条件的中间点，不使用 KMZ；需保持前台和连接。iOS 的新版构建也使用 App 侧控制支持此模式。
-   不要把“连续”理解为所有拐弯、升降和边界点都不停。
-6. 任务结束后核对实际照片与漏拍 / 未确认记录；“到达终点”不等于“所有照片有效”。
-   补拍照片如何纳入下一轮分析遵循总入口的工作站流程，不假定 finalized 会话还能直接追加。
+1. Previewing an unapproved route does not activate a mission. Import still requires the result and payload review fields to permit it. Test-only/relative-height sessions remain point-cloud-only; do not remove or rewrite review metadata.
+2. Import only loads the local planner. Check mission ID, schema, groups/capture points, actual takeoff location and WGS84/ASL conversion. Do not reuse an old relative altitude after changing takeoff locations.
+3. Inspect the complete flight/transit/return path, clearance, RTH height, camera/gimbal direction and duration. Missing or stale point-cloud geometry is not clearance evidence. Resolve an executing/paused task lock before replacing the mission.
+4. Validate a small mission in HIL/simulation, complete local preflight, then explicitly prepare/execute with the selected backend. V5 KMZ requires its generation/upload/preparation sequence; V4 Mini 2 requires the app foreground and control link.
+5. Schema 13 stops and stabilizes before capture. V5 continuous reacquisition is opt-in, active-recapture-only and DJI-KMZ-only; changing it invalidates mission identity, checkpoints and prepared/uploaded KMZ, so prepare again. Updated V4/iOS builds opt into schema 14 when creating a cloud session and use app-side Virtual Stick for eligible intermediate points. Turns, height changes and boundaries may still stop.
+6. At completion, inspect actual photos and missing/unconfirmed records. Reaching the endpoint does not establish valid capture at every point. Follow the workstation workflow for the next round; do not assume a finalized session accepts appended photos.
 
-### 常见问题
+## Troubleshooting
 
-| 现象 | 检查 |
+| Symptom | Check |
 | --- | --- |
-| 连接超时 / 拒绝 | 手机是否可达真实主机、服务是否启动、根地址 / 端口 / HTTPS、VPN / 防火墙 |
-| HTTP 401 / 403 | 访问码与权限，不是规划器故障；更换服务后重新填写对应凭据 |
-| HTTP 404 / 会话不匹配 | 是否填了另一服务的会话，或错误地把完整 API 路径填进根地址 |
-| 已拍增长，已传不增长 | 待传队列、未入队原因、GPS / ASL、图传新帧、网络和磁盘空间 |
-| 无点云 / 无航线 | 查看 `phase`、`error`、`mission_error`，产物可能尚未生成或测试模式禁止航线 |
-| 点云下载被拒 | 是否超限 / 格式不兼容 / 跨域链接；当前只读入口要求同源且拒绝重定向 |
-| 航线无法导入 / 执行 | schema、审核状态、坐标 / 高度、任务锁和本地预检；不是靠重启或解除保护解决 |
+| Timeout / connection refused | Phone reachability, running service, root URL/port, HTTPS, VPN and firewall |
+| HTTP 401 / 403 | Access code and permission; update credentials after changing services |
+| HTTP 404 / mismatched session | Session/server pairing and an accidentally appended API path |
+| Captured count rises but uploaded does not | Pending/rejected records, GPS/ASL, fresh video, network and free disk space |
+| No cloud or mission | `phase`, `error`, `mission_error`, processing progress and test-mode restrictions |
+| Cloud download refused | Size/format limits and same-origin URL rules; the read-only browser rejects redirects |
+| Import/execution blocked | Schema, review fields, coordinates/height, task lock and local preflight; do not bypass checks |
 
-下文保留开发者协议与下载上限说明；两种入口的缓存 / 点云上限不同，不混用。
-
+The protocol details below describe the independent browser. Its cache and size
+limits need not match the local capture/upload workflow.
 
 This route-related workflow is included in both private and public clients. It does not need
 MNN, VLN inference, or model distribution. Open the cloud/reconstruction entry and choose

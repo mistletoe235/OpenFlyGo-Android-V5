@@ -1,32 +1,36 @@
-# 航线相机参数匹配与限制
+# Camera profile compatibility
 
-更新：2026-09-21。适用于安装版与对应的航线开源版；不代表所有 DJI 官方支持的机型都已经过本项目实飞验收。
+[English](CAMERA_PROFILE_COMPATIBILITY.md) · [Chinese reference](CAMERA_PROFILE_COMPATIBILITY.zh-CN.md)
 
-## 自动匹配什么
+Updated September 21, 2026. This guide applies to installation packages and the
+corresponding survey source builds. It does not claim flight acceptance for every
+DJI-supported aircraft.
 
-- 使用飞机型号、相机型号和镜头来源的明确别名匹配，不使用包含关系猜测机型。例如 M300 RTK 不能匹配成 M30。
-- 企业系列名称不能单独确认参数：必须识别具体相机；多镜头还必须明确是目录对应的广角（M3M 可为 RGB）。未知负载、冲突型号、红外、长焦、多光谱不能套用广角参数。
-- 目录保存照片宽高、视场角和拍照间隔。水平/垂直视场角由公开对角视场角推算，不是 SDK 返回的标定内参，也不是逐台飞机实测标定。
-- Mavic 2 Zoom 的可变焦距尚未验证，不再按固定广角授权执行。
+## Automatic matching
 
-## 执行前与执行中
+- Matching uses explicit aircraft, camera and lens aliases, not substring guesses. For example, M300 RTK must not match M30.
+- An enterprise family name alone cannot confirm geometry: the specific camera and the catalogued wide-angle lens must be identified (RGB for M3M where applicable). Unknown payloads, conflicting identities, thermal, telephoto and multispectral lenses cannot inherit a wide-angle profile.
+- Profiles contain photo dimensions, field of view and capture intervals. Horizontal/vertical FOV is derived from published diagonal FOV, not SDK-calibrated intrinsics or per-aircraft calibration.
+- Mavic 2 Zoom's variable focal length is unverified and no longer authorizes execution as a fixed wide-angle camera.
 
-- 读取当前照片比例、可变分辨率模式、变焦；V5 的可旋转 Mini 相机还检查横拍方向。V4 / iOS 对固定分辨率机型使用目录尺寸，对 Air 2 区分普通/高分辨率拍照模式。
-- 各参数读回最多每秒发起一次，超过 2 秒的缓存不用于确认参数；断开或更换相机后清空缓存，迟到的旧回调不恢复旧状态。这里是参数检查频率，不是图传或飞控频率。
-- 无法确认、参数过期或与任务几何参数不符时，阻止执行/恢复；运行时检测到不符会进入可恢复暂停，不因读回恢复而自动续飞。图传预览和离线规划不因此禁止。
-- 普通航线比较照片尺寸与视场角；云端补拍允许同视场角、同比例且不低于任务要求的分辨率，不静默重写云端任务。
-- 切换相机后应重新生成普通航线。旧任务使用不同视场角时也可能被拦截，不能只改相机名称绕过；云端任务应以实际相机参数重新生成。
-- UE HIL 使用明确启用的虚拟图像源时，不依赖真机相机参数确认；DJI 原生模拟器使用真实相机时仍需检查。
+## Before and during execution
 
-## 比例与使用方式
+- Readback checks photo aspect ratio, selectable resolution and zoom. V5 also checks landscape orientation for rotatable Mini cameras. V4/iOS use catalog dimensions for fixed-resolution cameras and distinguish normal/high-resolution Air 2 modes.
+- Parameter readback is requested at most once per second. Values older than two seconds cannot confirm geometry. Disconnecting or changing cameras clears the cache; late callbacks cannot restore old state. These are parameter-check rates, not video or flight-controller rates.
+- Unknown, stale or mismatched geometry blocks start/resume. A runtime mismatch causes a resumable pause; successful readback does not resume flight automatically. Video preview and offline planning remain available.
+- Ordinary surveys compare photo dimensions and FOV. Cloud reacquisition accepts matching FOV/aspect ratio with resolution no lower than the mission requirement; it does not silently rewrite the mission.
+- Regenerate ordinary surveys after a camera change. Old missions with different FOV may be blocked; renaming the camera is not a valid workaround. Regenerate cloud missions for the actual camera geometry.
+- An explicitly enabled UE HIL virtual image source does not depend on physical-camera profile confirmation. DJI Simulator using the real camera still requires those checks.
 
-- Android V4 / iOS 当前以目录默认比例为准。请先把相机切回对应照片比例及普通拍照分辨率、1× 变焦，再等待参数读回。
-- Android V5 保留 16:9 中心裁剪规划，缩小垂直视场角，不把裁剪图像当作完整传感器画面。KMZ 准备阶段可设置任务比例，真正执行前必须与读回一致；自定义 Virtual Stick 航线需先将相机比例设为任务比例。
-- 出现“相机参数未确认或与航线不符”时，先查看显示的型号/镜头/模式，核对照片比例、分辨率、横拍和变焦。新连接时等待数秒；持续缺少参数不能视为已确认，不建议盲目重试起飞。
+## Aspect ratio and operation
 
-## 尚未解决的边界
+- V4/iOS currently use the catalog's default aspect ratio. Restore the matching photo ratio, normal resolution and 1x zoom, then wait for readback.
+- V5 retains 16:9 center-crop planning with reduced vertical FOV; a crop is not treated as a full-sensor image. KMZ preparation may set the mission ratio, but readback must match before execution. Set the matching ratio manually before custom Virtual Stick missions.
+- For an unconfirmed/mismatched-camera warning, inspect model, lens, mode, ratio, resolution, landscape orientation and zoom. Allow a few seconds after connecting. Persistently missing parameters are not confirmation; do not repeatedly attempt takeoff to bypass the warning.
 
-- SDK 支持连接不等于该负载已有相机参数、对应航线能力或实飞验证。
-- 不自动标定新负载、变焦镜头或畸变参数；当前参数检查不是对照片光学精度的保证。
-- 最短拍照间隔仍主要使用目录值，不宣称已动态读回所有机型、存储、JPEG/RAW 模式的最短间隔。换机后仍需地面拍照与航线验收。
-- 软件回归使用假飞控/桌面模拟器，不等于该机型真机验收。本次修改不触发飞机起飞或航线执行。
+## Remaining limits
+
+- SDK connectivity does not establish profile availability, survey support or flight validation for that payload.
+- New payloads, zoom lenses and distortion parameters are not calibrated automatically; these checks do not guarantee optical accuracy.
+- Minimum capture intervals still primarily use catalog values. Dynamic readback across all cameras, storage and JPEG/RAW modes is not claimed. Camera changes require ground capture and mission validation.
+- Software tests use fake providers/desktop simulators, not aircraft acceptance. Profile tests do not trigger takeoff or mission execution.
