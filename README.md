@@ -32,6 +32,26 @@ non-public DJI simulator hooks are also excluded.
 Terrain following is disabled in this public build: its UI is unavailable, and missions with `terrainPlan` cannot be loaded, executed or exported to DJI KMZ.
 Maintainers can build survey installation packages using private keys and release signing. These are not the private development builds containing model runtimes.
 
+## Download and install
+
+- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.1-v5/OpenFlyGo-Android-V5-0.1.1.apk)
+- [App release and checksums](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.1-v5)
+- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/preview-20260922)
+
+Version `0.1.1-v5`, versionCode `3`; arm64 Android 7.0 or later. This is the
+survey/capture source-release client, not the private model-inference build.
+Releases are currently private and require an authorized GitHub account.
+
+Download the APK and allow installation from your browser/file manager if Android
+prompts. Select this SDK line for compatible aircraft; `Mini 4 Pro` is the project
+reference, not a guarantee for every SDK-listed model. Preserve missions when
+updating and do not uninstall/clear data to bypass a signature conflict or downgrade.
+Use the included checksums and notices. Maintainer packages are signed with the
+project certificate; source builds still require your own keys and signing.
+Configure a phone-reachable workstation URL and access code for cloud features.
+Read the flight-safety warning above before any aircraft use; installation neither
+starts a mission nor establishes flight readiness.
+
 ## Client selection and aircraft support
 
 Reviewed September 21, 2026. **V4 and V5 are different DJI SDK product lines,
