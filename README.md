@@ -36,6 +36,12 @@ non-public DJI simulator hooks are also excluded.
 Terrain following is disabled in this public build: its UI is unavailable, and missions with `terrainPlan` cannot be loaded, executed or exported to DJI KMZ.
 Maintainers can build survey installation packages using private keys and release signing. These are not the private development builds containing model runtimes.
 
+## App preview
+
+![OpenFly Go Android V5 showing five-direction survey strips and capture settings in Expo West.](docs/images/five-direction-survey.webp)
+
+*Five-direction survey planning and accelerated route preview in Expo West.*
+
 ## Download and install
 
 - [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.1-v5/OpenFlyGo-Android-V5-0.1.1.apk)
