@@ -1,5 +1,9 @@
 # OpenFly Go for Android — MSDK V5
 
+Part of [OpenFlyScan](https://github.com/mistletoe235/OpenFlyScan) ·
+[Paper](https://arxiv.org/abs/2609.24253) ·
+[Citation](https://github.com/mistletoe235/OpenFlyScan#citation)
+
 > [!WARNING]
 > **Flight safety — read before flying**
 >
@@ -40,7 +44,7 @@ Maintainers can build survey installation packages using private keys and releas
 
 Version `0.1.1-v5`, versionCode `3`; arm64 Android 7.0 or later. This is the
 survey/capture source-release client, not the private model-inference build.
-Releases are currently private and require an authorized GitHub account.
+The Android preview APK is publicly downloadable from Releases.
 
 Download the APK and allow installation from your browser/file manager if Android
 prompts. Select this SDK line for compatible aircraft; `Mini 4 Pro` is the project
