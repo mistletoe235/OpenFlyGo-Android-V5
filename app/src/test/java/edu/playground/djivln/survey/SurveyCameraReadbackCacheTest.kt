@@ -4,7 +4,28 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SurveyCameraReadbackCacheTest {
-    @Test fun requestsAreBoundedAndExpiredValuesCannotAuthorizeFlight() {
+    @Test fun successfulSynchronousCallbackAcrossClockTickIsImmediatelyVisible() {
+        var now = 1_000L
+        val cache = SurveyCameraReadbackCache { now }
+        cache.changeSource("camera")
+        assertEquals("4:3", cache.read("ratio") { completion ->
+            now += 1
+            completion("4:3")
+        })
+    }
+
+    @Test fun failedRefreshDoesNotEraseFreshValueOrExtendItsLifetime() {
+        var now = 0L
+        val cache = SurveyCameraReadbackCache { now }
+        cache.changeSource("camera")
+        assertEquals("4:3", cache.read("ratio") { it("4:3") })
+        now = 1_000
+        assertEquals("4:3", cache.read("ratio") { it(null) })
+        now = 2_001
+        assertNull(cache.read("ratio") { it(null) })
+    }
+
+    @Test fun requestsAreBoundedAndExpiredValuesAreNotReportedAsFresh() {
         var now = 0L
         val cache = SurveyCameraReadbackCache { now }
         cache.changeSource("camera-a")
@@ -24,6 +45,8 @@ class SurveyCameraReadbackCacheTest {
         now = 3_001
         read()
         reply?.invoke(null)
+        assertEquals("16:9", read())
+        now = 4_002
         assertNull(read())
     }
 

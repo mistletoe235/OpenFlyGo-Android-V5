@@ -1462,10 +1462,10 @@ class SurveyCustomExecutionEngine(
             } else SurveyExecutionEnvironment.REAL_AIRCRAFT_MANUAL_TAKEOFF,
             checkPreflightReadiness = checkPreflight,
         )
-        if (!checkCameraGeometry || backend == SurveyExecutionBackend.UE_HIL || cameraGeometryMatches(mission)) return result
-        return result.copy(allowed = false, blocks = LinkedHashSet(result.blocks).apply {
-            add(SurveyExecutionBlock.CAMERA_GEOMETRY_UNVERIFIED)
-        })
+        if (!checkCameraGeometry || backend == SurveyExecutionBackend.UE_HIL) return result
+        return SurveyCameraExecutionPolicy.evaluate(
+            result, cameraController.currentSnapshot().connected, cameraGeometryMatches(mission),
+        ).gate
     }
 
     private fun cameraReady(): Boolean = cameraController.currentSnapshot().let {

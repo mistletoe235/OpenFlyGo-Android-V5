@@ -57,11 +57,25 @@ class ImportedMissionCameraCompatibilityPolicyTest {
 
         assertFalse(result.compatible)
         assertTrue(result.reasons.any { it.contains("disconnected") })
-        assertTrue(result.reasons.any { it.contains("not calibrated") })
-        assertTrue(result.reasons.any { it.contains("aspect ratio") })
+        assertTrue(result.warnings.any { it.contains("estimated") })
+        assertTrue(result.warnings.any { it.contains("aspect ratio") })
         assertTrue(result.reasons.any { it.contains("minimum capture interval") })
         assertTrue(result.reasons.any { it.contains("payload") })
         assertTrue(result.reasons.any { it.contains("capture lens") })
+    }
+
+    @Test fun unlistedCameraAndGeometryMismatchDoNotBlockImportedMission() {
+        val result = ImportedMissionCameraCompatibilityPolicy.evaluate(
+            mission = mission,
+            currentCamera = mission.cameraProfile.copy(id = "unlisted-camera", imageHeightPixels = 2250),
+            cameraConnected = true,
+            profileVerified = false,
+            requireKmzPayload = true,
+            payloadPositionSupported = true,
+            payloadLensSupported = true,
+        )
+        assertTrue(result.reasons.joinToString(), result.compatible)
+        assertTrue(result.warnings.isNotEmpty())
     }
 
     private fun fixtureDirectory(): File {

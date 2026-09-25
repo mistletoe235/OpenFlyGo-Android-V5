@@ -50,6 +50,7 @@ import edu.playground.djivln.adapter.dji.DjiWpmzRoutePolicy
 import edu.playground.djivln.survey.RecaptureFlightMode
 import edu.playground.djivln.survey.RecaptureFlightModePolicy
 import edu.playground.djivln.survey.ContinuousCapturePosePolicy
+import edu.playground.djivln.survey.MovingCapturePoseGate
 import edu.playground.djivln.survey.StoppedCapturePosePolicy
 import edu.playground.djivln.adapter.dji.DjiV5WaylinePort
 import edu.playground.djivln.camera.CameraCaptureController
@@ -265,6 +266,7 @@ class SurveyFeatureController(
     private val triggerFrameRecorder = SurveyTriggerFrameRecorder(
         save = artifactStore::save,
         onEvent = recordEvent,
+        persistLocally = { preferences.getBoolean(KEY_SAVE_TRIGGER_FRAMES, DEFAULT_SAVE_TRIGGER_FRAMES) },
         exifWriter = edu.playground.djivln.camera.SurveyFrameExifWriter(
             java.io.File(activity.cacheDir, "survey-frame-exif"),
             activity,
@@ -322,6 +324,7 @@ class SurveyFeatureController(
     private var djiCaptureGimbalTimeoutHandled = false
     private var djiCaptureGimbalLastGateLogAtMillis = 0L
     private var djiCapturePoseWaypointIndex: Int? = null
+    private val djiMovingCapturePoseGate = MovingCapturePoseGate()
     private var djiCapturePoseStableSinceMillis = 0L
     private var djiCapturePoseVerificationStartedAtMillis = 0L
     private var djiCapturePoseTimeoutHandled = false
@@ -447,6 +450,10 @@ class SurveyFeatureController(
         binding.generateFiveDirection.setOnClickListener { generateSafely(obliqueFiveDirection = true) }
         binding.activeRecaptureGroups.setOnClickListener { showActiveRecaptureGroupDialog() }
         binding.continuousRecapture.setOnClickListener { confirmRecaptureFlightMode() }
+        binding.saveTriggerFrames.isChecked = preferences.getBoolean(KEY_SAVE_TRIGGER_FRAMES, DEFAULT_SAVE_TRIGGER_FRAMES)
+        binding.saveTriggerFrames.setOnCheckedChangeListener { _, checked ->
+            preferences.edit().putBoolean(KEY_SAVE_TRIGGER_FRAMES, checked).apply()
+        }
         binding.cloudReconstruction.setOnClickListener { showV86Dialog() }
         binding.openPointCloud.setOnClickListener { handleV86PointCloudAction() }
         binding.obliqueAngle.setOnClickListener { showObliqueAngleDialog() }
@@ -639,7 +646,7 @@ class SurveyFeatureController(
         renderEditableVertices()
     }
 
-    private var cameraGeometryPausePending = false
+    private var cameraGeometryWarningActive = false
 
     fun refreshLiveState() {
         val now = SystemClock.elapsedRealtimeNanos()
@@ -652,15 +659,16 @@ class SurveyFeatureController(
         }
         restorePendingCheckpointWhenReady()
         val current = mission
-        if (!cameraGeometryPausePending && current != null && waylineState.phase in setOf(
-                edu.playground.djivln.domain.wayline.WaylinePhase.EXECUTING,
-                edu.playground.djivln.domain.wayline.WaylinePhase.RECOVERING,
-            ) && !cameraGeometryMatches(current)) {
-            cameraGeometryPausePending = true
-            pauseForExternalIntervention(activity.getString(R.string.current_camera_not_calibrated)) {
-                cameraGeometryPausePending = false
-            }
+        val geometryWarning = current != null && selectedBackend() != SurveyExecutionBackend.UE_HIL &&
+            cameraDiscovery.current().cameraConnected && !cameraGeometryMatches(current)
+        if (geometryWarning && !cameraGeometryWarningActive) {
+            recordSurveyEvent("camera_geometry_advisory", mapOf(
+                "message" to activity.getString(R.string.current_camera_not_calibrated),
+                "planned_profile" to current?.cameraProfile?.id,
+                "current_profile" to cameraDiscovery.current().cameraProfileLabel,
+            ))
         }
+        cameraGeometryWarningActive = geometryWarning
         updateDjiAppCapture()
         renderSimulatorOriginAction()
         if (manualTakeoverPreflightRejected && !effectiveSnapshot().sticksActive) {
@@ -3243,7 +3251,7 @@ class SurveyFeatureController(
         val cameraUnverified = requiresDjiCamera && (!camera.profileVerified ||
             (!allowPhotoRatioPreparation && !cameraGeometryMatches(current, camera)))
         val importedCameraReasons = importedCameraCompatibility?.reasons.orEmpty()
-        val passed = blocks.isEmpty() && !cameraUnverified && !cameraChanged && importedCameraReasons.isEmpty()
+        val passed = blocks.isEmpty() && (!requiresDjiCamera || camera.cameraConnected) && importedCameraReasons.isEmpty()
         manualTakeoverPreflightRejected = SurveyExecutionBlock.MANUAL_TAKEOVER in blocks
         if (!passed) {
             recordSurveyEvent(
@@ -3272,11 +3280,13 @@ class SurveyFeatureController(
         } else buildString {
             append(activity.getString(R.string.survey_preflight_failed_prefix))
             val reasons = blocks.map(::surveyBlockLabel).toMutableList()
-            if (cameraUnverified) reasons += activity.getString(R.string.current_camera_not_calibrated)
-            if (cameraChanged) reasons += activity.getString(R.string.current_camera_changed_regenerate)
+            if (requiresDjiCamera && !camera.cameraConnected) reasons += activity.getString(R.string.current_camera_disconnected)
             reasons += importedCameraReasons
             append(reasons.distinct().joinToString(activity.getString(R.string.list_separator)))
             append(activity.getString(R.string.preflight_no_commands_sent_suffix))
+        }
+        if (passed && (cameraUnverified || cameraChanged || importedCameraCompatibility?.warnings?.isNotEmpty() == true)) {
+            operationMessage += " · " + activity.getString(R.string.current_camera_not_calibrated)
         }
         renderStatus()
         return passed
@@ -3308,10 +3318,6 @@ class SurveyFeatureController(
                     constraints.startPointMode == SurveyStartPointMode.CUSTOM)) &&
             binding.completionAction.selectedItemPosition == constraints.completionAction.ordinal &&
             binding.captureMode.selectedItemPosition == constraints.captureTriggerMode.ordinal &&
-            selectedPlanningCameraProfile().let { selectedCamera ->
-                selectedCamera.imageWidthPixels == current.cameraProfile.imageWidthPixels &&
-                    selectedCamera.imageHeightPixels == current.cameraProfile.imageHeightPixels
-            } &&
             binding.obliqueHeadingMode.selectedItemPosition == constraints.obliqueHeadingMode.ordinal &&
             binding.followTerrain.isChecked == (current.terrainPlan != null) &&
             (!binding.followTerrain.isChecked || (
@@ -3348,6 +3354,7 @@ class SurveyFeatureController(
             edu.playground.djivln.survey.SurveyExecutionBlock.MISSION_TOO_LONG -> activity.getString(R.string.preflight_mission_too_long)
             edu.playground.djivln.survey.SurveyExecutionBlock.MISSION_ALTITUDE_UNSAFE -> activity.getString(R.string.preflight_altitude_unsafe)
             edu.playground.djivln.survey.SurveyExecutionBlock.CAMERA_TRIGGER_UNSAFE -> activity.getString(R.string.preflight_camera_trigger_unsafe)
+            edu.playground.djivln.survey.SurveyExecutionBlock.CAMERA_UNAVAILABLE -> activity.getString(R.string.current_camera_disconnected)
             edu.playground.djivln.survey.SurveyExecutionBlock.CAMERA_GEOMETRY_UNVERIFIED -> activity.getString(R.string.current_camera_not_calibrated)
             edu.playground.djivln.survey.SurveyExecutionBlock.RC_SIGNAL_WEAK -> activity.getString(R.string.preflight_rc_signal_weak)
             edu.playground.djivln.survey.SurveyExecutionBlock.GPS_SATELLITES_LOW -> activity.getString(R.string.preflight_gps_satellites_low)
@@ -4485,6 +4492,7 @@ class SurveyFeatureController(
     }
 
     private fun resetDjiCapturePoseGate() {
+        djiMovingCapturePoseGate.reset()
         djiCapturePoseWaypointIndex = null
         djiCapturePoseStableSinceMillis = 0L
         djiCapturePoseVerificationStartedAtMillis = 0L
@@ -4687,12 +4695,13 @@ class SurveyFeatureController(
         val nowNanos = SystemClock.elapsedRealtimeNanos()
         val velocity = aircraft.velocity
         val horizontalSpeed = if (velocity == null) 0.0 else kotlin.math.hypot(velocity.north, velocity.east)
-        val stoppedTarget = gimbalTarget?.takeIf { continuousTarget == null }
+        val stoppedTarget = gimbalTarget?.takeIf { it.requiresStoppedPose(djiContinuousCaptureIndices) }
             ?.let { mission?.waypoints?.getOrNull(it.waypointIndex) }
         if (djiCapturePoseWaypointIndex != gimbalTarget?.waypointIndex) {
+            djiMovingCapturePoseGate.reset()
             djiCapturePoseWaypointIndex = gimbalTarget?.waypointIndex
             djiCapturePoseStableSinceMillis = 0L
-            djiCapturePoseVerificationStartedAtMillis = nowElapsedMillis
+            djiCapturePoseVerificationStartedAtMillis = 0L
             djiCapturePoseTimeoutHandled = false
             djiCapturePoseLastGateLogAtMillis = 0L
         }
@@ -4702,8 +4711,41 @@ class SurveyFeatureController(
                 continuousTarget,
                 nowNanos,
             )
-            gimbalTarget == null || stoppedTarget == null -> true
+            gimbalTarget == null -> true
+            stoppedTarget == null -> {
+                val target = mission?.waypoints?.getOrNull(gimbalTarget.waypointIndex)
+                val ready = djiMovingCapturePoseGate.ready(
+                    aircraft = aircraft,
+                    target = target,
+                    gimbalVerified = verifyDjiCaptureGimbal(
+                        target = gimbalTarget,
+                        actualPitchDegrees = aircraft.gimbalPitchDegrees,
+                        nowElapsedMillis = nowElapsedMillis,
+                    ),
+                    nowNanos = nowNanos,
+                )
+                if (!ready && nowElapsedMillis - djiCapturePoseLastGateLogAtMillis >= 1_000L) {
+                    djiCapturePoseLastGateLogAtMillis = nowElapsedMillis
+                    recordSurveyEvent(
+                        "dji_capture_blocked_moving_pose",
+                        mapOf(
+                            "waypoint_index" to gimbalTarget.waypointIndex,
+                            "target_heading_deg" to target?.headingDegrees,
+                            "actual_heading_deg" to aircraft.headingDegrees,
+                            "target_pitch_deg" to gimbalTarget.pitchDegrees,
+                            "actual_pitch_deg" to aircraft.gimbalPitchDegrees,
+                            "horizontal_speed_mps" to horizontalSpeed,
+                        ),
+                    )
+                }
+                ready
+            }
             else -> {
+                djiCapturePoseVerificationStartedAtMillis = StoppedCapturePosePolicy.verificationStartedAt(
+                    arrived = StoppedCapturePosePolicy.arrived(aircraft, stoppedTarget, position, nowNanos),
+                    previousStartedAtMillis = djiCapturePoseVerificationStartedAtMillis,
+                    nowElapsedMillis = nowElapsedMillis,
+                )
                 val gimbalVerified = verifyDjiCaptureGimbal(
                     target = gimbalTarget,
                     actualPitchDegrees = aircraft.gimbalPitchDegrees,
@@ -4736,6 +4778,7 @@ class SurveyFeatureController(
                             "target_pitch_deg" to stoppedTarget.gimbalPitchDegrees,
                             "actual_pitch_deg" to aircraft.gimbalPitchDegrees,
                             "horizontal_speed_mps" to horizontalSpeed,
+                            "verification_started_at_ms" to djiCapturePoseVerificationStartedAtMillis,
                             "stable_ms" to if (djiCapturePoseStableSinceMillis > 0L) {
                                 nowElapsedMillis - djiCapturePoseStableSinceMillis
                             } else 0L,
@@ -4754,6 +4797,9 @@ class SurveyFeatureController(
                 stable
             }
         }
+        if (djiCapturePoseTimeoutHandled || djiCaptureGimbalTimeoutHandled ||
+            waylineState.phase != edu.playground.djivln.domain.wayline.WaylinePhase.EXECUTING
+        ) return
         val cameraIndex = cameraDiscovery.current().index
         if (djiCaptureCamera.currentSnapshot().cameraIndex != cameraIndex) {
             djiCaptureCamera.bind(cameraIndex, force = true)
@@ -4780,6 +4826,8 @@ class SurveyFeatureController(
                 "latitude" to position.latitude,
                 "longitude" to position.longitude,
                 "speed_mps" to horizontalSpeed,
+                "target_heading_deg" to mission?.waypoints?.getOrNull(request.waypointIndex)?.headingDegrees,
+                "actual_heading_deg" to aircraft.headingDegrees,
                 "target_gimbal_pitch_deg" to gimbalTarget?.pitchDegrees,
                 "actual_gimbal_pitch_deg" to aircraft.gimbalPitchDegrees,
             ),
@@ -4842,6 +4890,8 @@ class SurveyFeatureController(
     }
 
     private fun captureDjiTriggerFrame(trigger: SurveyPhotoTrigger) {
+        val cloud = v86Controller.current()
+        if (!preferences.getBoolean(KEY_SAVE_TRIGGER_FRAMES, DEFAULT_SAVE_TRIGGER_FRAMES) && (cloud.sessionId == null || cloud.sealed)) return
         val cameraIndex = cameraDiscovery.current().index
         if (cameraIndex == dji.sdk.keyvalue.value.common.ComponentIndexType.UNKNOWN) {
             triggerFrameRecorder.captureProvided(trigger, null)
@@ -4980,9 +5030,10 @@ class SurveyFeatureController(
         applyMissionPhotoRatio(current) { ratioResult ->
             if (!isDjiPreparationCurrent(generation, current)) return@applyMissionPhotoRatio
             if (ratioResult.isFailure) {
-                preparingDjiExecution = false
-                reject(activity.getString(R.string.photo_ratio_set_failed, ratioResult.exceptionOrNull()?.message.orEmpty()))
-                return@applyMissionPhotoRatio
+                recordSurveyEvent("camera_ratio_preparation_advisory", mapOf(
+                    "error" to ratioResult.exceptionOrNull()?.message,
+                    "message" to activity.getString(R.string.current_camera_not_calibrated),
+                ))
             }
             prepareKmz(current) { file ->
             if (!isDjiPreparationCurrent(generation, current)) return@prepareKmz
@@ -5234,7 +5285,7 @@ class SurveyFeatureController(
             completion()
             return
         }
-        recordSurveyEvent("wayline_operation_requested", mapOf("operation" to "pause"))
+        recordSurveyEvent("wayline_operation_requested", mapOf("operation" to "pause", "reason" to reason))
         operationMessage = activity.getString(R.string.requesting_pause)
         renderStatus()
         waylinePort.pause { result ->
@@ -5571,6 +5622,7 @@ class SurveyFeatureController(
                 ))
             }
             if (!camera.profileVerified) append(activity.getString(R.string.camera_uncalibrated_verify_suffix))
+            if (cameraGeometryWarningActive) append(" · " + activity.getString(R.string.current_camera_not_calibrated))
         }
         val editingLocked = isMissionLockedForEditing()
         val hasEditableArea = editedRoi.size >= 3
@@ -6310,6 +6362,8 @@ class SurveyFeatureController(
         const val KEY_SETTINGS = "planner_settings_v1"
         const val KEY_MISSION = "active_mission"
         const val KEY_ACTIVE_RECAPTURE_SOURCE_MISSION = "active_recapture_source_mission"
+        const val KEY_SAVE_TRIGGER_FRAMES = "save_trigger_frames_to_phone_v1"
+        const val DEFAULT_SAVE_TRIGGER_FRAMES = false
         const val KEY_CHECKPOINT = "active_checkpoint"
         const val KEY_LIBRARY = "mission_library"
         const val KEY_LAST_JSON_DOCUMENT_URI = "last_json_document_uri"

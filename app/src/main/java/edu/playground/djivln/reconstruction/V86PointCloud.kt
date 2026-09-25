@@ -27,15 +27,15 @@ object V86PlyDecoder {
             text(context, R.string.ply_file_missing_or_small, "PLY file is missing or too small")
         }
         RandomAccessFile(file, "r").use { input ->
-            require(input.readLine() == "ply") { text(context, R.string.not_ply_file, "Not a PLY file") }
-            require(input.readLine() == "format binary_little_endian 1.0") {
+            require(input.readHeaderLine(context) == "ply") { text(context, R.string.not_ply_file, "Not a PLY file") }
+            require(input.readHeaderLine(context) == "format binary_little_endian 1.0") {
                 text(context, R.string.ply_binary_little_endian_only, "Only binary_little_endian PLY is supported")
             }
             var vertexCount: Int? = null
             val properties = mutableListOf<List<String>>()
             var readingVertexProperties = false
             while (true) {
-                val line = input.readLine() ?: error(text(context, R.string.ply_end_header_missing, "PLY is missing end_header"))
+                val line = input.readHeaderLine(context) ?: error(text(context, R.string.ply_end_header_missing, "PLY is missing end_header"))
                 if (line == "end_header") break
                 if (line.startsWith("element vertex ")) {
                     vertexCount = line.substringAfterLast(' ').toIntOrNull()
@@ -47,6 +47,7 @@ object V86PlyDecoder {
                 }
             }
             val count = vertexCount ?: error(text(context, R.string.ply_vertex_count_missing, "PLY is missing the vertex count"))
+            require(count > 0) { text(context, R.string.ply_no_vertices, "PLY contains no vertices") }
             require(properties == SUPPORTED_PROPERTIES) {
                 text(context, R.string.ply_vertex_contract_mismatch, "PLY vertex fields do not match the V86 XYZ+RGB contract")
             }
@@ -92,7 +93,10 @@ object V86PlyDecoder {
         require(bytes.size >= 64) { text(context, R.string.ply_file_too_small, "PLY file is too small") }
         val marker = "end_header\n".toByteArray(Charsets.US_ASCII)
         val headerEnd = bytes.indexOf(marker)
-        require(headerEnd >= 0) { text(context, R.string.ply_end_header_missing, "PLY is missing end_header") }
+        require(headerEnd >= 0) {
+            if (bytes.size >= MAX_HEADER_BYTES) text(context, R.string.ply_header_too_large, "PLY header exceeds size limit")
+            else text(context, R.string.ply_end_header_missing, "PLY is missing end_header")
+        }
         val dataOffset = headerEnd + marker.size
         val header = bytes.copyOfRange(0, dataOffset).toString(Charsets.US_ASCII)
         require(header.startsWith("ply\n")) { text(context, R.string.not_ply_file, "Not a PLY file") }
@@ -102,6 +106,7 @@ object V86PlyDecoder {
         val vertexCount = Regex("element vertex (\\d+)")
             .find(header)?.groupValues?.get(1)?.toIntOrNull()
             ?: error(text(context, R.string.ply_vertex_count_missing, "PLY is missing the vertex count"))
+        require(vertexCount > 0) { text(context, R.string.ply_no_vertices, "PLY contains no vertices") }
         val properties = header.lineSequence()
             .dropWhile { !it.startsWith("element vertex ") }
             .drop(1)
@@ -143,7 +148,7 @@ object V86PlyDecoder {
     }
 
     private fun ByteArray.indexOf(needle: ByteArray): Int {
-        outer@ for (index in 0..size - needle.size) {
+        outer@ for (index in 0..minOf(size, MAX_HEADER_BYTES) - needle.size) {
             for (offset in needle.indices) if (this[index + offset] != needle[offset]) continue@outer
             return index
         }
@@ -156,6 +161,23 @@ object V86PlyDecoder {
     private fun RandomAccessFile.readLittleEndianFloat(): Float =
         Float.fromBits(Integer.reverseBytes(readInt()))
 
+    private fun RandomAccessFile.readHeaderLine(context: Context?): String? {
+        val line = StringBuilder()
+        while (true) {
+            require(filePointer < MAX_HEADER_BYTES) {
+                text(context, R.string.ply_header_too_large, "PLY header exceeds size limit")
+            }
+            val byte = read()
+            if (byte < 0) return if (line.isEmpty()) null else line.toString().removeSuffix("\r")
+            if (byte == 10) return line.toString().removeSuffix("\r")
+            require(line.length < 4096) {
+                text(context, R.string.ply_header_line_too_large, "PLY header line exceeds size limit")
+            }
+            line.append(byte.toChar())
+        }
+    }
+
+    private const val MAX_HEADER_BYTES = 64 * 1024
     private const val VERTEX_STRIDE = 15
     private val SUPPORTED_PROPERTIES = listOf(
         listOf("property", "float", "x"),

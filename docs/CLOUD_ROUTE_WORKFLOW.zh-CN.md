@@ -146,3 +146,9 @@ unit tests and `assembleDebug`; this does not command an aircraft.
 empty sessions and reads a completed reference mission for preview. Set `OPENFLYSCAN_LIVE_ENDPOINT`,
 `OPENFLYSCAN_LIVE_TOKEN` and `OPENFLYSCAN_LIVE_SESSION` privately to run it. It uploads no images and
 issues no aircraft commands. Without those variables it is explicitly skipped.
+
+## 手机图片副本
+
+默认不再保存额外的手机图传图片档案。只有主动开启的云端采集才生成必要的待传缓存；
+V5 的“额外保存图传帧到手机”开关默认关闭。旧照片不会被自动删除，手动导出与 HIL 不受影响。
+具体见 [手机图片存储说明](PHONE_IMAGE_STORAGE_2026-09-25.md)。

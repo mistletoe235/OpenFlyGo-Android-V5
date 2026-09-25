@@ -164,6 +164,21 @@
                         android:minHeight="48dp" android:layout_marginTop="6dp"
                         android:text="@string/recapture_continuous_switch" android:textSize="11sp"
                         android:checked="false" android:visibility="gone" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/save_trigger_frames"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:minHeight="44dp"
+                        android:text="@string/save_trigger_frames_to_phone"
+                        android:textSize="11sp"
+                        android:checked="false" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/save_trigger_frames_to_phone_hint"
+                        android:textColor="#FF808893"
+                        android:textSize="8sp" />
                     <TextView android:id="@+id/camera_profile_status" android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/camera_identifying_compact"
                         android:textColor="#FF808893" android:textSize="8sp" android:visibility="gone" />

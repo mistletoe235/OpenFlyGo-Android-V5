@@ -7,6 +7,66 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class DjiKmzAppCaptureCoordinatorTest {
+    @Test fun yawNotAlignedAtStartBlocksPhotosThenAllowsMovingIntervalCapture() {
+        for (mode in SurveyCaptureTriggerMode.values()) {
+            val mission = mission().let { it.copy(constraints = it.constraints.copy(captureTriggerMode = mode)) }
+            val coordinator = DjiKmzAppCaptureCoordinator()
+            val gate = MovingCapturePoseGate()
+            coordinator.arm(mission)
+            fun tick(elapsedMillis: Long, heading: Double, position: GeoPoint): DjiKmzAppCaptureCoordinator.Request? {
+                val nowNanos = elapsedMillis * 1_000_000L
+                val aircraft = edu.playground.djivln.domain.telemetry.AircraftSnapshot(
+                    connected = true,
+                    aircraftLocationUpdatedAtNanos = nowNanos,
+                    relativeAltitudeMeters = 40.0,
+                    relativeAltitudeUpdatedAtNanos = nowNanos,
+                    headingDegrees = heading,
+                    headingUpdatedAtNanos = nowNanos,
+                    gimbalPitchDegrees = -90.0,
+                    gimbalAttitudeUpdatedAtNanos = nowNanos,
+                )
+                val target = checkNotNull(coordinator.currentGimbalTarget(0))
+                return coordinator.tick(position, 0, elapsedMillis,
+                    gate.ready(aircraft, mission.waypoints[target.waypointIndex], true, nowNanos), 4.0)
+            }
+            for (elapsed in 1_000L..61_000L step 100L) assertNull(tick(elapsed, -55.8, start))
+            assertNull(tick(61_100L, 90.0, start))
+            assertNull(tick(61_899L, 90.0, start))
+            assertNotNull(tick(61_900L, 90.0, start))
+            coordinator.onCaptureResult(start, 62_000L, true)
+            assertNull(tick(62_500L, 120.0, point(12.0)))
+            assertNull(tick(63_000L, 90.0, point(12.0)))
+            assertNotNull(tick(63_800L, 90.0, point(12.0)))
+        }
+    }
+
+    @Test fun ordinaryMovingPassNeverRequiresStoppedPoseDuringLongEntryFlight() {
+        val coordinator = DjiKmzAppCaptureCoordinator()
+        coordinator.arm(mission())
+        for (elapsedMillis in 1_000L..61_000L step 1_000L) {
+            val target = checkNotNull(coordinator.currentGimbalTarget(0))
+            assertEquals(false, target.isPointCapture)
+            assertEquals(false, target.requiresStoppedPose(emptySet()))
+            assertNull(coordinator.tick(point(-50.0), 0, elapsedMillis, true, 4.0))
+        }
+        assertNotNull(coordinator.tick(start, 0, 62_000L, true, 4.0))
+    }
+
+    @Test fun onlyNonContinuousPointCaptureRequiresStoppedPose() {
+        val route = mission()
+        val pointMission = route.copy(waypoints = listOf(route.waypoints.first().copy(
+            kind = SurveyWaypointKind.CAPTURE_POINT,
+            captureAction = CaptureAction.CAPTURE_ON_REACH,
+            captureIntervalMeters = null,
+        )))
+        val coordinator = DjiKmzAppCaptureCoordinator()
+        coordinator.arm(pointMission)
+        val target = checkNotNull(coordinator.currentGimbalTarget(0))
+        assertEquals(true, target.isPointCapture)
+        assertEquals(true, target.requiresStoppedPose(emptySet()))
+        assertEquals(false, target.requiresStoppedPose(setOf(0)))
+    }
+
     private val start = GeoPoint(31.0, 121.0, 40.0)
     private fun point(eastMeters: Double) = GeoPoint(
         31.0,

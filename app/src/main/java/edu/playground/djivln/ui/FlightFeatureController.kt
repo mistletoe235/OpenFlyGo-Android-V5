@@ -96,6 +96,7 @@ class FlightFeatureController(
     private var mapWidget: MapWidget? = null
     private var mapInitializationRequested = false
     private var mapLifecycleCreated = false
+    private var mapInitializationError: String? = null
     private var satelliteMap = false
     private var safetyPanelCollapsed = processSafetyPanelCollapsed
     private var mapCenteredOnLiveLocation = false
@@ -215,8 +216,9 @@ class FlightFeatureController(
             if (mapProbeAttempts < MAP_READY_MAX_ATTEMPTS) {
                 widget.postDelayed(this, MAP_READY_RETRY_MILLIS)
             } else {
-                binding.mapLocationStatus.text = activity.getString(R.string.map_controller_timeout)
-                binding.mapLocationStatus.visibility = android.view.View.VISIBLE
+                mapInitializationError = activity.getString(R.string.map_controller_timeout)
+                Log.e(TAG, "Map controller initialization timed out")
+                updateMapLocationStatus()
             }
         }
     }
@@ -464,10 +466,11 @@ class FlightFeatureController(
                 mapLifecycleCreated = true
                 widget.postDelayed(mapReadyProbe, MAP_READY_INITIAL_DELAY_MILLIS)
             }.onFailure {
+                Log.e(TAG, "Baidu map initialization failed", it)
                 binding.mapToggle.text = activity.getString(R.string.map_unavailable_compact)
-                binding.mapLocationStatus.text = activity.getString(R.string.map_init_failed,
+                mapInitializationError = activity.getString(R.string.map_init_failed,
                     it.message ?: it.javaClass.simpleName)
-                binding.mapLocationStatus.visibility = android.view.View.VISIBLE
+                updateMapLocationStatus()
             }
         }
     }
@@ -476,6 +479,7 @@ class FlightFeatureController(
         if (map === readyMap) return
         val widget = mapWidget ?: return
         map = readyMap
+        mapInitializationError = null
         Log.i(TAG, "map control attached camera=${readyMap.cameraPosition}")
         widget.removeCallbacks(mapReadyProbe)
         widget.setMapCenterLock(MapWidget.MapCenterLock.NONE)
@@ -1733,6 +1737,13 @@ class FlightFeatureController(
     }
 
     private fun updateMapLocationStatus() {
+        mapInitializationError?.let { message ->
+            binding.mapLocationStatus.text = message
+            binding.mapLocationStatus.contentDescription = message
+            binding.mapLocationStatus.maxWidth = dp(360)
+            binding.mapLocationStatus.visibility = View.VISIBLE
+            return
+        }
         if (bestMapLocation() != null) {
             binding.mapLocationStatus.visibility = View.GONE
             binding.mapLocationStatus.contentDescription = null

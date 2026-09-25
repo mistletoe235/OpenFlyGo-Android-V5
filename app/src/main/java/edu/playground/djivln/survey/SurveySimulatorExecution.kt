@@ -70,6 +70,7 @@ enum class SurveyExecutionBlock {
     FLIGHT_CONTROLLER_FAILSAFE_ACTIVE,
     TERRAIN_REAL_FLIGHT_NOT_VERIFIED,
     TERRAIN_FEATURE_DISABLED,
+    CAMERA_UNAVAILABLE,
 }
 
 data class SurveyExecutionGateResult(

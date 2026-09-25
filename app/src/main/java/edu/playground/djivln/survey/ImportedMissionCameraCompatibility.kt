@@ -8,6 +8,7 @@ data class ImportedMissionCameraCompatibility(
     val compatible: Boolean,
     val reasons: List<String>,
     val minimumPlannedCaptureIntervalSeconds: Double?,
+    val warnings: List<String> = emptyList(),
 )
 
 object ImportedMissionCameraCompatibilityPolicy {
@@ -23,18 +24,19 @@ object ImportedMissionCameraCompatibilityPolicy {
     ): ImportedMissionCameraCompatibility {
         require(mission.activeMapping != null) { "policy only applies to imported active-recapture missions" }
         val reasons = mutableListOf<String>()
+        val warnings = mutableListOf<String>()
         if (!cameraConnected) reasons += text(context, R.string.current_camera_disconnected, "Current camera is disconnected")
-        if (!profileVerified) reasons += text(context, R.string.current_camera_not_calibrated, "Current camera is not calibrated")
+        if (!profileVerified) warnings += text(context, R.string.current_camera_not_calibrated, "Camera geometry is estimated; execution remains available")
 
         if (!SurveyCameraModePolicy.compatibleRecapture(mission.cameraProfile, currentCamera)) {
-            reasons += text(context, R.string.current_camera_not_calibrated, "Current camera is not calibrated")
+            warnings += text(context, R.string.current_camera_not_calibrated, "Camera geometry is estimated; execution remains available")
         }
         val missionAspect = mission.cameraProfile.imageWidthPixels.toDouble() /
             mission.cameraProfile.imageHeightPixels
         val currentAspect = currentCamera.imageWidthPixels.toDouble() /
             currentCamera.imageHeightPixels
         if (abs(missionAspect - currentAspect) > 0.03) {
-            reasons += context?.getString(R.string.camera_aspect_mismatch, missionAspect, currentAspect)
+            warnings += context?.getString(R.string.camera_aspect_mismatch, missionAspect, currentAspect)
                 ?: "Mission requires %.2f:1 aspect ratio; current camera profile is %.2f:1".format(missionAspect, currentAspect)
         }
 
@@ -78,6 +80,7 @@ object ImportedMissionCameraCompatibilityPolicy {
             compatible = reasons.isEmpty(),
             reasons = reasons,
             minimumPlannedCaptureIntervalSeconds = minimumPlannedInterval,
+            warnings = warnings.distinct(),
         )
     }
 

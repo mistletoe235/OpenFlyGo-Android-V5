@@ -30,6 +30,7 @@ class SurveyTriggerFrameRecorder(
     ) -> Unit,
     private val onEvent: (String, Map<String, Any?>) -> Unit,
     private val exifWriter: SurveyFrameExifWriter,
+    private val persistLocally: () -> Boolean = { true },
     private val metadataTransform: (SurveyFrameMetadata) -> SurveyFrameMetadata = { it },
     private val onSaved: (SavedFrame) -> Unit = {},
     private val onSkipped: (reason: String) -> Unit = {},
@@ -141,6 +142,33 @@ class SurveyTriggerFrameRecorder(
             val frameHeight = frame.height
             val frameSourceId = frame.sourceId
             val frameSequence = frame.sequence
+            if (!persistLocally()) {
+                onSaved(
+                    SavedFrame(
+                        trigger = trigger,
+                        metadata = metadata,
+                        displayName = displayName,
+                        mimeType = encoded.mimeType,
+                        bytes = encoded.bytes,
+                        savedPath = "",
+                        width = frameWidth,
+                        height = frameHeight,
+                        sourceId = frameSourceId,
+                    ),
+                )
+                onEvent(
+                    "trigger_frame_prepared",
+                    trigger.fields(null) + mapOf(
+                        "local_copy" to false,
+                        "frame_source" to frameSourceId,
+                        "frame_sequence" to frameSequence,
+                        "frame_width" to frameWidth,
+                        "frame_height" to frameHeight,
+                        "frame_age_ms" to frameAgeMillis,
+                    ),
+                )
+                return
+            }
             val callbackHandled = AtomicBoolean(false)
             save(DIRECTORY, displayName, encoded.mimeType, encoded.bytes) { result ->
                 if (!callbackHandled.compareAndSet(false, true)) return@save
@@ -169,6 +197,7 @@ class SurveyTriggerFrameRecorder(
                     onEvent(
                         "trigger_frame_saved",
                         trigger.fields(result.exceptionOrNull()?.message) + mapOf(
+                            "local_copy" to true,
                             "success" to result.isSuccess,
                             "saved_path" to result.getOrNull(),
                             "frame_source" to frameSourceId,

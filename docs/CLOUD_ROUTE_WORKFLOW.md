@@ -135,3 +135,9 @@ unit tests and `assembleDebug`; this does not command an aircraft.
 empty sessions and reads a completed reference mission for preview. Set `OPENFLYSCAN_LIVE_ENDPOINT`,
 `OPENFLYSCAN_LIVE_TOKEN` and `OPENFLYSCAN_LIVE_SESSION` privately to run it. It uploads no images and
 issues no aircraft commands. Without those variables it is explicitly skipped.
+
+## Phone copies and upload storage
+
+Extra phone image archives are off by default. Cloud collection is explicit and still uses a bounded
+local retry queue; it does not require an extra permanent downlink-image archive. See
+[phone image storage behavior](PHONE_IMAGE_STORAGE_2026-09-25.md). Old images are not deleted.

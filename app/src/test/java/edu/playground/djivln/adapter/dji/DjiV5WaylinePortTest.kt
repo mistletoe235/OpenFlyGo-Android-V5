@@ -271,7 +271,112 @@ class DjiV5WaylinePortTest {
         assertEquals(null, port.state().error)
     }
 
+    @Test fun pauseAcknowledgementUpdatesStateWithoutNativePausedCallback() {
+        val client = RecordingClient()
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        port.execute("survey.kmz") { }
+        client.executingInfo?.invoke("survey", 0, 3)
+        val breakpoint = port.state().breakpoint
+
+        port.pause { assertTrue(it.isSuccess) }
+
+        assertEquals(WaylinePhase.PAUSED, port.state().phase)
+        assertEquals(breakpoint, port.state().breakpoint)
+        assertEquals(false, port.confirmExecutionFromTelemetry())
+        port.pause { assertTrue(it.isSuccess) }
+        assertEquals(1, client.pauseCount)
+    }
+
+    @Test fun duplicatePendingPausesShareOneSdkRequest() {
+        val client = RecordingClient().apply { deferPause = true }
+        val port = DjiV5WaylinePort(client)
+        port.execute("survey.kmz") { }
+        var completed = 0
+        repeat(2) { port.pause { assertTrue(it.isSuccess); completed += 1 } }
+
+        assertEquals(1, client.pauseCount)
+        assertEquals(0, completed)
+        client.pendingPause?.invoke(Result.success(Unit))
+        assertEquals(2, completed)
+        assertEquals(WaylinePhase.PAUSED, port.state().phase)
+    }
+
+    @Test fun pauseFailureDoesNotTurnRunningMissionIntoError() {
+        val client = RecordingClient().apply { deferPause = true }
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        port.execute("survey.kmz") { }
+        client.phase?.invoke(WaylinePhase.EXECUTING, "executing")
+        port.pause { assertTrue(it.isFailure) }
+        client.pendingPause?.invoke(Result.failure(IllegalStateException("CANNOT_BREAK_WAYLINE_IN_CUR_STATE")))
+
+        assertEquals(WaylinePhase.EXECUTING, port.state().phase)
+        port.pause { }
+        assertEquals(2, client.pauseCount)
+    }
+
+    @Test fun pauseFailurePreservesNativeInterruptedState() {
+        val client = RecordingClient().apply { deferPause = true }
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        port.execute("survey.kmz") { }
+        port.pause { assertTrue(it.isFailure) }
+        client.interrupt?.invoke("USER_BREAK")
+        client.pendingPause?.invoke(Result.failure(IllegalStateException("CANNOT_BREAK_WAYLINE_IN_CUR_STATE")))
+
+        assertEquals(WaylinePhase.PAUSED, port.state().phase)
+        assertEquals("USER_BREAK", port.state().error)
+    }
+
+    @Test fun lateRunningCallbacksCannotUndoAcknowledgedPauseButResumeCan() {
+        val client = RecordingClient()
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        port.execute("survey.kmz") { }
+        port.pause { }
+        client.phase?.invoke(WaylinePhase.EXECUTING, "late executing")
+        client.phase?.invoke(WaylinePhase.PREPARING, "late preparing")
+        client.executingInfo?.invoke("survey", 0, 3)
+        assertEquals(WaylinePhase.PAUSED, port.state().phase)
+
+        port.resume { assertTrue(it.isSuccess) }
+        assertEquals(WaylinePhase.RECOVERING, port.state().phase)
+        client.phase?.invoke(WaylinePhase.EXECUTING, "resumed")
+        assertEquals(WaylinePhase.EXECUTING, port.state().phase)
+    }
+
+    @Test fun latePauseResultCannotOverwriteNewMission() {
+        val client = RecordingClient().apply { deferPause = true }
+        val port = DjiV5WaylinePort(client)
+        port.execute("old.kmz") { }
+        var completions = 0
+        port.pause { assertTrue(it.isFailure); completions += 1 }
+        val oldReply = client.pendingPause
+        port.execute("new.kmz") { }
+        oldReply?.invoke(Result.success(Unit))
+
+        assertEquals(1, completions)
+        assertEquals("new", port.state().missionFileName)
+        assertEquals(WaylinePhase.PREPARING, port.state().phase)
+    }
+
+    @Test fun finishedStateWinsOverLatePauseAcknowledgement() {
+        val client = RecordingClient().apply { deferPause = true }
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        port.execute("survey.kmz") { }
+        port.pause { }
+        client.phase?.invoke(WaylinePhase.FINISHED, "finished")
+        client.pendingPause?.invoke(Result.success(Unit))
+
+        assertEquals(WaylinePhase.FINISHED, port.state().phase)
+    }
+
     private class RecordingClient : DjiWaylineClient {
+        var pauseCount = 0
+        var deferPause = false
+        var pendingPause: ((Result<Unit>) -> Unit)? = null
         var availableIds = listOf(0)
         var executedMissionName: String? = null
         var stoppedMissionName: String? = null
@@ -329,7 +434,10 @@ class DjiV5WaylinePortTest {
             completion(Result.success(Unit))
         }
 
-        override fun pause(completion: (Result<Unit>) -> Unit) = completion(Result.success(Unit))
+        override fun pause(completion: (Result<Unit>) -> Unit) {
+            pauseCount += 1
+            if (deferPause) pendingPause = completion else completion(Result.success(Unit))
+        }
 
         override fun resume(breakpoint: WaylineBreakpoint?, completion: (Result<Unit>) -> Unit) {
             executedBreakpoint = breakpoint

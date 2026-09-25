@@ -1423,7 +1423,7 @@
     <string name="survey_preflight_passed">安全预检通过：%1$d 个边界点、%2$d 个航点；相机=%3$s</string>
     <string name="survey_preflight_passed_simulator_takeoff">安全预检通过：%1$d 个边界点、%2$d 个航点；相机=%3$s；仿真器将先自动起飞，稳定后再次严格复检</string>
     <string name="survey_preflight_failed_prefix">安全预检未通过：</string>
-    <string name="current_camera_not_calibrated">相机参数未确认或与航线不符：请核对镜头、照片比例、分辨率和 1× 变焦</string>
+    <string name="current_camera_not_calibrated">相机参数未完全确认或与航线不同，覆盖率和 GSD 仅供估算；不阻止执行</string>
     <string name="current_camera_changed_regenerate">当前相机已变化，请重新生成航线</string>
     <string name="preflight_no_commands_sent_suffix">；未申请 VS，未发送飞行/相机指令</string>
     <string name="unnamed_area_route">未命名区域航线</string>
@@ -1477,10 +1477,10 @@
     <string name="user_aborted">用户终止</string>
     <string name="action_resume">恢复</string>
     <string name="current_camera_status">当前相机 · %1$s · %2$s</string>
-    <string name="current_camera_status_uncalibrated">当前相机 · %1$s · %2$s · 未校准</string>
+    <string name="current_camera_status_uncalibrated">当前相机 · %1$s · %2$s · 参数估算</string>
     <string name="camera_profile_index">相机：%1$s @ %2$s</string>
     <string name="available_camera_sources_suffix"> · 可选=%1$s</string>
-    <string name="camera_uncalibrated_verify_suffix">（未校准，实飞前核对）</string>
+    <string name="camera_uncalibrated_verify_suffix">（参数估算，不阻止执行）</string>
     <string name="tap_map_add_roi_wgs84">点击地图添加规划区边界点；任务坐标保存为 WGS-84</string>
     <string name="current_roi_points_need_three">当前 %1$d 个边界点；至少需要 3 个</string>
     <string name="sortie_waypoint_range">%1$d:航点%2$d–%3$d</string>
@@ -1792,4 +1792,9 @@
     <string name="v86_remote_cloud_ready">点云已打开；不是实时避障地图。</string>
     <string name="v86_remote_review">导入只载入航线，不会起飞或执行。请核对地图、坐标与高度，并重新完成飞行前检查。</string>
     <string name="v86_remote_import">导入航线（不执行）</string>
+    <string name="save_trigger_frames_to_phone">额外保存图传帧到手机</string>
+    <string name="save_trigger_frames_to_phone_hint">默认关闭。飞机 SD 卡仍正常拍照；开启后每次拍照会额外保存一张图传 JPEG，占用手机空间。</string>
+    <string name="ply_no_vertices">点云暂时没有有效点，请等待重建后刷新</string>
+    <string name="ply_header_too_large">点云文件头超过大小限制，请检查工作站输出</string>
+    <string name="ply_header_line_too_large">点云文件头单行过长，请检查工作站输出</string>
 </resources>

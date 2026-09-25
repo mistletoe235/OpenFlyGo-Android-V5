@@ -1419,7 +1419,7 @@
     <string name="survey_preflight_passed">Safety preflight passed: %1$d boundary points, %2$d waypoints; camera=%3$s</string>
     <string name="survey_preflight_passed_simulator_takeoff">Safety preflight passed: %1$d boundary points, %2$d waypoints; camera=%3$s; Simulator will take off first, then run the strict checks again after stabilizing</string>
     <string name="survey_preflight_failed_prefix">Safety preflight failed: </string>
-    <string name="current_camera_not_calibrated">Camera parameters are unconfirmed or differ from the mission: check lens, photo ratio, resolution and 1x zoom</string>
+    <string name="current_camera_not_calibrated">Camera parameters are unconfirmed or differ from this mission; coverage and GSD are estimates. Execution remains available.</string>
     <string name="current_camera_changed_regenerate">The current camera has changed; regenerate the route</string>
     <string name="preflight_no_commands_sent_suffix">; VS was not requested and no flight or camera command was sent</string>
     <string name="unnamed_area_route">Unnamed area route</string>
@@ -1472,10 +1472,10 @@
     <string name="user_aborted">User aborted</string>
     <string name="action_resume">Resume</string>
     <string name="current_camera_status">Current camera · %1$s · %2$s</string>
-    <string name="current_camera_status_uncalibrated">Current camera · %1$s · %2$s · Uncalibrated</string>
+    <string name="current_camera_status_uncalibrated">Current camera · %1$s · %2$s · Estimated parameters</string>
     <string name="camera_profile_index">Camera: %1$s @ %2$s</string>
     <string name="available_camera_sources_suffix"> · Available=%1$s</string>
-    <string name="camera_uncalibrated_verify_suffix"> (uncalibrated; verify before flight)</string>
+    <string name="camera_uncalibrated_verify_suffix"> (estimated parameters; execution remains available)</string>
     <string name="tap_map_add_roi_wgs84">Tap the map to add survey boundary points; mission coordinates are saved as WGS-84</string>
     <string name="current_roi_points_need_three">Currently %1$d boundary points; at least 3 are required</string>
     <string name="sortie_waypoint_range">%1$d: waypoints %2$d–%3$d</string>
@@ -1788,4 +1788,9 @@
     <string name="v86_remote_cloud_ready">Point cloud opened; this is not a live obstacle map.</string>
     <string name="v86_remote_review">Import only loads the route; it does not take off or execute. Check the map, coordinates and altitude, then complete preflight checks.</string>
     <string name="v86_remote_import">Import mission (no execution)</string>
+    <string name="save_trigger_frames_to_phone">Save extra downlink frames to phone</string>
+    <string name="save_trigger_frames_to_phone_hint">Off by default. Aircraft SD photos are unaffected. Enabling this saves an extra downlink JPEG for each capture and uses phone storage.</string>
+    <string name="ply_no_vertices">The point cloud is empty. Refresh after reconstruction progresses.</string>
+    <string name="ply_header_too_large">The point cloud header exceeds the size limit. Check the workstation output.</string>
+    <string name="ply_header_line_too_large">A point cloud header line exceeds the size limit. Check the workstation output.</string>
 </resources>

@@ -1,5 +1,9 @@
 # OpenFly Go for Android — MSDK V5
 
+**Phone image storage:** ordinary capture no longer saves extra downlink JPEG/JSON copies by default.
+Aircraft SD photos are unaffected; explicitly enabled cloud collection keeps only the required retry
+queue. See [storage defaults and exceptions](docs/PHONE_IMAGE_STORAGE_2026-09-25.md).
+
 Part of [OpenFlyScan](https://github.com/mistletoe235/OpenFlyScan) ·
 [Paper](https://arxiv.org/abs/2609.24253) ·
 [Citation](https://github.com/mistletoe235/OpenFlyScan#citation)
@@ -44,19 +48,19 @@ Maintainers can build survey installation packages using private keys and releas
 
 ## Download and install
 
-- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.1-v5/OpenFlyGo-Android-V5-0.1.1.apk)
-- [App release and checksums](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.1-v5)
-- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/preview-20260922)
+- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.7-v5/OpenFlyGo-Android-V5-0.1.7.apk)
+- [App release and notices](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.7-v5)
+- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/mobile-20260925)
 
-Version `0.1.1-v5`, versionCode `3`; arm64 Android 7.0 or later. This is the
+Version `0.1.7-v5`, versionCode `9`; arm64 Android 7.0 or later. This is the
 survey/capture source-release client, not the private model-inference build.
-The Android preview APK is publicly downloadable from Releases.
+The Android Release APK is publicly downloadable from Releases.
 
 Download the APK and allow installation from your browser/file manager if Android
 prompts. Select this SDK line for compatible aircraft; `Mini 4 Pro` is the project
 reference, not a guarantee for every SDK-listed model. Preserve missions when
 updating and do not uninstall/clear data to bypass a signature conflict or downgrade.
-Use the included checksums and notices. Maintainer packages are signed with the
+Read the included package metadata and notices. Maintainer packages are signed with the
 project certificate; source builds still require your own keys and signing.
 Configure a phone-reachable workstation URL and access code for cloud features.
 Read the flight-safety warning above before any aircraft use; installation neither
@@ -111,7 +115,7 @@ are not separate aircraft models.
 - V5 supports DJI WPMZ/KMZ execution. V4/iOS Mini 2 missions use app-side control: **keep the app in the foreground and connected**, rather than treating them as offline onboard missions.
 - Default reacquisition uses stable stop-and-capture points (schema 13). All three clients support experimental schema 14: V4/iOS use Virtual Stick and V5 uses DJI KMZ. Only eligible intermediate capture points pass continuously; boundaries and turns may still stop. V4/iOS require the September 22, 2026 adaptation or a later compatible build. This is not merely relaxed version parsing or a new real-flight acceptance claim.
 - The source excludes MNN, VLN, model downloads and private inference runtimes. Cloud routes and point clouds do not depend on them.
-- Android retains experimental terrain following, disabled by default. iOS Release rejects missions with `terrainPlan`.
+- Release installers do not provide terrain following: Android V4/V5 and iOS hide the entry and do not activate missions with `terrainPlan`. Android V4 Debug retains the experimental implementation.
 - Debug is for development; Release is a build configuration, not an all-aircraft acceptance label. Supply your own keys/signing for local builds. Maintainer installation packages use private signing; different signatures cannot overwrite one another. Do not erase app data merely to switch packages.
 
 ## Features
@@ -257,7 +261,7 @@ their own terms; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 Read the [camera compatibility guide](docs/CAMERA_PROFILE_COMPATIBILITY.md) before
 changing aircraft, lens or photo mode. SDK connectivity does not verify the camera
-profile; unconfirmed geometry must not authorize mission execution.
+profile; unconfirmed geometry is a coverage/GSD advisory, not a mission-execution block.
 
 ## License and third-party software
 

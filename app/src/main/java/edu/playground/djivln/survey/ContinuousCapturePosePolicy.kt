@@ -36,6 +36,25 @@ object StoppedCapturePosePolicy {
     const val MAX_HEADING_ERROR_DEGREES = 3.0
     private const val MAX_SAMPLE_AGE_NANOS = 1_000_000_000L
 
+    fun arrived(
+        aircraft: AircraftSnapshot,
+        target: SurveyWaypoint,
+        position: GeoPoint,
+        nowNanos: Long,
+    ): Boolean {
+        val altitude = aircraft.relativeAltitudeMeters ?: return false
+        fun fresh(updatedAt: Long): Boolean = updatedAt > 0L && nowNanos >= updatedAt &&
+            nowNanos - updatedAt <= MAX_SAMPLE_AGE_NANOS
+        return aircraft.connected && fresh(aircraft.aircraftLocationUpdatedAtNanos) &&
+            fresh(aircraft.relativeAltitudeUpdatedAtNanos) &&
+            distanceMeters(position, target.point) <= MAX_HORIZONTAL_ERROR_METERS &&
+            abs(altitude - target.point.altitudeMeters) <= MAX_ALTITUDE_ERROR_METERS
+    }
+
+    fun verificationStartedAt(arrived: Boolean, previousStartedAtMillis: Long, nowElapsedMillis: Long): Long =
+        if (previousStartedAtMillis > 0L) previousStartedAtMillis
+        else if (arrived) nowElapsedMillis else 0L
+
     fun aligned(
         aircraft: AircraftSnapshot,
         target: SurveyWaypoint,
@@ -48,7 +67,7 @@ object StoppedCapturePosePolicy {
         val heading = aircraft.headingDegrees ?: return false
         val pitch = aircraft.gimbalPitchDegrees ?: return false
         val altitude = aircraft.relativeAltitudeMeters ?: return false
-        return aircraft.connected &&
+        return arrived(aircraft, target, position, nowNanos) &&
             fresh(aircraft.aircraftLocationUpdatedAtNanos) &&
             fresh(aircraft.relativeAltitudeUpdatedAtNanos) &&
             fresh(aircraft.velocityUpdatedAtNanos) &&

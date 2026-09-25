@@ -58,6 +58,9 @@ class DjiV5WaylinePort internal constructor(
     private var current = WaylineState()
     private var started = false
     private var breakpointQueryGeneration = 0L
+    private var pauseGeneration = 0L
+    private var pauseAccepted = false
+    private val pendingPauseCompletions = mutableListOf<WaylineCompletion>()
 
     override fun start(listener: WaylineStateListener) {
         this.listener = listener
@@ -66,7 +69,12 @@ class DjiV5WaylinePort internal constructor(
             client.start(
                 onPhase = { phase, message ->
                     val previousPhase = current.phase
-                    if (phase != WaylinePhase.PAUSED || current.phase.acceptsInterruption()) {
+                    val staleRunningState = pauseAccepted && phase in setOf(
+                        WaylinePhase.PREPARING, WaylinePhase.RECOVERING, WaylinePhase.EXECUTING,
+                    )
+                    if (!staleRunningState &&
+                        (phase != WaylinePhase.PAUSED || current.phase.acceptsInterruption())
+                    ) {
                         update {
                             it.copy(
                                 phase = phase,
@@ -132,6 +140,7 @@ class DjiV5WaylinePort internal constructor(
     }
 
     override fun stop() {
+        invalidatePause()
         if (started) client.stop()
         breakpointQueryGeneration += 1
         started = false
@@ -164,6 +173,7 @@ class DjiV5WaylinePort internal constructor(
             )
             return
         }
+        invalidatePause()
         update {
             WaylineState(
                 WaylinePhase.UPLOADING,
@@ -207,6 +217,7 @@ class DjiV5WaylinePort internal constructor(
             )
             return
         }
+        invalidatePause()
         update {
             it.copy(
                 phase = WaylinePhase.PREPARING,
@@ -242,6 +253,7 @@ class DjiV5WaylinePort internal constructor(
             )
             return
         }
+        invalidatePause()
         update {
             it.copy(
                 phase = WaylinePhase.RECOVERING,
@@ -256,11 +268,38 @@ class DjiV5WaylinePort internal constructor(
     }
 
     override fun pause(completion: WaylineCompletion) {
+        if (current.phase == WaylinePhase.PAUSED) {
+            completion.complete(Result.success(Unit))
+            return
+        }
+        pendingPauseCompletions.add(completion)
+        if (pendingPauseCompletions.size > 1) return
+        val generation = ++pauseGeneration
         client.pause { result ->
-            result.onSuccess {
-                update { it.copy(message = UiText.resource(R.string.wayline_pause_accepted)) }
+            if (generation != pauseGeneration) return@pause
+            val completions = pendingPauseCompletions.toList()
+            pendingPauseCompletions.clear()
+            if (result.isSuccess && current.phase.acceptsInterruption()) {
+                pauseAccepted = true
+                update {
+                    it.copy(
+                        phase = WaylinePhase.PAUSED,
+                        message = UiText.resource(R.string.wayline_pause_accepted),
+                        error = null,
+                    )
+                }
             }
-            complete(result, completion)
+            completions.forEach { it.complete(result) }
+        }
+    }
+
+    private fun invalidatePause() {
+        pauseGeneration += 1
+        pauseAccepted = false
+        val completions = pendingPauseCompletions.toList()
+        pendingPauseCompletions.clear()
+        completions.forEach {
+            it.complete(Result.failure(IllegalStateException("Pause superseded by another mission operation")))
         }
     }
 
@@ -273,14 +312,14 @@ class DjiV5WaylinePort internal constructor(
         resumeInternal(breakpoint, completion)
 
     private fun resumeInternal(breakpoint: WaylineBreakpoint?, completion: WaylineCompletion) {
-        if (breakpoint != null) {
-            update {
-                it.copy(
-                    phase = WaylinePhase.RECOVERING,
-                    breakpoint = breakpoint,
-                    message = UiText.resource(R.string.wayline_restoring_dji),
-                )
-            }
+        invalidatePause()
+        update {
+            it.copy(
+                phase = WaylinePhase.RECOVERING,
+                breakpoint = breakpoint ?: it.breakpoint,
+                message = UiText.resource(R.string.wayline_restoring_dji),
+                error = null,
+            )
         }
         client.resume(breakpoint) { complete(it, completion) }
     }
@@ -311,6 +350,7 @@ class DjiV5WaylinePort internal constructor(
     }
 
     override fun stopMission(missionFileName: String, completion: WaylineCompletion) {
+        invalidatePause()
         breakpointQueryGeneration += 1
         client.stopMission(WaylineMissionName.normalize(missionFileName)) { complete(it, completion) }
     }

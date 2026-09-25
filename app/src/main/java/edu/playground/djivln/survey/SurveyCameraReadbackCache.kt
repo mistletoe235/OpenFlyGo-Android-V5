@@ -26,13 +26,13 @@ class SurveyCameraReadbackCache(private val nowMillis: () -> Long = { System.nan
             val completion: (Any?) -> Unit = { value ->
                 synchronized(this) {
                     if (generation == currentGeneration && requests[key] == now) {
-                        if (value == null) samples.remove(key)
-                        else samples[key] = Sample(value, nowMillis())
+                        if (value != null) samples[key] = Sample(value, nowMillis())
                     }
                 }
             }
             try { request(completion) } catch (_: Exception) { completion(null) }
         }
-        return samples[key]?.takeIf { now - it.receivedAt in 0..2_000 }?.value
+        val readAt = nowMillis()
+        return samples[key]?.takeIf { readAt - it.receivedAt in 0..2_000 }?.value
     }
 }

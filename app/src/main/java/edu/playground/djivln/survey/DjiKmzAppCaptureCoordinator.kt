@@ -25,7 +25,11 @@ class DjiKmzAppCaptureCoordinator(
         val captureView: SurveyCaptureView,
         val pitchDegrees: Double,
         val waypointIndex: Int = 0,
-    )
+        val isPointCapture: Boolean = false,
+    ) {
+        fun requiresStoppedPose(continuousCaptureIndices: Set<Int>): Boolean =
+            isPointCapture && waypointIndex !in continuousCaptureIndices
+    }
 
     data class Progress(
         val passIndex: Int,
@@ -124,6 +128,7 @@ class DjiKmzAppCaptureCoordinator(
             captureView = pass.start.captureView,
             pitchDegrees = pass.start.gimbalPitchDegrees,
             waypointIndex = pass.firstWaypointIndex,
+            isPointCapture = pass.isPointCapture,
         )
     }
 
