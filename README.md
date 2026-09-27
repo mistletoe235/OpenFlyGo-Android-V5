@@ -1,5 +1,7 @@
 # OpenFly Go for Android — MSDK V5
 
+[Q&A: capture checks, simulator cooling and recovery after interruption](docs/FAQ.md).
+
 **Phone image storage:** ordinary capture no longer saves extra downlink JPEG/JSON copies by default.
 Aircraft SD photos are unaffected; explicitly enabled cloud collection keeps only the required retry
 queue. See [storage defaults and exceptions](docs/PHONE_IMAGE_STORAGE_2026-09-25.md).
@@ -21,7 +23,7 @@ Part of [OpenFlyScan](https://github.com/mistletoe235/OpenFlyScan) ·
 
 > Quick links: [Client selection](#client-selection-and-aircraft-support) · [HIL](docs/HIL_QUICKSTART.md) · [Cloud workflow](docs/CLOUD_ROUTE_WORKFLOW.md)
 >
-> [Project home](https://github.com/mistletoe235/OpenFlyScan) · [English](README.md) · [Chinese reference](README.zh-CN.md)
+> [Project home](https://github.com/mistletoe235/OpenFlyScan) · [English](README.md) · [中文](README.zh-CN.md)
 
 
 Cloud point-cloud viewing and existing-session route import are included; see
@@ -48,11 +50,11 @@ Maintainers can build survey installation packages using private keys and releas
 
 ## Download and install
 
-- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.7-v5/OpenFlyGo-Android-V5-0.1.7.apk)
-- [App release and notices](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.7-v5)
-- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/mobile-20260925)
+- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.10-v5/OpenFlyGo-Android-V5-0.1.10.apk)
+- [App release and notices](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.10-v5)
+- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/mobile-20260927)
 
-Version `0.1.7-v5`, versionCode `9`; arm64 Android 7.0 or later. This is the
+Version `0.1.10-v5`, versionCode `12`; arm64 Android 7.0 or later. This is the
 survey/capture source-release client, not the private model-inference build.
 The Android Release APK is publicly downloadable from Releases.
 
@@ -98,7 +100,7 @@ pinned SDK, Android/iOS platform, aircraft firmware and remote controller togeth
 | --- | --- | --- |
 | Mini 2 | Android V4 or iOS | Project hardware-use record; preflight is still required for the installed firmware |
 | Mini 4 Pro | Android V5 | Project hardware-use record; not supported by this iOS client |
-| Mini 3 / Mini 3 Pro | Listed by DJI for V5; use Android V5 for compatibility testing | Full project workflow not yet hardware-validated |
+| Mini 3 / Mini 3 Pro | Android V5 automatically selects Virtual Stick for new, unlocked tasks | Software adaptation only; full project workflow not yet hardware-validated |
 | Mavic 3 Enterprise, Mavic 3TA, Matrice 30 / 300 RTK / 350 RTK / 400, Matrice 4 / 4D Enterprise | Check the V5 product list and firmware requirements | Enterprise payloads, multiple cameras and all survey functions are not guaranteed; Mavic 3 Enterprise is not the consumer Mavic 3 |
 | Mavic Pro / Mavic Air, Mavic 2 Pro / Zoom / Enterprise, Spark, Phantom, Inspire, earlier Matrice products | Check the exact V4 model and platform | SDK candidates, not individually accepted by this project |
 | Mavic Mini, Mini SE, Mavic Air 2, Air 2S and other V4 products | Check the matching Android/iOS SDK release | Android support does not imply iOS support; not listed as project-validated aircraft |
@@ -117,6 +119,25 @@ are not separate aircraft models.
 - The source excludes MNN, VLN, model downloads and private inference runtimes. Cloud routes and point clouds do not depend on them.
 - Release installers do not provide terrain following: Android V4/V5 and iOS hide the entry and do not activate missions with `terrainPlan`. Android V4 Debug retains the experimental implementation.
 - Debug is for development; Release is a build configuration, not an all-aircraft acceptance label. Supply your own keys/signing for local builds. Maintainer installation packages use private signing; different signatures cannot overwrite one another. Do not erase app data merely to switch packages.
+
+### V5 aircraft-aware execution
+
+From `0.1.9-v5`, new/unlocked Mini 3 and Mini 3 Pro tasks automatically select
+Custom Virtual Stick instead of native KMZ. Use **Execute**; no KMZ upload is
+needed. Keep the app in the foreground and the control link connected.
+[DJI explains the Mini 3 native-waypoint limitation here](https://github.com/dji-sdk/Mobile-SDK-Android-V5/issues/754).
+
+Mini 4 Pro keeps KMZ by default. Explicit Virtual Stick/HIL selections are retained.
+The survey page displays the actual backend. Disconnects, unknown aircraft and
+ordinary upload errors do not trigger an automatic fallback. Automatic selection
+does not overwrite the saved preference; reconnecting a known KMZ-capable aircraft
+restores that preference only when no uploaded/active task or checkpoint is locked.
+Active, paused and restored tasks are never silently converted between backends.
+
+This is **software adaptation, not Mini 3 flight acceptance**. Ordinary strips and
+default stop-and-capture reacquisition use the existing custom executor; experimental
+continuous reacquisition remains KMZ-only on V5. M300/M350 breakpoint recovery is
+not adapted by this first batch. See the [adaptation plan](docs/V5_DEVICE_WAYLINE_ADAPTATION_PLAN_2026-09-27.md).
 
 ## Features
 

@@ -1,4 +1,9 @@
 <resources>
+    <string name="survey_backend_actual">执行方式：%1$s</string>
+    <string name="survey_backend_auto_virtual_stick">Mini 3 系列无原生 KMZ 航线，已自动选虚拟摇杆；请保持 App 前台和控制链路。</string>
+    <string name="survey_backend_virtual_stick_link">请保持 App 前台和控制链路；这不是离线机载航线。</string>
+    <string name="survey_backend_kmz_incompatible">当前机型不支持 KMZ；已上传任务或旧断点保持原样，不会自动转换。请停止旧任务后新建虚拟摇杆任务。</string>
+    <string name="survey_backend_upload_not_required">当前执行方式不需要上传 KMZ，请使用“执行”按钮。</string>
     <string name="app_name" translatable="false">OpenFly Go V5</string>
     <string name="dji_vln_app_label" translatable="false">OpenFly Go V5</string>
     <string name="dji_vln_legacy_label" translatable="false">VLN Pilot Legacy</string>

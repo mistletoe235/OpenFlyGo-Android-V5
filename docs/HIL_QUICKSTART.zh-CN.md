@@ -1,5 +1,7 @@
 # HIL 快速上手（手机端）
 
+[常见问题 Q&A：拍照确认、仿真散热与异常中断恢复](FAQ.zh-CN.md)。
+
 HIL = hardware-in-the-loop，硬件在环。本指南面向已准备好兼容 OpenFly 的 UE/AirSim
 场景与 HIL 适配器的用户；UE 程序 / 场景获取、安装和工作站部署见项目总入口的对应指南。
 **普通 AirSim、ROS 或一个能打开的 UE 窗口，不会自动实现 OpenFly HIL 协议。**

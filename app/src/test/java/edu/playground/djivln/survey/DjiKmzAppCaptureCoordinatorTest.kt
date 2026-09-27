@@ -40,6 +40,33 @@ class DjiKmzAppCaptureCoordinatorTest {
         }
     }
 
+    @Test fun ordinaryPassKeepsCapturingWithUnchangedPoseCallbackTimes() {
+        for (mode in SurveyCaptureTriggerMode.values()) {
+            val route = mission().let { it.copy(constraints = it.constraints.copy(captureTriggerMode = mode)) }
+            val coordinator = DjiKmzAppCaptureCoordinator()
+            val gate = MovingCapturePoseGate()
+            coordinator.arm(route)
+            val aircraft = edu.playground.djivln.domain.telemetry.AircraftSnapshot(
+                connected = true, aircraftLocationUpdatedAtNanos = 1_000_000_000L,
+                relativeAltitudeMeters = 40.0, relativeAltitudeUpdatedAtNanos = 1_000_000_000L,
+                headingDegrees = 90.0, headingUpdatedAtNanos = 1_000_000_000L,
+                gimbalPitchDegrees = -90.0, gimbalAttitudeUpdatedAtNanos = 1_000_000_000L,
+            )
+            var successes = 0
+            for (elapsed in 60_000L..71_000L step 100L) {
+                val position = point(((elapsed - 61_000L).coerceAtLeast(0L) * 0.003).coerceAtMost(30.0))
+                val target = coordinator.currentGimbalTarget(0) ?: break
+                val ready = gate.ready(aircraft, route.waypoints[target.waypointIndex], true, elapsed * 1_000_000L)
+                val request = coordinator.tick(position, 0, elapsed, ready, 3.0)
+                if (request != null) {
+                    successes += 1
+                    coordinator.onCaptureResult(position, elapsed, true, request)
+                }
+            }
+            org.junit.Assert.assertTrue("No sustained capture for $mode: $successes", successes >= 3)
+        }
+    }
+
     @Test fun ordinaryMovingPassNeverRequiresStoppedPoseDuringLongEntryFlight() {
         val coordinator = DjiKmzAppCaptureCoordinator()
         coordinator.arm(mission())

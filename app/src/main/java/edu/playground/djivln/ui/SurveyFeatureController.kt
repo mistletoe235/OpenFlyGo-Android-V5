@@ -1,6 +1,10 @@
 package edu.playground.djivln.ui
 
 import android.app.Activity
+import edu.playground.djivln.survey.SurveyAircraftBackendPolicy
+import edu.playground.djivln.survey.SurveyAircraftSupport
+import edu.playground.djivln.survey.SurveyBackendTaskState
+import edu.playground.djivln.survey.SurveyCaptureFeedback
 import android.Manifest
 import android.content.pm.PackageManager
 import android.app.AlertDialog
@@ -338,6 +342,8 @@ class SurveyFeatureController(
     private var captureSelectionChanging = false
     private var backendSelectionChanging = false
     private var lastBackendPosition = 0
+    private var preferredBackend = SurveyExecutionBackend.DJI_KMZ
+    private var lastBackendDecision: SurveyAircraftBackendPolicy.Decision? = null
     private var lastTerrainKindPosition = TERRAIN_KIND_SURFACE_DSM
     private var preparingDjiExecution = false
     private var djiPreparationGeneration = 0L
@@ -488,7 +494,9 @@ class SurveyFeatureController(
         ).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
         binding.executionBackend.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (!backendSelectionChanging && position != lastBackendPosition && isMissionLockedForEditing()) {
+                if (position != binding.executionBackend.selectedItemPosition) return
+                val manualChange = !backendSelectionChanging && !settingsRestoring && position != lastBackendPosition
+                if (manualChange && backendTaskState().copy(hasUploadedKmz = false).locked) {
                     backendSelectionChanging = true
                     binding.executionBackend.setSelection(lastBackendPosition)
                     backendSelectionChanging = false
@@ -496,6 +504,11 @@ class SurveyFeatureController(
                     return
                 }
                 lastBackendPosition = position
+                if (manualChange) {
+                    preferredBackend = selectedBackend()
+                    recordSurveyEvent("backend_manual_selection", mapOf("backend" to preferredBackend.name))
+                    resolveAircraftBackend()
+                }
                 schedulePersistPlannerSettings()
                 renderStatus()
             }
@@ -658,6 +671,7 @@ class SurveyFeatureController(
             refreshRthHeight()
         }
         restorePendingCheckpointWhenReady()
+        resolveAircraftBackend()
         val current = mission
         val geometryWarning = current != null && selectedBackend() != SurveyExecutionBackend.UE_HIL &&
             cameraDiscovery.current().cameraConnected && !cameraGeometryMatches(current)
@@ -2741,6 +2755,9 @@ class SurveyFeatureController(
                 "backend" to runCatching { selectedBackend().name }.getOrNull(),
             ) + fields,
         )
+        SurveyCaptureFeedback.result(type, fields)?.let { success ->
+            activity.runOnUiThread { onPhotoCaptureFeedback(success) }
+        }
     }
 
     private fun missionVersions() = runCatching {
@@ -3024,6 +3041,7 @@ class SurveyFeatureController(
             plannerTextInputs().forEach { (key, input) -> text.put(key, input.text.toString()) }
             val spinners = JSONObject()
             plannerSpinners().forEach { (key, spinner) -> spinners.put(key, spinner.selectedItemPosition) }
+            spinners.put("execution_backend", preferredBackend.ordinal)
             val captureViews = JSONArray()
             selectedCaptureViews().forEach { captureViews.put(it.name) }
             val root = JSONObject()
@@ -3079,6 +3097,7 @@ class SurveyFeatureController(
                 .getOrDefault(SurveyTab.AREA)
                 .takeUnless { it == SurveyTab.TERRAIN } ?: SurveyTab.AREA
             lastBackendPosition = binding.executionBackend.selectedItemPosition
+            preferredBackend = selectedBackend()
             lastTerrainKindPosition = binding.terrainKind.selectedItemPosition
             updateCaptureViewActions()
             binding.obliqueAngle.text = activity.getString(
@@ -3167,6 +3186,7 @@ class SurveyFeatureController(
     }
 
     private fun preflight(allowPhotoRatioPreparation: Boolean = false): Boolean {
+        if (!checkBackendCompatibility()) return false
         val current = mission ?: run {
             reject(activity.getString(R.string.generate_or_import_route_first))
             return false
@@ -4130,6 +4150,7 @@ class SurveyFeatureController(
     }
 
     private fun uploadWayline() {
+        if (!checkBackendCompatibility(kmzOnly = true)) return
         val current = mission ?: return reject(activity.getString(R.string.no_current_mission))
         if (!plannerFieldsMatch(current)) {
             return reject(activity.getString(R.string.route_parameters_changed_upload_kmz))
@@ -4200,6 +4221,7 @@ class SurveyFeatureController(
     }
 
     private fun executeWayline() {
+        if (!checkBackendCompatibility(kmzOnly = true, allowSelection = false)) return
         val current = mission ?: return reject(activity.getString(R.string.generate_or_import_task_first))
         val file = currentKmzFile(current)
             ?: return reject(activity.getString(R.string.kmz_inputs_changed_reupload))
@@ -4880,7 +4902,6 @@ class SurveyFeatureController(
                         "longitude" to completedPosition.longitude,
                     ),
                 )
-                onPhotoCaptureFeedback(result.isSuccess)
                 if (result.isFailure) {
                     operationMessage = activity.getString(R.string.route_capture_failed, result.exceptionOrNull()?.message ?: activity.getString(R.string.unknown_error))
                     renderStatus()
@@ -4987,6 +5008,7 @@ class SurveyFeatureController(
     }
 
     private fun executeSelectedBackend() {
+        if (!checkBackendCompatibility()) return
         var current = mission ?: return reject(activity.getString(R.string.generate_or_import_task_first))
         if (preparingDjiExecution) return reject(activity.getString(R.string.dji_mission_preparing_no_repeat))
         if (selectedBackend() == SurveyExecutionBackend.DJI_KMZ && restoredDjiCheckpoint != null) {
@@ -5022,6 +5044,7 @@ class SurveyFeatureController(
     }
 
     private fun prepareUploadAndExecuteDji(current: SurveyMission) {
+        if (!checkBackendCompatibility(kmzOnly = true, allowSelection = false)) return
         if (!snapshot().connected) return reject(activity.getString(R.string.dji_route_aircraft_disconnected))
         val generation = ++djiPreparationGeneration
         preparingDjiExecution = true
@@ -5163,8 +5186,15 @@ class SurveyFeatureController(
         )
     }
 
-    private fun isDjiPreparationCurrent(generation: Long, expectedMission: SurveyMission): Boolean =
-        preparingDjiExecution && generation == djiPreparationGeneration && mission?.id == expectedMission.id
+    private fun isDjiPreparationCurrent(generation: Long, expectedMission: SurveyMission): Boolean {
+        if (!preparingDjiExecution || generation != djiPreparationGeneration || mission?.id != expectedMission.id) return false
+        if (aircraftBackendCapabilities().kmz == SurveyAircraftSupport.UNSUPPORTED) {
+            preparingDjiExecution = false
+            reject(activity.getString(R.string.survey_backend_kmz_incompatible))
+            return false
+        }
+        return true
+    }
 
     private fun requiredGlobalRthHeight(current: SurveyMission): Double {
         val highestWaypoint = current.waypoints.maxOfOrNull { it.point.altitudeMeters }
@@ -5327,6 +5357,7 @@ class SurveyFeatureController(
     }
 
     private fun resumeSelectedBackend() {
+        if (!checkBackendCompatibility(allowSelection = false)) return
         mission?.let { if (!recaptureExecutionAllowed(it)) return }
         if (selectedBackend() == SurveyExecutionBackend.DJI_KMZ) {
             restoredDjiCheckpoint?.let {
@@ -5340,6 +5371,7 @@ class SurveyFeatureController(
             renderStatus()
             waylinePort.queryBreakpoint(missionFileName) { result ->
                 activity.runOnUiThread {
+                    if (!checkBackendCompatibility(kmzOnly = true, allowSelection = false)) return@runOnUiThread
                     mission?.let { if (!recaptureExecutionAllowed(it)) return@runOnUiThread }
                     result.onSuccess { queriedBreakpoint ->
                         val breakpoint = queriedBreakpoint ?: waylineState.breakpoint
@@ -5506,6 +5538,7 @@ class SurveyFeatureController(
     }
 
     private fun resumeImportedDjiCheckpoint(pending: PendingCheckpointRestore) {
+        if (!checkBackendCompatibility(kmzOnly = true, allowSelection = false)) return
         val breakpoint = pending.checkpoint.djiBreakpoint
             ?: return reject(activity.getString(R.string.dji_resume_breakpoint_missing))
         if (!preflight()) return
@@ -5603,6 +5636,7 @@ class SurveyFeatureController(
 
     private fun renderStatus() {
         renderLiveTelemetry()
+        renderBackendStatus()
         val camera = cameraDiscovery.current()
         val streamSource = camera.streamSource?.name?.replace("_CAMERA", "") ?: "SOURCE --"
         binding.areaCameraStatus.text = activity.getString(
@@ -5669,7 +5703,8 @@ class SurveyFeatureController(
         val selected = selectedBackend()
         val customStatus = customState.status.state
         binding.ueEndpoint.isEnabled = selected == SurveyExecutionBackend.UE_HIL && !editingLocked
-        binding.uploadWayline.isEnabled = selected == SurveyExecutionBackend.DJI_KMZ && actions.canUpload
+        binding.uploadWayline.isEnabled = selected == SurveyExecutionBackend.DJI_KMZ && actions.canUpload &&
+            aircraftBackendCapabilities().kmz != SurveyAircraftSupport.UNSUPPORTED
         val canExecute = if (selected == SurveyExecutionBackend.DJI_KMZ) {
             if (waylineState.phase == edu.playground.djivln.domain.wayline.WaylinePhase.PAUSED) {
                 actions.canResume
@@ -6173,6 +6208,84 @@ class SurveyFeatureController(
 
     private fun effectiveSnapshot(): AircraftSnapshot =
         DjiV5SimulatorAuthority.apply(snapshot(), simulatorManager.isSimulatorEnabled())
+
+    private fun backendTaskState() = SurveyBackendTaskState(
+        waylinePhase = waylineState.phase,
+        customState = customState.status.state,
+        preparing = isMissionLockedForEditing(),
+        hasCheckpoint = pendingCheckpointRestore != null || restoredDjiCheckpoint != null ||
+            activeDjiRecoveryDisplayCheckpoint != null || checkpointPreferences.contains(KEY_CHECKPOINT) ||
+            preferences.contains(KEY_CHECKPOINT),
+        hasUploadedKmz = waylineState.phase == edu.playground.djivln.domain.wayline.WaylinePhase.READY &&
+            uploadedKmzSessionSignature != null,
+    )
+
+    private fun aircraftBackendCapabilities() = SurveyAircraftBackendPolicy.capabilities(
+        cameraDiscovery.current().productType,
+        snapshot().connected,
+    )
+
+    private fun resolveAircraftBackend() {
+        if (settingsRestoring || binding.executionBackend.adapter == null) return
+        val decision = SurveyAircraftBackendPolicy.select(
+            productType = cameraDiscovery.current().productType,
+            connected = snapshot().connected,
+            preferred = preferredBackend,
+            current = selectedBackend(),
+            task = backendTaskState(),
+        )
+        if (decision.backend != selectedBackend()) {
+            backendSelectionChanging = true
+            lastBackendPosition = decision.backend.ordinal
+            binding.executionBackend.setSelection(lastBackendPosition)
+            backendSelectionChanging = false
+            schedulePersistPlannerSettings()
+        }
+        if (decision != lastBackendDecision) {
+            lastBackendDecision = decision
+            recordSurveyEvent("aircraft_backend_selection", mapOf(
+                "product" to decision.capabilities.product,
+                "kmz" to decision.capabilities.kmz.name,
+                "virtual_stick" to decision.capabilities.virtualStick.name,
+                "preferred_backend" to preferredBackend.name,
+                "effective_backend" to decision.backend.name,
+                "reason" to decision.reason.name,
+            ))
+        }
+    }
+
+    private fun checkBackendCompatibility(kmzOnly: Boolean = false, allowSelection: Boolean = true): Boolean {
+        if (allowSelection) resolveAircraftBackend()
+        if (selectedBackend() == SurveyExecutionBackend.DJI_KMZ &&
+            aircraftBackendCapabilities().kmz == SurveyAircraftSupport.UNSUPPORTED
+        ) {
+            reject(activity.getString(R.string.survey_backend_kmz_incompatible))
+            return false
+        }
+        if (kmzOnly && selectedBackend() != SurveyExecutionBackend.DJI_KMZ) {
+            reject(activity.getString(R.string.survey_backend_upload_not_required))
+            return false
+        }
+        return true
+    }
+
+    private fun renderBackendStatus() {
+        val selected = selectedBackend()
+        val capabilities = aircraftBackendCapabilities()
+        val detail = when {
+            selected == SurveyExecutionBackend.DJI_KMZ && capabilities.kmz == SurveyAircraftSupport.UNSUPPORTED ->
+                activity.getString(R.string.survey_backend_kmz_incompatible)
+            selected == SurveyExecutionBackend.CUSTOM_VIRTUAL_STICK &&
+                lastBackendDecision?.reason == SurveyAircraftBackendPolicy.Reason.MINI_3_VIRTUAL_STICK ->
+                activity.getString(R.string.survey_backend_auto_virtual_stick)
+            selected == SurveyExecutionBackend.CUSTOM_VIRTUAL_STICK ->
+                activity.getString(R.string.survey_backend_virtual_stick_link)
+            else -> ""
+        }
+        binding.surveyBackendStatus.text = activity.getString(
+            R.string.survey_backend_actual, activity.getString(selected.labelRes),
+        ) + if (detail.isEmpty()) "" else "\n$detail"
+    }
 
     private fun selectedBackend(): SurveyExecutionBackend =
         SurveyExecutionBackend.values().getOrElse(binding.executionBackend.selectedItemPosition) {

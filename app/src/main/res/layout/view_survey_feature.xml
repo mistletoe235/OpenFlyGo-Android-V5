@@ -25,6 +25,9 @@
                 android:layout_height="wrap_content" android:layout_marginTop="4dp" android:maxLines="4"
                 android:text="@string/survey_summary_placeholder"
                 android:textColor="#FF66717D" android:textSize="9sp" />
+            <TextView android:id="@+id/survey_backend_status" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="4dp"
+                android:textColor="#FF596673" android:textSize="9sp" />
             <TextView android:id="@+id/survey_execution_status" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:layout_marginTop="4dp" android:maxLines="2"
                 android:text="@string/survey_preflight_pending" android:textColor="#FF8A5A20"

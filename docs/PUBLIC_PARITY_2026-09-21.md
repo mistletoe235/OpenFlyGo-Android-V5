@@ -1,6 +1,6 @@
 # V5 control and telemetry parity — September 21, 2026
 
-[English](PUBLIC_PARITY_2026-09-21.md) · [Chinese reference](PUBLIC_PARITY_2026-09-21.zh-CN.md)
+[English](PUBLIC_PARITY_2026-09-21.md) · [中文](PUBLIC_PARITY_2026-09-21.zh-CN.md)
 
 ## Scope
 

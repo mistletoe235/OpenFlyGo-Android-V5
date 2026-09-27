@@ -1,6 +1,8 @@
 # Phone-side HIL quickstart
 
-[English](HIL_QUICKSTART.md) · [Chinese reference](HIL_QUICKSTART.zh-CN.md)
+[Q&A: capture checks, simulator cooling and recovery after interruption](FAQ.md).
+
+[English](HIL_QUICKSTART.md) · [中文](HIL_QUICKSTART.zh-CN.md)
 
 HIL means hardware-in-the-loop. Start with a compatible OpenFly UE/AirSim scene
 and HIL adapter; use the [main simulator guide](https://github.com/mistletoe235/OpenFlyScan/blob/main/docs/simulator.md)

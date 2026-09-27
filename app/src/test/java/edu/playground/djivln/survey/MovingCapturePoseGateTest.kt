@@ -49,11 +49,11 @@ class MovingCapturePoseGateTest {
         assertTrue(gate.ready(aircraft(2_400_000_000L), target, true, 2_400_000_000L))
     }
 
-    @Test fun staleHeadingAndUnverifiedGimbalCannotReleaseCapture() {
+    @Test fun unchangedHeadingDoesNotBlockButUnverifiedGimbalStillDoes() {
         val gate = MovingCapturePoseGate()
         assertFalse(gate.ready(aircraft(1_000_000_000L), target, true, 1_000_000_000L))
-        assertFalse(gate.ready(aircraft(1_900_000_000L).copy(headingUpdatedAtNanos = 1L), target, true, 1_900_000_000L))
-        assertFalse(gate.ready(aircraft(2_000_000_000L), target, true, 2_000_000_000L))
+        assertTrue(gate.ready(aircraft(1_900_000_000L).copy(headingUpdatedAtNanos = 1L), target, true, 1_900_000_000L))
+        assertTrue(gate.ready(aircraft(2_000_000_000L), target, true, 2_000_000_000L))
         assertFalse(gate.ready(aircraft(2_800_000_000L), target, false, 2_800_000_000L))
         assertFalse(gate.ready(aircraft(2_900_000_000L), target, true, 2_900_000_000L))
         assertTrue(gate.ready(aircraft(3_700_000_000L), target, true, 3_700_000_000L))
@@ -70,6 +70,31 @@ class MovingCapturePoseGateTest {
         assertTrue(gate.ready(aircraft(4_800_000_000L), next, true, 4_800_000_000L))
         gate.reset()
         assertFalse(gate.ready(aircraft(4_900_000_000L), next, true, 4_900_000_000L))
+    }
+
+    @Test fun unchangedFieldsAllowOrdinaryCaptureButNotOtherCaptureModes() {
+        val gate = MovingCapturePoseGate()
+        val unchanged = aircraft(1_000_000_000L)
+        assertFalse(gate.ready(unchanged, target, true, 60_000_000_000L))
+        assertTrue(gate.ready(unchanged, target, true, 60_800_000_000L))
+        assertFalse(ContinuousCapturePosePolicy.ready(unchanged, target, 60_800_000_000L))
+        assertFalse(StoppedCapturePosePolicy.aligned(unchanged, target, target.point, 0.0, 60_800_000_000L))
+        assertFalse(gate.ready(unchanged.copy(connected = false), target, true, 60_900_000_000L))
+    }
+
+    @Test fun missingInvalidOrMisalignedValuesStillBlockOrdinaryCapture() {
+        val valid = aircraft(1_000_000_000L)
+        val invalid = listOf(
+            valid.copy(headingDegrees = null), valid.copy(headingDegrees = Double.NaN),
+            valid.copy(gimbalPitchDegrees = null), valid.copy(gimbalPitchDegrees = -80.0),
+            valid.copy(relativeAltitudeMeters = null), valid.copy(relativeAltitudeMeters = 43.0),
+            valid.copy(relativeAltitudeMeters = Double.NaN), valid.copy(headingDegrees = 94.0),
+        )
+        for (sample in invalid) {
+            val gate = MovingCapturePoseGate()
+            assertFalse(gate.ready(sample, target, true, 60_000_000_000L))
+            assertFalse(gate.ready(sample, target, true, 60_800_000_000L))
+        }
     }
 
     @Test fun headingWraparoundIsAcceptedButMissingTargetIsNot() {

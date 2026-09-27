@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="survey_backend_actual">Execution: %1$s</string>
+    <string name="survey_backend_auto_virtual_stick">Mini 3 series has no native KMZ missions. Virtual Stick selected automatically; keep the app in foreground and the control link connected.</string>
+    <string name="survey_backend_virtual_stick_link">Keep the app in foreground and the control link connected; this is not an offline onboard mission.</string>
+    <string name="survey_backend_kmz_incompatible">This aircraft does not support KMZ. Uploaded tasks and old checkpoints are retained, not converted. Stop the old task before creating a new Virtual Stick task.</string>
+    <string name="survey_backend_upload_not_required">This execution mode does not need a KMZ upload. Use Execute instead.</string>
     <string name="status_sdk_starting">SDK starting</string>
     <string name="status_aircraft_disconnected">Aircraft not connected</string>
     <string name="feature_flight">Flight</string>

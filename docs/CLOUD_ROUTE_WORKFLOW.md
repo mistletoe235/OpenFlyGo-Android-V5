@@ -1,6 +1,6 @@
 # Cloud uploads, point clouds and reacquisition
 
-[English](CLOUD_ROUTE_WORKFLOW.md) · [Chinese reference](CLOUD_ROUTE_WORKFLOW.zh-CN.md)
+[English](CLOUD_ROUTE_WORKFLOW.md) · [中文](CLOUD_ROUTE_WORKFLOW.zh-CN.md)
 
 ## Workstation connection
 

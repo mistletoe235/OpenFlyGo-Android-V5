@@ -1,5 +1,9 @@
 # OpenFly Go for Android — MSDK V5
 
+正式版：**0.1.10-v5（12）** · [下载 APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.10-v5/OpenFlyGo-Android-V5-0.1.10.apk) · [更新说明](docs/RELEASE_0.1.10.md)。
+
+[常见问题 Q&A：拍照确认、仿真散热与异常中断恢复](docs/FAQ.zh-CN.md)。
+
 **手机图片存储更新：** 普通拍照默认不再额外往手机保存图传 JPEG / JSON。飞机 SD 卡拍照不变；
 主动开启云端采集仍保留必要的待传缓存。详见 [默认行为与例外](docs/PHONE_IMAGE_STORAGE_2026-09-25.md)。
 
@@ -72,7 +76,7 @@ SDK 版本、Android/iOS 平台、飞机固件和遥控器**，不要只看网�
 | --- | --- | --- |
 | Mini 2 | Android V4 或 iOS | 项目已实机验证；仍需按当前固件做预检 |
 | Mini 4 Pro | Android V5 | 项目已实机验证；本项目 iOS 不支持 |
-| Mini 3 / Mini 3 Pro | DJI 官方列在 V5；选 Android V5 做兼容验收 | 尚未按本项目完整流程实机验收 |
+| Mini 3 / Mini 3 Pro | Android V5 的新建、未锁定任务自动选择虚拟摇杆 | 已做软件适配，尚未按本项目完整流程实机验收 |
 | Mavic 3 Enterprise、Mavic 3TA、Matrice 30 / 300 RTK / 350 RTK / 400、Matrice 4 / 4D Enterprise 系列 | 查 V5 官方清单和固件要求 | 不承诺企业负载、多相机和全部航线功能已适配；Mavic 3 Enterprise 不等于消费版 Mavic 3 |
 | Mavic Pro / Mavic Air、Mavic 2 Pro / Zoom / Enterprise、Spark、Phantom、Inspire、较早 Matrice 产品 | 查 V4 表中的**具体型号**和平台限制，不能按整个系列推断 | 仅 SDK 候选机型，本项目未逐一验收 |
 | Mavic Mini、Mini SE、Mavic Air 2、Air 2S 等其他 V4 产品 | 查对应 Android/iOS SDK 版本说明，不能由 Android 支持推断 iOS 支持 | 当前不列为本项目已验收机型 |
@@ -81,6 +85,20 @@ SDK 版本、Android/iOS 平台、飞机固件和遥控器**，不要只看网�
 优先使用能通过 USB 数据线连接手机、且被对应 SDK 支持的遥控器。开源 V5 **不包含 RC2
 破解 / 视频兼容实验**；不要把遥控器能装 APK 等同于可运行本项目。SDK 列表中的云台 / 负载
 （例如 H30）也不是独立的飞机型号。
+
+### V5 按机型选择执行方式
+
+从 `0.1.9-v5` 起，Mini 3 / Mini 3 Pro 的新建、未锁定任务自动使用“自定义虚拟摇杆”，
+直接点“执行”，不需要上传 KMZ；必须保持 App 前台运行和控制链路连接。
+[DJI 对 Mini 3 原生航线限制的说明](https://github.com/dji-sdk/Mobile-SDK-Android-V5/issues/754)。
+
+Mini 4 Pro 默认仍用 KMZ；明确选择虚拟摇杆或 UE HIL 时不会抢改。航线页显示实际执行方式。
+自动选择不会覆盖保存的用户偏好；换回已知支持 KMZ 的机型后，仅在任务未锁定时恢复偏好。
+未知机型、断连、上传超时或其他普通错误不触发自动回退；已上传、执行中、暂停或待恢复断点不跨后端转换。
+
+这是**软件适配，不是 Mini 3 实飞验收**。普通航带和默认停点补拍复用现有自定义执行器；
+V5 实验连续补拍仍仅支持 KMZ，本批不适配 M300 / M350 的特殊断点恢复接口。
+详见[设备适配计划](docs/V5_DEVICE_WAYLINE_ADAPTATION_PLAN_2026-09-27.md)。
 
 ### 功能与构建差异
 
