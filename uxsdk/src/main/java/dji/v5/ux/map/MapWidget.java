@@ -24,7 +24,6 @@
 package dji.v5.ux.map;
 
 import android.Manifest;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
@@ -34,12 +33,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,10 +96,7 @@ import static dji.v5.ux.map.MapWidgetModel.INVALID_COORDINATE;
 public class MapWidget extends ConstraintLayoutWidget<Object> implements View.OnTouchListener, FlyZoneActionListener {
 
     //region  Constants
-    private static final int COUNTER_REFRESH_THRESHOLD = 200;
     private static final int MAX_FLY_ZONE_SHOW_ON_MAP = 100;
-    private static final int FLIGHT_ANIM_DURATION = 130;
-    private static final int ROTATION_ANIM_DURATION = 100;
     private static final int AIRCRAFT_MARKER_ELEVATION = 100;
     private static final int GIMBAL_MARKER_ELEVATION = 99;
     private static final int HOME_MARKER_ELEVATION = 90;
@@ -117,7 +113,7 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
 
     //region map  fields
     private boolean isTouching = false;
-    private int centerRefreshCounter = 201;
+    private long lastCenterRefreshMillis = -1000;
     private MapWidgetModel widgetModel;
     private DJIMap map;
     private DJIMapViewInternal mapView;
@@ -169,7 +165,6 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
     //endregion
 
     //region Aircraft Marker Fields
-    private float aircraftMarkerHeading;
     private DJIMarker aircraftMarker;
     private Drawable aircraftIcon;
     private boolean aircraftMarkerEnabled;
@@ -179,6 +174,8 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
 
     //region direction to home fields
     private DJIPolyline homeLine;
+    private DJILatLng lastHomeLineAircraft;
+    private DJILatLng lastHomeLineHome;
     private List<FlyZoneInformation> flyZoneInformationList;
     private boolean homeDirectionEnabled = true;
     @ColorInt
@@ -189,6 +186,8 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
     //region flight path fields
     private DJIPolyline flightPathLine;
     private List<DJILatLng> flightPathPoints = new ArrayList<>();
+    private boolean flightPathDirty;
+    private long lastFlightPathRefreshMillis = -MapDisplayPolicy.TRAIL_INTERVAL_MILLIS;
     @ColorInt
     private int flightPathColor = Color.WHITE;
     private float flightPathWidth = 5;
@@ -228,14 +227,11 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
     @Override
     protected void reactToModelChanges() {
         addReaction(reactToHeadingChanges());
-        addReaction(widgetModel.getHomeLocation()
-                .observeOn(SchedulerProvider.ui())
+        addReaction(displayUpdates(widgetModel.getHomeLocation())
                 .subscribe(this::updateHomeLocation));
-        addReaction(widgetModel.getAircraftLocation()
-                .observeOn(SchedulerProvider.ui())
+        addReaction(displayUpdates(widgetModel.getAircraftLocation())
                 .subscribe(this::updateAircraftLocation));
-        addReaction(widgetModel.getRcGPSInfo()
-                .observeOn(SchedulerProvider.ui())
+        addReaction(displayUpdates(widgetModel.getRcGPSInfo())
                 .subscribe(this::updateRcLocation));
         addReaction(Flowable.combineLatest(
                         widgetModel.flyZoneInformationDataProcessor.toFlowable(),
@@ -464,13 +460,16 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
     }
 
     private Disposable reactToHeadingChanges() {
-        return Flowable.combineLatest(widgetModel.getAircraftHeading(),
-                        widgetModel.getGimbalHeading(), Pair::create)
-                .observeOn(SchedulerProvider.ui())
+        return displayUpdates(Flowable.combineLatest(widgetModel.getAircraftHeading(),
+                        widgetModel.getGimbalHeading(), Pair::create))
                 .subscribe(values -> {
                     updateAircraftHeading(values.first.floatValue());
                     setGimbalHeading(values.first.floatValue(), values.second.floatValue());
                 }, UxErrorHandle.logErrorConsumer(TAG, "react to Heading Update "));
+    }
+
+    private <Value> Flowable<Value> displayUpdates(Flowable<Value> source) {
+        return MapDisplayPolicy.latestUpdates(source, SchedulerProvider.computation(), SchedulerProvider.ui());
     }
 
     /**
@@ -523,11 +522,15 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
         DJILatLng homePosition = new DJILatLng(homeLocation.getLatitude(), homeLocation.getLongitude());
         if (map == null || !homePosition.isAvailable()) return;
         if (homeMarker != null) {
-            homeMarker.setPosition(homePosition);
+            if (!MapDisplayPolicy.samePosition(homeMarker.getPosition(), homePosition)) {
+                homeMarker.setPosition(homePosition);
+                homeMarker.setPositionCache(homePosition);
+            }
             updateCameraPosition();
         } else {
             initHomeOnMap(homePosition);
         }
+        updateHomeDirection();
     }
 
     /** Draw the physical remote-controller GNSS position independently of aircraft/home. */
@@ -698,14 +701,7 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
     }
 
     private void updateAircraftHeading(float aircraftHeading) {
-        if (((aircraftHeading >= 0 && aircraftMarkerHeading >= 0) ||
-                (aircraftHeading <= 0 && aircraftMarkerHeading <= 0)) && map != null) {
-            animateAircraftHeading(aircraftMarkerHeading,
-                    aircraftHeading - map.getCameraPosition().bearing,
-                    aircraftHeading);
-        } else {
-            setAircraftHeading(aircraftHeading);
-        }
+        setAircraftHeading(aircraftHeading);
     }
 
     /**
@@ -716,7 +712,6 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
         if (aircraftMarker != null) {
             rotateAircraftMarker(aircraftHeading - map.getCameraPosition().bearing);
         }
-        aircraftMarkerHeading = aircraftHeading - map.getCameraPosition().bearing;
     }
 
     /**
@@ -730,33 +725,14 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
     }
 
     /**
-     * Animates the rotation of the aircraft
-     */
-    private void animateAircraftHeading(final float fromPosition, final float toPosition, float aircraftHeading) {
-        if (map == null || aircraftMarker == null) return;
-
-        //rotation animation
-        ValueAnimator rotateAnimation =
-                ValueAnimator.ofFloat(aircraftMarkerHeading, aircraftHeading - map.getCameraPosition().bearing);
-        rotateAnimation.setDuration(ROTATION_ANIM_DURATION);
-        rotateAnimation.setInterpolator(new LinearInterpolator());
-        rotateAnimation.addUpdateListener(valueAnimator -> {
-            float progress = valueAnimator.getAnimatedFraction();
-            float rotation = (toPosition - fromPosition) * progress + fromPosition;
-            rotateAircraftMarker(rotation);
-        });
-        rotateAnimation.start();
-        aircraftMarkerHeading = aircraftHeading - map.getCameraPosition().bearing;
-    }
-
-    /**
      * Sets the aircraft to the given rotation
      *
      * @param rotation the rotation to be set to
      */
     private void rotateAircraftMarker(float rotation) {
-        if (aircraftMarker != null) {
+        if (aircraftMarker != null && MapDisplayPolicy.rotationChanged(aircraftMarker.getRotation(), rotation)) {
             aircraftMarker.setRotation(rotation);
+            aircraftMarker.setRotationCache(rotation);
         }
     }
 
@@ -766,49 +742,19 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
      * @param rotation the rotation to be set to
      */
     private void rotateGimbalMarker(float rotation) {
-        if (gimbalYawMarker != null) {
+        if (gimbalYawMarker != null && MapDisplayPolicy.rotationChanged(gimbalYawMarker.getRotation(), rotation)) {
             gimbalYawMarker.setRotation(rotation);
+            gimbalYawMarker.setRotationCache(rotation);
         }
-    }
-
-    /**
-     * Animates the change in position of the aircraft
-     *
-     * @param toPosition   ending position
-     * @param fromPosition starting position
-     */
-    private void animateAircraftMarker(final DJILatLng toPosition, final DJILatLng fromPosition) {
-        ValueAnimator flightAnimation = ValueAnimator.ofFloat(0, 1);
-        flightAnimation.setDuration(FLIGHT_ANIM_DURATION);
-        flightAnimation.setInterpolator(new LinearInterpolator());
-        flightAnimation.addUpdateListener(valueAnimator -> {
-            float progress = valueAnimator.getAnimatedFraction();
-            double latitude =
-                    (toPosition.getLatitude() - fromPosition.getLatitude()) * progress + fromPosition.getLatitude();
-            double longitude =
-                    (toPosition.getLongitude() - fromPosition.getLongitude()) * progress + fromPosition.getLongitude();
-
-            DJILatLng aircraftLatLng = new DJILatLng(latitude, longitude);
-            if (aircraftLatLng.isAvailable()) {
-                if (aircraftMarker != null) {
-                    aircraftMarker.setPosition(aircraftLatLng);
-                }
-                if (gimbalYawMarker != null) {
-                    gimbalYawMarker.setPosition(aircraftLatLng);
-                }
-            }
-            updateCameraPosition();
-        });
-        flightAnimation.start();
     }
 
     /**
      * Changes position of camera to follow aircraft if camera is locked
      */
     private void updateCameraPosition() {
-        centerRefreshCounter++;
-        if (centerRefreshCounter > COUNTER_REFRESH_THRESHOLD) {
-            centerRefreshCounter = 0;
+        long now = SystemClock.elapsedRealtime();
+        if (now - lastCenterRefreshMillis >= 1000) {
+            lastCenterRefreshMillis = now;
             setMapCenter(mapCenterLockMode, DO_NOT_UPDATE_ZOOM, true);
         }
     }
@@ -822,16 +768,23 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
                 || locationCoordinate3D.getLongitude() == INVALID_COORDINATE) return;
 
         final DJILatLng aircraftPosition = new DJILatLng(locationCoordinate3D.getLatitude(), locationCoordinate3D.getLongitude());
+        if (!aircraftPosition.isAvailable()) return;
         if (aircraftMarker != null) {
-            final DJILatLng markerPosition = aircraftMarker.getPosition();
-            //Update marker
-            animateAircraftMarker(aircraftPosition, markerPosition);
+            if (!MapDisplayPolicy.samePosition(aircraftMarker.getPosition(), aircraftPosition)) {
+                aircraftMarker.setPosition(aircraftPosition);
+                aircraftMarker.setPositionCache(aircraftPosition);
+            }
+            if (gimbalYawMarker != null && !MapDisplayPolicy.samePosition(gimbalYawMarker.getPosition(), aircraftPosition)) {
+                gimbalYawMarker.setPosition(aircraftPosition);
+                gimbalYawMarker.setPositionCache(aircraftPosition);
+            }
         } else if (aircraftPosition.isAvailable()) {
             //Create new marker
             initAircraftOnMap(aircraftPosition);
         }
         updateFlightPath();
         updateHomeDirection();
+        updateCameraPosition();
     }
 
     /**
@@ -841,7 +794,10 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
         //Update the aircraft to home path
         if (homeMarker == null || aircraftMarker == null || map == null) return;
         DJILatLng homeCoordinate = homeMarker.getPosition();
+        DJILatLng aircraftCoordinate = aircraftMarker.getPosition();
         if (homeDirectionEnabled) {
+            if (homeLine != null && MapDisplayPolicy.samePosition(lastHomeLineAircraft, aircraftCoordinate)
+                    && MapDisplayPolicy.samePosition(lastHomeLineHome, homeCoordinate)) return;
             if (homeLine != null) {
                 List<DJILatLng> points = new ArrayList<>();
                 points.add(aircraftMarker.getPosition());
@@ -857,6 +813,8 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
                 //draw new line
                 homeLine = map.addPolyline(homeLineOptions);
             }
+            lastHomeLineAircraft = aircraftCoordinate;
+            lastHomeLineHome = homeCoordinate;
         } else {
             if (homeLine != null) {
                 homeLine.remove();
@@ -1137,14 +1095,19 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
             if (Math.abs(lastPosition.getLatitude() - aircraftPosition.getLatitude()) > 0.000005
                     || Math.abs(lastPosition.getLongitude() - aircraftPosition.getLongitude()) > 0.000005) {
                 flightPathPoints.add(aircraftPosition);
+                MapDisplayPolicy.compactTrail(flightPathPoints);
+                flightPathDirty = true;
             }
         } else {
             //new polylines require 2+ points
             flightPathPoints.add(aircraftPosition);
             flightPathPoints.add(aircraftPosition);
+            flightPathDirty = true;
         }
-
-        refreshFlightPath();
+        long now = SystemClock.elapsedRealtime();
+        if (flightPathDirty && now - lastFlightPathRefreshMillis >= MapDisplayPolicy.TRAIL_INTERVAL_MILLIS) {
+            refreshFlightPath();
+        }
     }
 
     /**
@@ -1152,6 +1115,8 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
      */
     private void refreshFlightPath() {
         if (aircraftMarker == null || map == null) return;
+        lastFlightPathRefreshMillis = SystemClock.elapsedRealtime();
+        flightPathDirty = false;
         //must create new line or else flightPathLine does not update otherwise
         if (flightPathEnabled) {
             if (flightPathLine == null) {
@@ -1181,10 +1146,10 @@ public class MapWidget extends ConstraintLayoutWidget<Object> implements View.On
      * even if it is hidden.
      */
     public void clearFlightPath() {
-        if (flightPathLine == null) return;
         flightPathPoints.clear();
-        flightPathLine.remove();
+        if (flightPathLine != null) flightPathLine.remove();
         flightPathLine = null;
+        lastFlightPathRefreshMillis = -MapDisplayPolicy.TRAIL_INTERVAL_MILLIS;
         updateFlightPath();
     }
 

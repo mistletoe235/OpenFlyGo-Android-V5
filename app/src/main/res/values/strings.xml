@@ -1802,4 +1802,5 @@
     <string name="ply_no_vertices">点云暂时没有有效点，请等待重建后刷新</string>
     <string name="ply_header_too_large">点云文件头超过大小限制，请检查工作站输出</string>
     <string name="ply_header_line_too_large">点云文件头单行过长，请检查工作站输出</string>
+    <string name="hil_preview_dimensions">UE 仿真单帧 · %1$d × %2$d</string>
 </resources>

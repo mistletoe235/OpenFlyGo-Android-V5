@@ -173,7 +173,7 @@ class DjiV5TelemetrySource(
         }
         safeListen("altitudeAboveGroundMeters") {
             FlightControllerKey.KeyUltrasonicHeight.create().listen(listenerOwner) { value ->
-                update { it.copy(altitudeAboveGroundMeters = value?.takeIf { cm -> cm > 0 }?.div(100.0)) }
+                update { it.copy(altitudeAboveGroundMeters = TelemetryNormalizer.decimetersToMeters(value)) }
             }
         }
         safeListen("attitude") {
@@ -514,8 +514,8 @@ class DjiV5TelemetrySource(
             }
         }
         safeRead("altitudeAboveGroundMeters") {
-            manager.getValue(FlightControllerKey.KeyUltrasonicHeight.create())?.let { centimeters ->
-                update { it.copy(altitudeAboveGroundMeters = centimeters.takeIf { value -> value > 0 }?.div(100.0)) }
+            manager.getValue(FlightControllerKey.KeyUltrasonicHeight.create())?.let { decimeters ->
+                update { it.copy(altitudeAboveGroundMeters = TelemetryNormalizer.decimetersToMeters(decimeters)) }
             }
         }
         safeRead("attitude") {

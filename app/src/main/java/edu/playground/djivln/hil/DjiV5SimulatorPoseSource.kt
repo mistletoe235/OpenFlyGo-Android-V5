@@ -232,8 +232,8 @@ class DjiV5SimulatorPoseSource(
         if (!running.get()) return
         val now = SystemClock.elapsedRealtimeNanos()
         val raw = latestRawPose.get()
-        if (raw != null && now - raw.elapsedRealtimeNanos <= RAW_FRESH_NANOS) {
-            val predicted = SimulatorPosePredictor.predict(previousRawPose.get(), raw, now)
+        if (raw != null) {
+            val predicted = SimulatorPosePredictor.predictFresh(previousRawPose.get(), raw, now) ?: return
             pollSampleCount.incrementAndGet()
             publish(
                 timestampNanos = now,
@@ -396,7 +396,6 @@ class DjiV5SimulatorPoseSource(
 
     private companion object {
         const val RATE_WINDOW_NANOS = 1_000_000_000L
-        const val RAW_FRESH_NANOS = 100_000_000L
         const val DEFAULT_OUTPUT_FREQUENCY_HZ = 50
         const val MIN_OUTPUT_FREQUENCY_HZ = 2
         const val MAX_OUTPUT_FREQUENCY_HZ = 150
@@ -449,9 +448,15 @@ internal data class PredictedSimulatorPose(
 )
 
 internal object SimulatorPosePredictor {
+    private const val RAW_FRESH_NANOS = 100_000_000L
     private const val MAX_EXTRAPOLATION_NANOS = 35_000_000L
     private const val MAX_LINEAR_SPEED_METERS_PER_SECOND = 30.0
     private const val MAX_ANGULAR_SPEED_DEGREES_PER_SECOND = 360.0
+
+    fun predictFresh(previous: SimulatorRawPose?, current: SimulatorRawPose, targetNanos: Long): PredictedSimulatorPose? {
+        if (targetNanos - current.elapsedRealtimeNanos !in 0L..RAW_FRESH_NANOS) return null
+        return predict(previous, current, targetNanos)
+    }
 
     fun predict(previous: SimulatorRawPose?, current: SimulatorRawPose, targetNanos: Long): PredictedSimulatorPose {
         val sampleDeltaNanos = previous?.let { current.elapsedRealtimeNanos - it.elapsedRealtimeNanos } ?: 0L

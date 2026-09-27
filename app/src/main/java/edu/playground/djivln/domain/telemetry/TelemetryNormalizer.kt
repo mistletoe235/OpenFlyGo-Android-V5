@@ -1,6 +1,9 @@
 package edu.playground.djivln.domain.telemetry
 
 object TelemetryNormalizer {
+    fun decimetersToMeters(decimeters: Int?): Double? =
+        decimeters?.takeIf { it > 0 }?.div(10.0)
+
     fun geoPoint(latitude: Double?, longitude: Double?, altitudeMeters: Double? = null): GeoPoint? {
         if (latitude == null || longitude == null || !latitude.isFinite() || !longitude.isFinite()) return null
         if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return null

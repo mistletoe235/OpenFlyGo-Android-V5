@@ -6,6 +6,14 @@ import org.junit.Test
 
 class TelemetryNormalizerTest {
     @Test
+    fun convertsDjiUltrasonicDecimetersToMeters() {
+        assertEquals(13.7, TelemetryNormalizer.decimetersToMeters(137)!!, 0.0)
+        assertNull(TelemetryNormalizer.decimetersToMeters(0))
+        assertNull(TelemetryNormalizer.decimetersToMeters(-1))
+        assertNull(TelemetryNormalizer.decimetersToMeters(null))
+    }
+
+    @Test
     fun convertsDjiNedVerticalVelocityToUpPositive() {
         assertEquals(
             VelocityMetersPerSecond(north = 2.0, east = -3.0, up = 4.0),

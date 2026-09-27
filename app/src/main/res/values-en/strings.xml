@@ -1798,4 +1798,5 @@
     <string name="ply_no_vertices">The point cloud is empty. Refresh after reconstruction progresses.</string>
     <string name="ply_header_too_large">The point cloud header exceeds the size limit. Check the workstation output.</string>
     <string name="ply_header_line_too_large">A point cloud header line exceeds the size limit. Check the workstation output.</string>
+    <string name="hil_preview_dimensions">UE simulation snapshot · %1$d × %2$d</string>
 </resources>

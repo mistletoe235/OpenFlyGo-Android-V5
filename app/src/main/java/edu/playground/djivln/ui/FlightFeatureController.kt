@@ -156,11 +156,13 @@ class FlightFeatureController(
     private var editingPolygon: DJIPolygon? = null
     private var simulatorOriginMarker: DJIMarker? = null
     private var replayMarker: DJIMarker? = null
-    private var executionRoute: DJIPolyline? = null
-    private var executionActiveRouteHalo: DJIPolyline? = null
-    private var executionActiveRoute: DJIPolyline? = null
-    private var executionTargetMarker: DJIMarker? = null
-    private var executionRecoveryMarker: DJIMarker? = null
+    private var executionOverlayRenderer: SurveyExecutionOverlayRenderer? = null
+    private val executionOverlayUpdates = LatestMapUpdate<SurveyExecutionOverlay?>(
+        clockMillis = SystemClock::elapsedRealtime,
+        schedule = { task, delay -> binding.root.postDelayed(task, delay); Unit },
+        cancel = { task -> binding.root.removeCallbacks(task); Unit },
+        render = ::drawExecutionOverlay,
+    )
     private var remoteControllerDirectionMarker: DJIMarker? = null
     private var remoteControllerDirectionVisible = false
     private var lastRemoteControllerMarkerLocation: edu.playground.djivln.domain.telemetry.GeoPoint? = null
@@ -478,6 +480,9 @@ class FlightFeatureController(
     private fun configureMap(readyMap: DJIMap) {
         if (map === readyMap) return
         val widget = mapWidget ?: return
+        executionOverlayUpdates.clear()
+        executionOverlayRenderer?.clear()
+        executionOverlayRenderer = SurveyExecutionOverlayRenderer(DjiSurveyExecutionSurface(readyMap, ::circleMarkerIcon))
         map = readyMap
         mapInitializationError = null
         Log.i(TAG, "map control attached camera=${readyMap.cameraPosition}")
@@ -689,82 +694,27 @@ class FlightFeatureController(
 
     override fun renderExecutionOverlay(overlay: SurveyExecutionOverlay?) {
         pendingExecutionOverlay = overlay
+        if (overlay == null) {
+            executionOverlayUpdates.clear()
+            drawExecutionOverlay(null)
+        } else if (map != null) {
+            executionOverlayUpdates.submit(overlay)
+        }
+    }
+
+    private fun drawExecutionOverlay(overlay: SurveyExecutionOverlay?) {
         if (focusedSurveyRegionId != overlay?.activeRegionId) {
             focusedSurveyRegionId = overlay?.activeRegionId
             pendingSurveyMission?.takeIf { it.activeMapping != null }
                 ?.let { renderSurveyMission(it, frameRoute = false) }
         }
-        executionRoute?.remove()
-        executionRoute = null
-        executionActiveRouteHalo?.remove()
-        executionActiveRouteHalo = null
-        executionActiveRoute?.remove()
-        executionActiveRoute = null
-        executionTargetMarker?.remove()
-        executionTargetMarker = null
-        executionRecoveryMarker?.remove()
-        executionRecoveryMarker = null
-        val activeMap = map ?: return
-        if (overlay == null) return
-
-        if (overlay.activeRoutePoints.size >= 2) {
-            val points = overlay.activeRoutePoints.map { point ->
-                DJILatLng(point.latitude, point.longitude)
-            }
-            executionActiveRouteHalo = activeMap.addPolyline(
-                DJIPolylineOptions()
-                    .addAll(points)
-                    .color(0xFFFFFFFF.toInt())
-                    .width(15f)
-                    .zIndex(38f),
-            )
-            executionActiveRoute = activeMap.addPolyline(
-                DJIPolylineOptions()
-                    .addAll(points)
-                    .color(if (overlay.paused) 0xFFFFA726.toInt() else 0xFF00B8D4.toInt())
-                    .width(10f)
-                    .zIndex(39f),
-            )
-        }
-
-        overlay.aircraftPoint?.let { aircraft ->
-            executionRoute = activeMap.addPolyline(
-                DJIPolylineOptions()
-                    .addAll(
-                        listOf(
-                            DJILatLng(aircraft.latitude, aircraft.longitude),
-                            DJILatLng(overlay.targetPoint.latitude, overlay.targetPoint.longitude),
-                        ),
-                    )
-                    .color(if (overlay.transit) 0xFF87919C.toInt() else 0xFF00E5FF.toInt())
-                    .width(if (overlay.transit) 5f else 8f)
-                    .setDashed(overlay.transit)
-                    .setDashLength(if (overlay.transit) 9f else 3f)
-                    .zIndex(40f),
-            )
-        }
-        executionTargetMarker = activeMap.addMarker(
-            DJIMarkerOptions()
-                .position(DJILatLng(overlay.targetPoint.latitude, overlay.targetPoint.longitude))
-                .title(overlay.title)
-                .icon(circleMarkerIcon(when {
-                    overlay.paused -> 0xFFF29A2E.toInt()
-                    overlay.transit -> 0xFF87919C.toInt()
-                    else -> 0xFF00A8C6.toInt()
-                }))
-                .anchor(0.5f, 0.5f)
-                .zIndex(42),
+        executionOverlayRenderer?.render(
+            overlay?.let {
+                if (it.recoveryPoint != null && it.recoveryTitle == null) {
+                    it.copy(recoveryTitle = activity.getString(R.string.actual_pause_position))
+                } else it
+            },
         )
-        overlay.recoveryPoint?.let { recovery ->
-            executionRecoveryMarker = activeMap.addMarker(
-                DJIMarkerOptions()
-                    .position(DJILatLng(recovery.latitude, recovery.longitude))
-                    .title(overlay.recoveryTitle ?: activity.getString(R.string.actual_pause_position))
-                    .icon(circleMarkerIcon(0xFFFF9800.toInt()))
-                    .anchor(0.5f, 0.5f)
-                    .zIndex(43),
-            )
-        }
     }
 
     override fun setThreeDimensional(enabled: Boolean): Boolean {
@@ -1362,6 +1312,10 @@ class FlightFeatureController(
     }
 
     override fun close() {
+        executionOverlayUpdates.clear()
+        executionOverlayRenderer?.clear()
+        executionOverlayRenderer = null
+        pendingExecutionOverlay = null
         cancelCameraCadenceTest("controller_closed")
         binding.root.removeCallbacks(hidePhotoFeedbackRunnable)
         mapWidget?.removeCallbacks(mapReadyProbe)

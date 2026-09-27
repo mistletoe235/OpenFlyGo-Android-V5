@@ -3,9 +3,20 @@ package edu.playground.djivln.hil
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class SimulatorPosePredictorTest {
+    @Test
+    fun staleRawDoesNotProduceAReplacementPoseOrRefreshItsTimestamp() {
+        val current = pose(1_000_000_000L, 2.0, -60.0).copy(upMeters = 50.760471)
+        assertEquals(50.760471, SimulatorPosePredictor.predictFresh(null, current, 1_100_000_000L)!!.upMeters, 0.0)
+        assertNull(SimulatorPosePredictor.predictFresh(null, current, 1_100_000_001L))
+        assertNull(SimulatorPosePredictor.predictFresh(null, current, 999_999_999L))
+        val refreshed = current.copy(elapsedRealtimeNanos = 1_140_000_000L)
+        assertEquals(50.760471, SimulatorPosePredictor.predictFresh(current, refreshed, 1_150_000_000L)!!.upMeters, 0.0)
+    }
+
     @Test
     fun extrapolatesBetweenRawUpdatesAtOutputCadence() {
         val previous = pose(timeNanos = 1_000_000_000L, east = 0.0, yaw = 0.0)

@@ -23,6 +23,8 @@ import dji.v5.manager.interfaces.IVirtualStickManager
 import edu.playground.djivln.control.BodyVelocityToDjiAxes
 import edu.playground.djivln.control.ProcessVirtualStickPortLease
 import edu.playground.djivln.control.VirtualStickLifecycleGuard
+import edu.playground.djivln.control.VirtualStickDisableCompletion
+import edu.playground.djivln.logging.AppDiagnosticLogger
 import edu.playground.djivln.control.VirtualStickPortLease
 import edu.playground.djivln.control.VirtualStickSendPolicy
 import edu.playground.djivln.domain.flight.BodyVelocityCommand
@@ -51,6 +53,8 @@ class DjiV5FlightControlPort(
     )
 
     private val lifecycle = VirtualStickLifecycleGuard()
+    private val disableCompletion = VirtualStickDisableCompletion()
+    private val diagnosticPortId = java.util.UUID.randomUUID().toString()
     private val leaseOwner = Any()
     private val timeoutHandler = Handler(Looper.getMainLooper())
     private var listener: FlightControlStateListener? = null
@@ -74,6 +78,7 @@ class DjiV5FlightControlPort(
             val next = synchronized(this@DjiV5FlightControlPort) {
                 actualEnabled = state.isVirtualStickEnable
                 actualOwner = rawOwner
+                disableCompletion.observeEnabled(state.isVirtualStickEnable)
                 pendingAcquire?.let { pending ->
                     pendingAcquire = pending.copy(advancedModeObserved = state.isVirtualStickAdvancedModeEnabled)
                 }
@@ -205,6 +210,7 @@ class DjiV5FlightControlPort(
                 !lease.isHolder(leaseOwner) ->
                     IllegalStateException("Virtual Stick release rejected: this port does not hold the lease")
                 pendingRelease != null -> IllegalStateException("Virtual Stick release is already pending")
+                disableCompletion.commandPending -> IllegalStateException("Virtual Stick disable command is still pending")
                 else -> null
             }
             if (failure == null) {
@@ -214,6 +220,7 @@ class DjiV5FlightControlPort(
                 }
                 pendingAcquire = null
                 lifecycle.requestDisable()
+                disableCompletion.begin()
                 val timeout = Runnable { onReleaseTimeout() }
                 pendingRelease = PendingRelease(completion, timeout)
                 next = updateLocked { it.copy(requested = false, lastError = null) }
@@ -324,6 +331,7 @@ class DjiV5FlightControlPort(
             timeoutHandler.removeCallbacks(pending.timeout)
             pendingAcquire = null
             lifecycle.requestDisable()
+            disableCompletion.begin()
             completion = pending.completion
             next = updateLocked { it.copy(requested = false, lastError = error.message) }
             pendingRollbackTimeout?.let(timeoutHandler::removeCallbacks)
@@ -337,19 +345,28 @@ class DjiV5FlightControlPort(
     }
 
     private fun requestDisableFromManager() {
-        val shouldRequest = synchronized(this) {
-            lease.isHolder(leaseOwner) && lifecycle.claimDisableCommand()
+        val token = synchronized(this) {
+            if (!lease.isHolder(leaseOwner) || !lifecycle.claimDisableCommand()) return
+            disableCompletion.token ?: return
         }
-        if (!shouldRequest) return
+        AppDiagnosticLogger.info("OpenFlyVSRelease", "disable command submitted", mapOf(
+            "port_id" to diagnosticPortId, "generation" to token.generation))
         runCatching { manager.setVirtualStickAdvancedModeEnabled(false) }
         runCatching {
             manager.disableVirtualStick(object : CommonCallbacks.CompletionCallback {
-                override fun onSuccess() = finishDisableSuccess()
+                override fun onSuccess() {
+                    val accepted = synchronized(this@DjiV5FlightControlPort) {
+                        disableCompletion.completeCommand(token)
+                    }
+                    AppDiagnosticLogger.info("OpenFlyVSRelease", "disable command callback", mapOf(
+                        "port_id" to diagnosticPortId, "generation" to token.generation, "accepted" to accepted))
+                    if (accepted) finishDisableSuccess()
+                }
 
                 override fun onFailure(error: IDJIError) =
-                    finishDisableFailure(DjiOperationException(error))
+                    finishDisableFailure(token, DjiOperationException(error))
             })
-        }.onFailure(::finishDisableFailure)
+        }.onFailure { finishDisableFailure(token, it) }
     }
 
     private fun finishDisableFromObservedState() {
@@ -363,7 +380,10 @@ class DjiV5FlightControlPort(
         var completion: FlightControlCompletion? = null
         var next: FlightControlPortState? = null
         synchronized(this) {
-            if (!lease.isHolder(leaseOwner)) return
+            if (!lease.isHolder(leaseOwner) || lifecycle.wantsEnabled() || !disableCompletion.ready) return
+            AppDiagnosticLogger.info("OpenFlyVSRelease", "disabled state and command completion confirmed", mapOf(
+                "port_id" to diagnosticPortId, "generation" to disableCompletion.token?.generation))
+            disableCompletion.clear()
             lease.release(leaseOwner)
             pendingRollbackTimeout?.let(timeoutHandler::removeCallbacks)
             pendingRollbackTimeout = null
@@ -385,15 +405,17 @@ class DjiV5FlightControlPort(
         finalizeStopIfPossible()
     }
 
-    private fun finishDisableFailure(error: Throwable) {
+    private fun finishDisableFailure(token: VirtualStickDisableCompletion.Token, error: Throwable) {
         var completion: FlightControlCompletion? = null
         var completedDespiteError = false
         var next: FlightControlPortState? = null
         synchronized(this) {
+            if (!disableCompletion.completeCommand(token) || lifecycle.wantsEnabled()) return
             lifecycle.releaseDisableCommandClaim()
             if (!lease.isHolder(leaseOwner)) return
-            val disabledWasObserved = !lease.snapshot().actualEnabled
+            val disabledWasObserved = disableCompletion.ready
             if (disabledWasObserved) {
+                disableCompletion.clear()
                 lease.release(leaseOwner)
                 pendingRollbackTimeout?.let(timeoutHandler::removeCallbacks)
                 pendingRollbackTimeout = null
@@ -424,7 +446,8 @@ class DjiV5FlightControlPort(
         synchronized(this) {
             pendingRollbackTimeout = null
             if (!lease.isHolder(leaseOwner) || lifecycle.wantsEnabled()) return
-            if (!lease.snapshot().actualEnabled) {
+            if (disableCompletion.ready) {
+                disableCompletion.clear()
                 lease.release(leaseOwner)
                 next = updateLocked {
                     it.copy(requested = false, owner = visibleOwner(actualOwner))

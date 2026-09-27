@@ -40,6 +40,8 @@ class HilFeatureController(
     private val simulatorOriginStore = SimulatorOriginStore(activity)
     private var lastAircraftConnected = false
     private var previewBitmap: Bitmap? = null
+    private var compactInline = false
+    private var previewDialog: android.app.AlertDialog? = null
     @Volatile private var simulatorLifecycleMessage = UiText.resource(edu.playground.djivln.R.string.simulator_not_checked)
     private var lastLoggedMessage: String? = null
 
@@ -111,6 +113,30 @@ class HilFeatureController(
             val frame = session.decodeLatestFrame(1_500L)
             if (frame == null) {
                 show(activity.getString(edu.playground.djivln.R.string.hil_no_virtual_camera_frame))
+                previewDialog?.dismiss()
+                previewDialog = android.app.AlertDialog.Builder(activity)
+                    .setTitle(edu.playground.djivln.R.string.preview_one_frame)
+                    .setMessage(edu.playground.djivln.R.string.hil_no_virtual_camera_frame)
+                    .setPositiveButton(android.R.string.ok, null).show()
+            } else if (compactInline) {
+                previewDialog?.dismiss()
+                val image = android.widget.ImageView(activity).apply {
+                    adjustViewBounds = true
+                    scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                    maxHeight = (activity.resources.displayMetrics.heightPixels * 0.65).toInt()
+                    setImageBitmap(frame)
+                }
+                val dialog = android.app.AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(edu.playground.djivln.R.string.hil_preview_dimensions, frame.width, frame.height))
+                    .setView(image)
+                    .setPositiveButton(android.R.string.ok, null).create()
+                dialog.setOnDismissListener {
+                    image.setImageDrawable(null)
+                    if (!frame.isRecycled) frame.recycle()
+                    if (previewDialog === dialog) previewDialog = null
+                }
+                previewDialog = dialog
+                dialog.show()
             } else {
                 val previous = previewBitmap
                 previewBitmap = frame
@@ -180,6 +206,8 @@ class HilFeatureController(
     }
 
     override fun close() {
+        previewDialog?.dismiss()
+        previewDialog = null
         session.removeListener(this)
         simulatorLifecycle.removeListener(this)
         binding.hilPreview.setImageDrawable(null)
@@ -188,6 +216,7 @@ class HilFeatureController(
     }
 
     fun useCompactInlineLayout() {
+        compactInline = true
         binding.hilPreviewContainer.visibility = android.view.View.GONE
         binding.root.layoutParams = binding.root.layoutParams.apply {
             height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT
