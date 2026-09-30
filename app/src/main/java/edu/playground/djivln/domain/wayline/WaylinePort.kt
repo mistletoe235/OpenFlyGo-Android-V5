@@ -27,6 +27,8 @@ data class WaylineState(
     val error: String? = null,
     val breakpoint: WaylineBreakpoint? = null,
     val actionEvent: WaylineActionEvent? = null,
+    val subscriptionGeneration: Long = 0L,
+    val executingInfoSequence: Long = 0L,
 )
 
 data class WaylineActionEvent(
@@ -73,6 +75,7 @@ interface WaylinePort {
      * waypoint-flight mode. Implementations must ignore this outside an active start/recovery.
      */
     fun confirmExecutionFromTelemetry(): Boolean = false
+    fun confirmInterruptionFromTelemetry(): Boolean = false
     fun availableWaylineIds(missionFileName: String): List<Int> = emptyList()
     fun upload(kmzPath: String, completion: WaylineCompletion)
     fun execute(missionFileName: String, waylineIds: List<Int> = emptyList(), completion: WaylineCompletion)

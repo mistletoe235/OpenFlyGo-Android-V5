@@ -7,6 +7,29 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class DjiKmzAppCaptureCoordinatorTest {
+    @Test fun turningAtPassEndAdvancesEvenWhenPhotoPoseIsNotReadyAndSdkIndexIsStale() {
+        val first = mission()
+        val reverse = first.waypoints.reversed().mapIndexed { index, waypoint ->
+            waypoint.copy(
+                headingDegrees = 270.0,
+                kind = if (index == 0) SurveyWaypointKind.PASS_START else SurveyWaypointKind.PASS_END,
+                captureAction = if (index == 0) CaptureAction.START_DISTANCE_INTERVAL else CaptureAction.STOP_DISTANCE_INTERVAL,
+                captureIntervalMeters = if (index == 0) 10.0 else null,
+                passIndex = 1,
+            )
+        }
+        val coordinator = DjiKmzAppCaptureCoordinator(minimumCapturePeriodMillis = 1_000L)
+        coordinator.arm(first.copy(waypoints = first.waypoints + reverse))
+        val initial = requireNotNull(coordinator.tick(start, 0, 1_000, true, 0.0))
+        coordinator.onCaptureResult(start, 1_100, true, initial)
+        assertNull(coordinator.tick(point(30.0), 0, 10_000, false, 0.1))
+        assertEquals(1, coordinator.currentGimbalTarget(0)?.passIndex)
+        val resumed = requireNotNull(coordinator.tick(point(30.0), 0, 12_000, true, 0.0))
+        assertEquals(1, resumed.passIndex)
+        coordinator.onCaptureResult(point(30.0), 12_100, true, resumed)
+        assertEquals(1, coordinator.tick(point(15.0), 0, 15_000, true, 5.0)?.passIndex)
+    }
+
     @Test fun yawNotAlignedAtStartBlocksPhotosThenAllowsMovingIntervalCapture() {
         for (mode in SurveyCaptureTriggerMode.values()) {
             val mission = mission().let { it.copy(constraints = it.constraints.copy(captureTriggerMode = mode)) }

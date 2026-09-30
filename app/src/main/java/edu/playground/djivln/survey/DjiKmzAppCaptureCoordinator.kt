@@ -198,7 +198,7 @@ class DjiKmzAppCaptureCoordinator(
                 pendingAdvance = true
                 return request(pass, position, "pass_end")
             }
-            if (!distanceCapture.active) advancePass()
+            advancePass()
             return null
         }
         if (distanceCapture.onPosition(

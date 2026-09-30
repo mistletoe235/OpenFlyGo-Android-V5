@@ -2678,7 +2678,7 @@ class SurveyFeatureController(
 
     private fun recordDjiState(state: WaylineState) {
         val action = state.actionEvent
-        val signature = "${state.phase}:${state.missionFileName}:${state.waylineId}:${state.waypointIndex}:" +
+        val signature = "${state.subscriptionGeneration}:${state.phase}:${state.missionFileName}:${state.waylineId}:${state.waypointIndex}:" +
             "${state.error}:${action?.actionGroupId}:${action?.actionId}:${action?.started}:${action?.error}"
         if (signature == lastDjiEventSignature) return
         lastDjiEventSignature = signature
@@ -2686,6 +2686,8 @@ class SurveyFeatureController(
             "wayline_state",
             mapOf(
                 "phase" to state.phase.name,
+                "subscription_generation" to state.subscriptionGeneration,
+                "executing_info_sequence" to state.executingInfoSequence,
                 "mission_file_name" to state.missionFileName,
                 "wayline_id" to state.waylineId,
                 "waypoint_index" to state.waypointIndex,
@@ -3592,30 +3594,54 @@ class SurveyFeatureController(
         when {
             djiActive -> {
                 if (isDjiReturnOrLandingActive()) {
-                    val fallbackSaved = persistEstimatedExternalDjiRecovery(reason)
-                    if (!fallbackSaved) {
-                        operationMessage = activity.getString(R.string.saving_resume_point_during_rth, reason)
-                        renderStatus()
-                    }
-                    requestDjiRecoverySnapshot(reason, prepareForResume = true) { result ->
-                        if (result.isFailure && fallbackSaved) {
-                            operationMessage = activity.getString(R.string.estimated_resume_saved, reason)
-                            renderStatus()
-                        } else if (result.isFailure) {
-                            operationMessage = activity.getString(
-                                R.string.route_paused_resume_save_failed_detail,
-                                result.exceptionOrNull()?.message.orEmpty(),
-                            )
-                            renderStatus()
-                        }
-                        completion()
-                    }
+                    reconcileDjiInterruption(reason)
+                    preserveInterruptedDjiRecovery(reason, completion)
                 } else {
                     pauseDjiAndPersistRecovery(reason, completion)
                 }
             }
             customActive -> customExecution.pause(reason, completion)
             else -> completion()
+        }
+    }
+
+    private fun reconcileDjiInterruption(reason: String, pauseRejected: Boolean = false): Boolean {
+        val aircraft = effectiveSnapshot()
+        if (!DjiWaylineTelemetryPolicy.confirmsInterruption(
+                waylineState.phase, aircraft, SystemClock.elapsedRealtimeNanos(), pauseRejected,
+            )
+        ) return false
+        stopDjiAppCapture()
+        val confirmed = waylinePort.confirmInterruptionFromTelemetry()
+        if (confirmed) {
+            recordSurveyEvent("wayline_interruption_telemetry_confirmed", mapOf(
+                "reason" to reason,
+                "flight_mode" to aircraft.flightMode,
+                "go_home_state" to aircraft.goHomeState,
+                "pause_rejected" to pauseRejected,
+            ))
+        }
+        return confirmed
+    }
+
+    private fun preserveInterruptedDjiRecovery(reason: String, completion: () -> Unit) {
+        val fallbackSaved = persistEstimatedExternalDjiRecovery(reason)
+        if (!fallbackSaved) {
+            operationMessage = activity.getString(R.string.saving_resume_point_during_rth, reason)
+            renderStatus()
+        }
+        requestDjiRecoverySnapshot(reason, prepareForResume = true) { result ->
+            if (result.isFailure && fallbackSaved) {
+                operationMessage = activity.getString(R.string.estimated_resume_saved, reason)
+                renderStatus()
+            } else if (result.isFailure) {
+                operationMessage = activity.getString(
+                    R.string.route_paused_resume_save_failed_detail,
+                    result.exceptionOrNull()?.message.orEmpty(),
+                )
+                renderStatus()
+            }
+            completion()
         }
     }
 
@@ -4676,6 +4702,15 @@ class SurveyFeatureController(
 
     private fun updateDjiAppCapture() {
         val aircraft = effectiveSnapshot()
+        if (DjiWaylineTelemetryPolicy.confirmsInterruption(
+                waylineState.phase, aircraft, SystemClock.elapsedRealtimeNanos(),
+            )
+        ) {
+            pauseForExternalIntervention(activity.getString(
+                R.string.survey_fc_rth_or_landing, aircraft.flightMode ?: aircraft.goHomeState.orEmpty(),
+            ))
+            return
+        }
         if (DjiWaylineTelemetryPolicy.confirmsExecution(
                 captureArmed = djiCaptureCoordinator.active,
                 phase = waylineState.phase,
@@ -5326,6 +5361,10 @@ class SurveyFeatureController(
                         "wayline_operation_result",
                         mapOf("operation" to "pause", "success" to false, "error" to error.message),
                     )
+                    if (reconcileDjiInterruption(reason, pauseRejected = true)) {
+                        preserveInterruptedDjiRecovery(reason, completion)
+                        return@runOnUiThread
+                    }
                     renderStatus()
                     completion()
                 }.onSuccess {

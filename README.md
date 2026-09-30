@@ -50,11 +50,11 @@ Maintainers can build survey installation packages using private keys and releas
 
 ## Download and install
 
-- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.10-v5/OpenFlyGo-Android-V5-0.1.10.apk)
-- [App release and notices](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.10-v5)
-- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/mobile-20260927)
+- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.13-v5/OpenFlyGo-Android-V5-0.1.13.apk)
+- [App release and notices](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.13-v5)
+- [Main project](https://github.com/mistletoe235/OpenFlyScan)
 
-Version `0.1.10-v5`, versionCode `12`; arm64 Android 7.0 or later. This is the
+Version `0.1.13-v5`, versionCode `15`; arm64 Android 7.0 or later. This is the
 survey/capture source-release client, not the private model-inference build.
 The Android Release APK is publicly downloadable from Releases.
 

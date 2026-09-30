@@ -59,17 +59,27 @@ class DjiV5WaylinePort internal constructor(
     private var started = false
     private var breakpointQueryGeneration = 0L
     private var pauseGeneration = 0L
-    private var pauseAccepted = false
+    @Volatile private var interruptionConfirmed = false
+    @Volatile private var subscriptionGeneration = 0L
     private val pendingPauseCompletions = mutableListOf<WaylineCompletion>()
 
     override fun start(listener: WaylineStateListener) {
         this.listener = listener
         if (!started) {
             started = true
-            client.start(
+            subscribe()
+        }
+        listener.onStateChanged(current)
+    }
+
+    private fun subscribe() {
+        val generation = ++subscriptionGeneration
+        update { it.copy(subscriptionGeneration = generation, executingInfoSequence = 0L) }
+        client.start(
                 onPhase = { phase, message ->
+                    if (generation != subscriptionGeneration) return@start
                     val previousPhase = current.phase
-                    val staleRunningState = pauseAccepted && phase in setOf(
+                    val staleRunningState = interruptionConfirmed && phase in setOf(
                         WaylinePhase.PREPARING, WaylinePhase.RECOVERING, WaylinePhase.EXECUTING,
                     )
                     if (!staleRunningState &&
@@ -93,6 +103,7 @@ class DjiV5WaylinePort internal constructor(
                     }
                 },
                 onExecutingInfo = { missionName, waylineId, waypointIndex ->
+                    if (generation != subscriptionGeneration || interruptionConfirmed) return@start
                     val normalizedMissionName = WaylineMissionName.normalizeOrNull(missionName)
                     update {
                         val fallbackBreakpoint = if (waylineId != null && waylineId >= 0 &&
@@ -107,6 +118,7 @@ class DjiV5WaylinePort internal constructor(
                             )
                         } else it.breakpoint
                         it.copy(
+                            executingInfoSequence = it.executingInfoSequence + 1,
                             // The V5 simulator can continue reporting PREPARING after publishing
                             // a valid executing waypoint. Executing info is the stronger signal.
                             phase = if (
@@ -122,6 +134,7 @@ class DjiV5WaylinePort internal constructor(
                     }
                 },
                 onInterrupt = { error ->
+                    if (generation != subscriptionGeneration) return@start
                     if (current.phase.acceptsInterruption()) {
                         update {
                             it.copy(
@@ -133,13 +146,26 @@ class DjiV5WaylinePort internal constructor(
                         refreshCurrentBreakpoint()
                     }
                 },
-                onAction = { action -> update { it.copy(actionEvent = action) } },
+                onAction = { action ->
+                    if (generation == subscriptionGeneration && !interruptionConfirmed) {
+                        update { it.copy(actionEvent = action) }
+                    }
+                },
             )
+    }
+
+    private fun beginExecutionSession() {
+        invalidatePause()
+        breakpointQueryGeneration += 1
+        if (started) {
+            subscriptionGeneration += 1
+            client.stop()
+            subscribe()
         }
-        listener.onStateChanged(current)
     }
 
     override fun stop() {
+        subscriptionGeneration += 1
         invalidatePause()
         if (started) client.stop()
         breakpointQueryGeneration += 1
@@ -148,6 +174,15 @@ class DjiV5WaylinePort internal constructor(
     }
 
     override fun state(): WaylineState = current
+
+    override fun confirmInterruptionFromTelemetry(): Boolean {
+        if (!current.phase.acceptsInterruption() || current.phase == WaylinePhase.PAUSED) return false
+        interruptionConfirmed = true
+        update {
+            it.copy(phase = WaylinePhase.PAUSED, message = UiText.resource(R.string.wayline_dji_interrupted), error = null)
+        }
+        return true
+    }
 
     override fun confirmExecutionFromTelemetry(): Boolean {
         if (current.phase !in setOf(WaylinePhase.PREPARING, WaylinePhase.RECOVERING)) return false
@@ -217,7 +252,7 @@ class DjiV5WaylinePort internal constructor(
             )
             return
         }
-        invalidatePause()
+        beginExecutionSession()
         update {
             it.copy(
                 phase = WaylinePhase.PREPARING,
@@ -253,7 +288,7 @@ class DjiV5WaylinePort internal constructor(
             )
             return
         }
-        invalidatePause()
+        beginExecutionSession()
         update {
             it.copy(
                 phase = WaylinePhase.RECOVERING,
@@ -280,7 +315,7 @@ class DjiV5WaylinePort internal constructor(
             val completions = pendingPauseCompletions.toList()
             pendingPauseCompletions.clear()
             if (result.isSuccess && current.phase.acceptsInterruption()) {
-                pauseAccepted = true
+                interruptionConfirmed = true
                 update {
                     it.copy(
                         phase = WaylinePhase.PAUSED,
@@ -295,7 +330,7 @@ class DjiV5WaylinePort internal constructor(
 
     private fun invalidatePause() {
         pauseGeneration += 1
-        pauseAccepted = false
+        interruptionConfirmed = false
         val completions = pendingPauseCompletions.toList()
         pendingPauseCompletions.clear()
         completions.forEach {
@@ -312,7 +347,7 @@ class DjiV5WaylinePort internal constructor(
         resumeInternal(breakpoint, completion)
 
     private fun resumeInternal(breakpoint: WaylineBreakpoint?, completion: WaylineCompletion) {
-        invalidatePause()
+        beginExecutionSession()
         update {
             it.copy(
                 phase = WaylinePhase.RECOVERING,

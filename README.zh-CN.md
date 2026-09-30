@@ -46,6 +46,15 @@ non-public DJI simulator hooks are also excluded.
 仿地功能关闭：不提供仿地入口，拒绝载入带 `terrainPlan` 的任务，也不能执行或导出为 DJI KMZ。
 维护者可用此开源代码配合私有 Key / 正式签名制作航线版安装包；这不是包含模型的私有开发完整版。
 
+## 下载与安装
+
+- [下载签名正式 APK](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/download/v0.1.13-v5/OpenFlyGo-Android-V5-0.1.13.apk)
+- [版本说明与第三方许可](https://github.com/mistletoe235/OpenFlyGo-Android-V5/releases/tag/v0.1.13-v5)
+
+版本 `0.1.13-v5` / versionCode `15`，适用于 arm64、Android 7.0 及以上。
+这是航线与采集版，不包含私有模型推理。更新前停止任务，覆盖安装保留数据；
+不要通过卸载、清数据或强制降级绕过签名/版本冲突。安装成功不代表已完成飞行验收。
+
 ## 版本选择与机型支持
 
 核对日期：2026-09-21。**V4 / V5 是 DJI SDK 两代产品线，不是同一 App 的“旧版 / 新版”；

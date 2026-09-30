@@ -6,6 +6,7 @@ import edu.playground.djivln.domain.wayline.WaylinePhase
 import edu.playground.djivln.R
 import edu.playground.djivln.localization.UiText
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
@@ -373,7 +374,72 @@ class DjiV5WaylinePortTest {
         assertEquals(WaylinePhase.FINISHED, port.state().phase)
     }
 
+    @Test fun eachBreakpointExecutionRenewsItsSdkSubscriptionAndRejectsOldCallbacks() {
+        val client = RecordingClient()
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        val oldInfo = requireNotNull(client.executingInfo)
+        val oldPhase = requireNotNull(client.phase)
+        port.executeFromBreakpoint("survey", WaylineBreakpoint(0, 75, 0.4)) { }
+        assertEquals(2, client.startCount)
+        client.executingInfo?.invoke("survey", 0, 118)
+        oldInfo("survey", 0, 75)
+        oldPhase(WaylinePhase.FINISHED, "old session")
+        assertEquals(118, port.state().waypointIndex)
+        assertEquals(WaylinePhase.RECOVERING, port.state().phase)
+        port.executeFromBreakpoint("survey", WaylineBreakpoint(0, 136, 0.8)) { }
+        assertEquals(3, client.startCount)
+        client.executingInfo?.invoke("survey", 0, 158)
+        assertEquals(158, port.state().waypointIndex)
+    }
+
+    @Test fun telemetryConfirmedRthInterruptsLocallyWithoutSendingPauseOrWaitingForSdkState() {
+        val client = RecordingClient()
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        assertFalse(port.confirmInterruptionFromTelemetry())
+        port.executeFromBreakpoint("survey", WaylineBreakpoint(0, 136, 0.8)) { }
+        client.phase?.invoke(WaylinePhase.EXECUTING, "running")
+        assertTrue(port.confirmInterruptionFromTelemetry())
+        assertEquals(WaylinePhase.PAUSED, port.state().phase)
+        assertEquals(WaylineBreakpoint(0, 136, 0.8), port.state().breakpoint)
+        assertEquals(0, client.pauseCount)
+        client.phase?.invoke(WaylinePhase.EXECUTING, "late running")
+        client.executingInfo?.invoke("survey", 0, 137)
+        assertEquals(WaylinePhase.PAUSED, port.state().phase)
+        assertEquals(136, port.state().waypointIndex)
+        port.pause { assertTrue(it.isSuccess) }
+        assertEquals(0, client.pauseCount)
+        port.resume { }
+        client.phase?.invoke(WaylinePhase.EXECUTING, "user resumed")
+        client.executingInfo?.invoke("survey", 0, 138)
+        assertEquals(WaylinePhase.EXECUTING, port.state().phase)
+        assertEquals(138, port.state().waypointIndex)
+    }
+
+    @Test fun oldSubscriptionCannotDeliverInterruptOrActionIntoNewMission() {
+        val client = RecordingClient()
+        val port = DjiV5WaylinePort(client)
+        port.start { }
+        val oldInterrupt = requireNotNull(client.interrupt)
+        val oldAction = requireNotNull(client.action)
+        port.execute("survey") { }
+        client.phase?.invoke(WaylinePhase.EXECUTING, "running")
+        oldInterrupt("old battery interruption")
+        oldAction(WaylineActionEvent(actionId = 1, started = false, error = "old action"))
+        assertEquals(WaylinePhase.EXECUTING, port.state().phase)
+        assertEquals(null, port.state().actionEvent)
+        assertEquals(null, port.state().error)
+        val generation = port.state().subscriptionGeneration
+        port.stop()
+        client.phase?.invoke(WaylinePhase.ERROR, "after close")
+        assertEquals(WaylinePhase.EXECUTING, port.state().phase)
+        port.start { }
+        assertTrue(port.state().subscriptionGeneration > generation)
+    }
+
     private class RecordingClient : DjiWaylineClient {
+        var startCount = 0
         var pauseCount = 0
         var deferPause = false
         var pendingPause: ((Result<Unit>) -> Unit)? = null
@@ -397,6 +463,7 @@ class DjiV5WaylinePortTest {
             onInterrupt: (String) -> Unit,
             onAction: (WaylineActionEvent) -> Unit,
         ) {
+            startCount += 1
             phase = onPhase
             executingInfo = onExecutingInfo
             interrupt = onInterrupt
